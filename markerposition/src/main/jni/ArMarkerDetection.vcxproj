@@ -127,8 +127,8 @@
     <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="ippe.cpp" />
     <ClCompile Include="IrArInterface.cpp" />
-    <ClCompile Include="Irexample6.cpp" />
     <ClCompile Include="Irexample7.cpp" />
+    <ClCompile Include="Irexample8.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
