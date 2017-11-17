@@ -4,11 +4,6 @@
 using namespace std;
 using namespace cv;
 
-static Scalar blue(255, 0, 0);
-static Scalar red(0, 0, 255);
-static Scalar green(0, 255, 0);
-static Scalar white(255, 255, 255);
-
 /****************************************************************************/
 /*  Aruco sample works well with the given marker length in meters         */
 /*  and draw the injection point without considering the marker orientation */
@@ -16,9 +11,9 @@ static Scalar white(255, 255, 255);
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main234(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	std::string infolder("./data/ar_3x3");
+	std::string infolder("./data/artest3");
 	std::string outfolder("./data/arucomarkerout");
 	
 	/************************************************************************/
@@ -27,7 +22,6 @@ int main234(int argc, char **argv)
 	float markerLength = 0.03f; // the unit is meter
 
 	std::string cameraFilename("camera-z2.yml");
-	//cv::Mat cameraMatrix, distCoeffs;
 	bool camflag = importYMLCameraParameters(cameraFilename);
 	if (!camflag)
 		return 0;
@@ -94,9 +88,9 @@ int main234(int argc, char **argv)
 		else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
 		else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
 		else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-		putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 10, 8, false);
+		putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
 		str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-		putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 10, 8, false);
+		putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
 			
 		imwrite(outfolder + SEP + files[i], src);
 

@@ -103,8 +103,16 @@ public:
 	double getXZCameraDistance(void)
 	{
 		double x = (double)m_cameraPosition.x;
+		double y = (double)m_cameraPosition.y;
 		double z = (double)m_cameraPosition.z;
-		return sqrt(x*x+z*z);
+		cv::Point3f XYZ(x, y, z);
+		if (m_ori == 90)
+			XYZ = cv::Point3f(y, -x, z);
+		else if (m_ori == 180)
+			XYZ = cv::Point3f(-x, -y, z);
+		else if (m_ori == 270)
+			XYZ = cv::Point3f(-y, x, z);
+		return sqrt(XYZ.x*XYZ.x+XYZ.z*XYZ.z);
 		//return z;
 	}
 	double getCameraDistance(void)

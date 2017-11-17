@@ -16,7 +16,7 @@ static Scalar white(255, 255, 255);
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main234(int argc, char **argv)
 {
 	std::string infolder("./data/ar_3x3");
 	std::string outfolder("./data/arucomarkerout");
