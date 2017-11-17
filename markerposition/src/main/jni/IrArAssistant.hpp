@@ -69,6 +69,7 @@ public:
 			break;
 		default:
 			cameraFilename = "camera-z2.yml";
+			//cameraFilename = "camera-g4.yml";
 			RTFilename = "bt300-RTmatrices-jim.yml";
 			break;
 		}
