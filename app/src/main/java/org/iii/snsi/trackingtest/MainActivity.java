@@ -15,7 +15,6 @@ import android.widget.TextView;
 import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.streamlibrary.CameraController;
 import org.iii.snsi.videotracking.IrArucoMarker;
-import org.iii.snsi.videotracking.IrDetect;
 
 public class MainActivity extends Activity{
 
@@ -61,7 +60,7 @@ public class MainActivity extends Activity{
 			requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_COARSE_LOCATION);
 		}
 
-		IrDetect.initialization(this);
+		MarkerHelper.initialization(this);
 
 		final SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -101,12 +100,12 @@ public class MainActivity extends Activity{
 										}
 									});
 								} else {
-									fullMarkerSet = IrDetect.nFindArucoMarkersWithMarkerSize(
+									fullMarkerSet = MarkerHelper.nFindArucoMarkersWithMarkerSize(
 											bytes, width, height, 0.03f, -0.05f);
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
-											IrDetect.printFullMarkerSet(fullMarkerSet, mMarkerInfoText);
+											MarkerHelper.printFullMarkerSet(fullMarkerSet, mMarkerInfoText);
 										}
 									});
 								}
