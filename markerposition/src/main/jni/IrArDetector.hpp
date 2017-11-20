@@ -73,11 +73,12 @@ public:
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setMarkerCenter(cent);
 				cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-				// Calculate the camera pose
+				// (e) Calculate the camera pose
 				cv::Mat R;
 				cv::Rodrigues(rvecs[i], R);
 				cv::Mat cameraPose = -R.t() * (cv::Mat)tvecs[i];
 				_markers[i].setCameraPos(cameraPose);
+
 				_markers[i].setRotationMatrix(rvecs[i]);
 				_markers[i].setTransnslationMatrix(tvecs[i]);
 
@@ -85,9 +86,11 @@ public:
 
 				markers.push_back(_markers[i]);
 			}
+			return true;
 		}
-
-		return true;
+		else
+			return false;
+		
 	}
 
 	std::vector<cv::Point2f> findInjectPoints(const std::vector<cv::Point3f>& objpts, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Mat& rvec, const cv::Mat& tvec, const int &ori, const cv::Point2f &center)

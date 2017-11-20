@@ -131,13 +131,15 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 
+		// rotate camera in counterclockwise by marker's orientation
+		/**********************************************************************************************/
+		/*           1) clockwise                                    2) counterclockwise              */
+		/*  | x'|   | cos(theta), -sin(theta) | | x |       | x'|   | cos(theta),  sin(theta)  | | x | */
+		/*  |   | = |                         | |   |       |   | = |                          | |   | */
+		/*  | y'|   | sin(theta), cos(theta)  | | y |       | y'|   | -sin(theta), cos(theta)  | | y | */
+		/**********************************************************************************************/
 		cv::Point3f XYZ(x, y, z);
-		if (angle == 90)
-			XYZ = cv::Point3f(y, -x, z);
-		else if (angle == 180)
-			XYZ = cv::Point3f(-x, -y, z);
-		else if (angle == 270)
-			XYZ = cv::Point3f(-y, x, z);
+		XYZ = cv::Point3f(x*cos(angle)+y*sin(angle), x*-sin(angle) + y*cos(angle), z);
 
 		// define XZ Quadrant
 		int xzflag = 1;

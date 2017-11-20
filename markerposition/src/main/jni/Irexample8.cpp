@@ -13,7 +13,7 @@ using namespace cv;
 /****************************************************************************/
 int main(int argc, char **argv)
 {
-	std::string infolder("./data/artest3");
+	std::string infolder("./data/artest2");
 	std::string outfolder("./data/arucomarkerout");
 	
 	/************************************************************************/
@@ -36,11 +36,6 @@ int main(int argc, char **argv)
 	std::vector<std::string> files;
 	get_files_in_directory(infolder, files);
 
-	cv::Mat rvec, tvec;
-	int mid = 0, mori = 0, mxzangle = 0, myzangle = 0;;
-	float mxzdist = 0;
-	cv::Point2f mcenter;
-
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
 		cout << "i: " << i + 1 << "/" << files.size() << endl;
@@ -51,6 +46,10 @@ int main(int argc, char **argv)
 		vector<IrArucoMarker> markers;
 		if (findArucoMarkers(src, markerLength, markers))
 		{
+			cv::Mat rvec, tvec;
+			int mid = 0, mori = 0, mxzangle = 0, myzangle = 0;;
+			float mxzdist = 0;
+			cv::Point2f mcenter;
 			for (unsigned int j = 0; j < markers.size(); j++)
 			{
 				mid = markers[j].getMarkerId();
@@ -66,34 +65,42 @@ int main(int argc, char **argv)
 
 				rvec = markers[j].getRotationMatrix();
 				tvec = markers[j].getTransnslationMatrix();
+
+				// find injection pts
+				cv::Point3f Injection(0, -0.05f, 0);
+				std::vector<cv::Point3f> Injectionpts = make_vector<cv::Point3f>() << Injection;
+				std::vector<cv::Point2f> injpts = findInjection(Injectionpts, rvec, tvec, mori, mcenter);
+				for (size_t j = 0; j < injpts.size(); j++)
+					cv::circle(src, injpts[j], 15, cv::Scalar(255, 0, 0), -1, 10);
+
+				// add marker center
+				cv::circle(src, mcenter, 10, cv::Scalar(0, 255, 0), -1, 10);
+
+				std::ostringstream str1, str2;
+				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
+				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
+				putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
+
+				imwrite(outfolder + SEP + files[i], src);
 			}
 		}
-		// find injection pts
-		cv::Point3f Injection(0,-0.05f,0);
-		std::vector<cv::Point3f> Injectionpts = make_vector<cv::Point3f>() << Injection;
-		std::vector<cv::Point2f> injpts = findInjection(Injectionpts, rvec, tvec, mori, mcenter);
-		for (size_t j = 0; j < injpts.size(); j++)
-			cv::circle(src, injpts[j], 15, cv::Scalar(255, 0, 0), -1, 10);
-				
-		// add marker center
-		cv::circle(src, mcenter, 10, cv::Scalar(0, 255, 0), -1, 10);
-
-		std::ostringstream str1, str2;
-		if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-		else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-		else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-		else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-		else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-		else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-		else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
-		else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-		else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-		putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
-		str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-		putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
-			
-		imwrite(outfolder + SEP + files[i], src);
-
+		else
+		{
+			std::ostringstream str3;
+			cout << "No Detected Marker!!!" << endl;
+			str3 << "No Detected Marker!!!";
+			putText(src, str3.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
+			imwrite(outfolder + SEP + files[i], src);
+		}
 	}
 	return 1;
 }
