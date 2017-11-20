@@ -28,10 +28,6 @@
         "source": "C:\\Users\\pop\\.android\\build-cache\\51364c5199bae4b65ab39a02b8cd001d504ad4c9\\output\\res\\layout\\abc_activity_chooser_view.xml"
     },
     {
-        "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\layout\\wifi_direct_row.xml",
-        "source": "C:\\Users\\pop\\.android\\build-cache\\48a3081864afd79ef000aba85b0bfafc2a9b1e19\\output\\res\\layout\\wifi_direct_row.xml"
-    },
-    {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_select_dialog_material.xml",
         "source": "C:\\Users\\pop\\.android\\build-cache\\51364c5199bae4b65ab39a02b8cd001d504ad4c9\\output\\res\\layout\\abc_select_dialog_material.xml"
     },
@@ -138,10 +134,6 @@
     {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
         "source": "C:\\Users\\pop\\.android\\build-cache\\51364c5199bae4b65ab39a02b8cd001d504ad4c9\\output\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
-    },
-    {
-        "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\layout\\wifi_direct_server.xml",
-        "source": "C:\\Users\\pop\\.android\\build-cache\\48a3081864afd79ef000aba85b0bfafc2a9b1e19\\output\\res\\layout\\wifi_direct_server.xml"
     },
     {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_layout.xml",

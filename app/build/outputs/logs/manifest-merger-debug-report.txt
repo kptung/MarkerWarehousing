@@ -38,7 +38,6 @@ MERGED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bf
 		ADDED from I:\netbeans\MarkerPositioning\app\src\main\AndroidManifest.xml:8:19-67
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from I:\netbeans\MarkerPositioning\app\src\main\AndroidManifest.xml:9:5-80
-MERGED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:15:5-80
 MERGED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:11:5-80
 	android:name
 		ADDED from I:\netbeans\MarkerPositioning\app\src\main\AndroidManifest.xml:9:22-77
@@ -99,7 +98,6 @@ MERGED from [com.android.support:appcompat-v7:23.4.0] C:\Users\pop\.android\buil
 MERGED from [com.android.support:animated-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\b023cf6868b8a024a537baf249802cb24fb3c2c7\output\AndroidManifest.xml:5:5-44
 MERGED from [com.android.support:support-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\1a8e10f5baf6fc3b465a37108785fa0434299751\output\AndroidManifest.xml:5:5-43
 MERGED from [com.android.support:support-v4:23.4.0] C:\Users\pop\.android\build-cache\7fe3087d60b7f4cb94986cbb6c7abd9bbf0579f5\output\AndroidManifest.xml:20:5-43
-MERGED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:7:5-9:41
 MERGED from [:lib-opencv-3.2.0-release:] C:\Users\pop\.android\build-cache\38c594feb2b2da2bf59193ae426a53fed5ce3758\output\AndroidManifest.xml:7:5-9:41
 MERGED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:5:5-7:41
 MERGED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:7:5-9:41
@@ -112,29 +110,11 @@ MERGED from [MarkerPositioning:drawer:unspecified] I:\netbeans\MarkerPositioning
 	android:minSdkVersion
 		INJECTED from I:\netbeans\MarkerPositioning\app\src\main\AndroidManifest.xml
 		INJECTED from I:\netbeans\MarkerPositioning\app\src\main\AndroidManifest.xml
-uses-permission#android.permission.BLUETOOTH
-ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:12:5-68
-	android:name
-		ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:12:22-65
-uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:13:5-74
-	android:name
-		ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:13:22-71
 uses-permission#android.permission.INTERNET
-ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:14:5-67
-MERGED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:12:5-67
+ADDED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:12:5-67
 MERGED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:17:5-67
 	android:name
-		ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:14:22-64
-uses-permission#android.permission.ACCESS_WIFI_STATE
-ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:18:5-76
-MERGED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:22:5-76
-	android:name
-		ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:18:22-73
-uses-permission#android.permission.CHANGE_WIFI_STATE
-ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:19:5-76
-	android:name
-		ADDED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:19:22-73
+		ADDED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:12:22-64
 uses-feature#android.hardware.camera.raw
 ADDED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:17:5-64
 	android:name
@@ -151,6 +131,10 @@ uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:21:5-79
 	android:name
 		ADDED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:21:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:22:5-76
+	android:name
+		ADDED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:22:22-73
 uses-permission#android.permission.MODIFY_AUDIO_SETTINGS
 ADDED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:23:5-80
 	android:name

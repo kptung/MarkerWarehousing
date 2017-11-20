@@ -1676,8 +1676,6 @@ containing a value of this type.
         public static final int customPanel=0x7f0d0039;
         public static final int decor_content_parent=0x7f0d0042;
         public static final int default_activity_button=0x7f0d002a;
-        public static final int device_details=0x7f0d0065;
-        public static final int device_name=0x7f0d0064;
         public static final int disableHome=0x7f0d000c;
         public static final int edit_query=0x7f0d0046;
         public static final int end=0x7f0d001d;
@@ -1695,7 +1693,6 @@ containing a value of this type.
         public static final int line1=0x7f0d005c;
         public static final int line3=0x7f0d0060;
         public static final int listMode=0x7f0d0009;
-        public static final int listVSiew=0x7f0d0067;
         public static final int list_item=0x7f0d002b;
         public static final int marker_id=0x7f0d0056;
         public static final int media_actions=0x7f0d005a;
@@ -1738,7 +1735,6 @@ containing a value of this type.
         public static final int text=0x7f0d0061;
         public static final int text2=0x7f0d005f;
         public static final int textSpacerNoButtons=0x7f0d0037;
-        public static final int textView=0x7f0d0066;
         public static final int time=0x7f0d005d;
         public static final int title=0x7f0d002d;
         public static final int title_template=0x7f0d0032;
@@ -1794,8 +1790,6 @@ containing a value of this type.
         public static final int select_dialog_multichoice_material=0x7f040023;
         public static final int select_dialog_singlechoice_material=0x7f040024;
         public static final int support_simple_spinner_dropdown_item=0x7f040025;
-        public static final int wifi_direct_row=0x7f040026;
-        public static final int wifi_direct_server=0x7f040027;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
