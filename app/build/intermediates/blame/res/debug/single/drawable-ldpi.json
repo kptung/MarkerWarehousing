@@ -4,23 +4,11 @@
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-ldpi\\camera.png"
     },
     {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi\\corners.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-ldpi\\corners.png"
-    },
-    {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi\\corners.png",
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-ldpi\\corners.png"
     },
     {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi\\icon.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-ldpi\\icon.png"
-    },
-    {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi\\icon.png",
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-ldpi\\icon.png"
-    },
-    {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi\\camera.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-ldpi\\camera.png"
     }
 ]

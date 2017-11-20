@@ -4,15 +4,7 @@
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-mdpi\\corners.png"
     },
     {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\icon.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-mdpi\\icon.png"
-    },
-    {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\icon.png",
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-mdpi\\icon.png"
-    },
-    {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi\\corners.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-mdpi\\corners.png"
     }
 ]

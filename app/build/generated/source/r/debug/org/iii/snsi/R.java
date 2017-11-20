@@ -79,7 +79,6 @@ public final class R {
         public static final int buttonStyleSmall = 0x7f010089;
         public static final int buttonTint = 0x7f010097;
         public static final int buttonTintMode = 0x7f010098;
-        public static final int camera_id = 0x7f010096;
         public static final int checkboxStyle = 0x7f01008a;
         public static final int checkedTextViewStyle = 0x7f01008b;
         public static final int closeIcon = 0x7f0100af;
@@ -178,7 +177,6 @@ public final class R {
         public static final int showAsAction = 0x7f0100a4;
         public static final int showDividers = 0x7f0100a2;
         public static final int showText = 0x7f0100be;
-        public static final int show_fps = 0x7f010095;
         public static final int singleChoiceItemLayout = 0x7f010022;
         public static final int spinBars = 0x7f01009a;
         public static final int spinnerDropDownItemStyle = 0x7f010053;
@@ -488,8 +486,6 @@ public final class R {
         public static final int activity_chooser_view_content = 0x7f0d0027;
         public static final int alertTitle = 0x7f0d0033;
         public static final int always = 0x7f0d001f;
-        public static final int any = 0x7f0d0014;
-        public static final int back = 0x7f0d0015;
         public static final int beginning = 0x7f0d001c;
         public static final int buttonPanel = 0x7f0d002e;
         public static final int cancel_action = 0x7f0d0058;
@@ -507,7 +503,6 @@ public final class R {
         public static final int end_padder = 0x7f0d0063;
         public static final int expand_activities_button = 0x7f0d0028;
         public static final int expanded_menu = 0x7f0d003b;
-        public static final int front = 0x7f0d0016;
         public static final int home = 0x7f0d0004;
         public static final int homeAsUp = 0x7f0d000d;
         public static final int icon = 0x7f0d002c;
@@ -1128,9 +1123,6 @@ public final class R {
         public static final int AppCompatTheme_windowNoTitle = 3;
         public static final int[] ButtonBarLayout = { 0x7f010094 };
         public static final int ButtonBarLayout_allowStacking = 0;
-        public static final int[] CameraBridgeViewBase = { 0x7f010095, 0x7f010096 };
-        public static final int CameraBridgeViewBase_camera_id = 1;
-        public static final int CameraBridgeViewBase_show_fps = 0;
         public static final int[] CompoundButton = { 0x01010107, 0x7f010097, 0x7f010098 };
         public static final int CompoundButton_android_button = 0;
         public static final int CompoundButton_buttonTint = 1;

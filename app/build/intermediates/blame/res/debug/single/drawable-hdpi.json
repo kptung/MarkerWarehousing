@@ -1,9 +1,5 @@
 [
     {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
-    },
-    {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\camera.png",
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-hdpi\\camera.png"
     },
@@ -14,13 +10,5 @@
     {
         "merged": "I:\\netbeans\\MarkerPositioning\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon.png",
         "source": "I:\\netbeans\\MarkerPositioning\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
-    },
-    {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\icon.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
-    },
-    {
-        "merged": "I:\\netbeans\\VideoTracking\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\corners.png",
-        "source": "I:\\netbeans\\VideoTracking\\app\\src\\main\\res\\drawable-hdpi\\corners.png"
     }
 ]

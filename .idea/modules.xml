@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/drawer/drawer.iml" filepath="$PROJECT_DIR$/drawer/drawer.iml" />
       <module fileurl="file://$PROJECT_DIR$/streamlibrary-release/streamlibrary-release.iml" filepath="$PROJECT_DIR$/streamlibrary-release/streamlibrary-release.iml" />
-      <module fileurl="file://$PROJECT_DIR$/trackingInterface/trackingInterface.iml" filepath="$PROJECT_DIR$/trackingInterface/trackingInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/videotracking/videotracking.iml" filepath="$PROJECT_DIR$/videotracking/videotracking.iml" />
     </modules>
   </component>

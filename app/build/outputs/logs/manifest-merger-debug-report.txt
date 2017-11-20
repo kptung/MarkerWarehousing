@@ -63,7 +63,6 @@ MERGED from [com.android.support:appcompat-v7:23.4.0] C:\Users\pop\.android\buil
 MERGED from [com.android.support:animated-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\b023cf6868b8a024a537baf249802cb24fb3c2c7\output\AndroidManifest.xml:7:5-20
 MERGED from [com.android.support:support-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\1a8e10f5baf6fc3b465a37108785fa0434299751\output\AndroidManifest.xml:7:5-20
 MERGED from [com.android.support:support-v4:23.4.0] C:\Users\pop\.android\build-cache\7fe3087d60b7f4cb94986cbb6c7abd9bbf0579f5\output\AndroidManifest.xml:22:5-20
-MERGED from [MarkerPositioning:trackingInterface:unspecified] I:\netbeans\MarkerPositioning\trackingInterface\build\intermediates\bundles\default\AndroidManifest.xml:11:5-15:19
 MERGED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:19:5-23:19
 MERGED from [:streamlibrary-release:] C:\Users\pop\.android\build-cache\9ba305bff0a05c699016b8aa4dcc2a28b33f3e0d\output\AndroidManifest.xml:25:5-29:19
 MERGED from [MarkerPositioning:drawer:unspecified] I:\netbeans\MarkerPositioning\drawer\build\intermediates\bundles\default\AndroidManifest.xml:11:5-15:19
@@ -100,7 +99,6 @@ MERGED from [com.android.support:appcompat-v7:23.4.0] C:\Users\pop\.android\buil
 MERGED from [com.android.support:animated-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\b023cf6868b8a024a537baf249802cb24fb3c2c7\output\AndroidManifest.xml:5:5-44
 MERGED from [com.android.support:support-vector-drawable:23.4.0] C:\Users\pop\.android\build-cache\1a8e10f5baf6fc3b465a37108785fa0434299751\output\AndroidManifest.xml:5:5-43
 MERGED from [com.android.support:support-v4:23.4.0] C:\Users\pop\.android\build-cache\7fe3087d60b7f4cb94986cbb6c7abd9bbf0579f5\output\AndroidManifest.xml:20:5-43
-MERGED from [MarkerPositioning:trackingInterface:unspecified] I:\netbeans\MarkerPositioning\trackingInterface\build\intermediates\bundles\default\AndroidManifest.xml:7:5-9:41
 MERGED from [:lib-util-release:] C:\Users\pop\.android\build-cache\48a3081864afd79ef000aba85b0bfafc2a9b1e19\output\AndroidManifest.xml:7:5-9:41
 MERGED from [:lib-opencv-3.2.0-release:] C:\Users\pop\.android\build-cache\38c594feb2b2da2bf59193ae426a53fed5ce3758\output\AndroidManifest.xml:7:5-9:41
 MERGED from [:lib-irglass-release:] C:\Users\pop\.android\build-cache\de520a45351299dfcb3881525a0341d5fc9fa23c\output\AndroidManifest.xml:5:5-7:41

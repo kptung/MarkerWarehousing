@@ -22,29 +22,5 @@
                 }
             }
         ]
-    },
-    {
-        "outputFile": "I:\\netbeans\\VideoTracking\\videotracking\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-h320dp-v13\\values-h320dp-v13.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endColumn": 57,
-                    "endOffset": 108
-                },
-                "from": {
-                    "file": "C:\\Users\\pop\\.android\\build-cache\\51364c5199bae4b65ab39a02b8cd001d504ad4c9\\output\\res\\values-h320dp-v13\\values-h320dp-v13.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endColumn": 57,
-                        "endOffset": 108
-                    }
-                }
-            }
-        ]
     }
 ]
