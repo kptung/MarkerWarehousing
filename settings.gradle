@@ -1,1 +1,2 @@
-include ':app', ':markerposition', ':drawer'
+include ':app', ':videotracking', ':trackingInterface', ':drawer', ':streamlibrary-release'
+
