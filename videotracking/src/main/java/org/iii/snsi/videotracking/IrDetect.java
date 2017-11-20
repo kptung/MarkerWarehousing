@@ -4,9 +4,12 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
+import org.iii.snsi.videotracking.IrArucoMarker;
+
 public class IrDetect {
     static {
         try {
+            System.loadLibrary("opencv_java3");
             System.loadLibrary("videotracking");
         } catch (Exception e) {
             Log.d("TAG", "Load Lib Fail...");
