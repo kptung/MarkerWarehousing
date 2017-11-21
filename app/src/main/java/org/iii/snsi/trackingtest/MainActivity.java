@@ -23,7 +23,8 @@ public class MainActivity extends Activity{
 	// marker
 	private TextView mMarkerInfoText;
 	private boolean mIsAdvanced = true;
-	private IrArucoMarker[] fullMarkerSet;
+	private IrArucoMarker[] fullMarkerSet1;
+	private IrArucoMarker[] fullMarkerSet2;
 	private SurfaceView surfaceView;
     private FrameLayout cameraLayout;
 	private DrawStereoRect2D drawer;
@@ -99,22 +100,26 @@ public class MainActivity extends Activity{
 										}
 									});
 								} else {
-									fullMarkerSet = MarkerHelper.nFindArucoMarkersWithMarkerSize(
-											bytes, width, height, 0.03f, -0.05f);
+									fullMarkerSet1 = MarkerHelper.nFindArucoMarkersWithMarkerSize(
+											bytes, width, height, 0.03f, -0.04f);
+									fullMarkerSet2 = MarkerHelper.nFindArucoMarkersWithMarkerSize(
+											bytes, width, height, 0.03f, -0.065f);
 
-									if(fullMarkerSet!=null && fullMarkerSet.length>0) {
-										IrArucoMarker marker = fullMarkerSet[0];
-										System.out.println("injectpoints x = " + (int)Math.round(marker.injectpoints[0].x));
-										System.out.println("injectpoints y = " + (int)Math.round(marker.injectpoints[0].y));
+									if(fullMarkerSet1 !=null && fullMarkerSet1.length>0) {
+										IrArucoMarker marker0 = fullMarkerSet1[0];
+										IrArucoMarker marker1 = fullMarkerSet2[0];
+										System.out.println("injectpoints x = " + (int)Math.round(marker0.injectpoints[0].x));
+										System.out.println("injectpoints y = " + (int)Math.round(marker1.injectpoints[0].y));
 										drawer.processTrackingRect(width, height,
-												new int[] {0, (int)Math.round(marker.injectpoints[0].x), (int)Math.round(marker.injectpoints[0].y), 30, 30});
+												new int[] {0, (int)Math.round(marker0.injectpoints[0].x -20), (int)Math.round(marker0.injectpoints[0].y), 40, (int)Math.round(marker1.injectpoints[0].y)});
 										drawer.postInvalidate();
 									}
 
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
-											MarkerHelper.printFullMarkerSet(fullMarkerSet, mMarkerInfoText);
+											MarkerHelper.printFullMarkerSet(
+													fullMarkerSet1, mMarkerInfoText);
 										}
 									});
 								}
