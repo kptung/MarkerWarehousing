@@ -1,11 +1,5 @@
 package org.iii.snsi.videotracking;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.TextView;
-
-import org.iii.snsi.videotracking.IrArucoMarker;
-
 public class IrDetect {
 
     public native static boolean importYMLCameraParameters(String filename);

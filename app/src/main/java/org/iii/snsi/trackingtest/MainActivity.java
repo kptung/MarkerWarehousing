@@ -19,7 +19,7 @@ import org.iii.snsi.videotracking.IrArucoMarker;
 public class MainActivity extends Activity{
 
 	// debug
-	private static final String TAG = "MarkerDetectionSampleActivity";
+	private static final String TAG = "MarkerActivity";
 	// marker
 	private TextView mMarkerInfoText;
 	private boolean mIsAdvanced = true;
@@ -60,7 +60,7 @@ public class MainActivity extends Activity{
 			requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_COARSE_LOCATION);
 		}
 
-		MarkerHelper.initialization(this);
+		MarkerHelper.initialization();
 
 		final SurfaceHolder surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(new SurfaceHolder.Callback() {

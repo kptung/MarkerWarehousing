@@ -1,6 +1,5 @@
 package org.iii.snsi.trackingtest;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -16,13 +15,13 @@ public class MarkerHelper {
             Log.d("TAG", "Load Lib Fail...");
         }
     }
-    private static final String TAG = "IrDetect";
+    private static final String TAG = "MarkerHelper";
     private static final String YML_FILE = "/sdcard/camera.yml";
     private static final String YML_FILE2 = "/sdcard/detector_params.yml";
     private static final String YML_FILE3 = "/sdcard/bt300-RTmatrices.yml";
     private static boolean enabelRTMatrices = false;
 
-    public static void initialization(Context context) {
+    public static void initialization() {
         IrDetect.importYMLCameraParameters(YML_FILE);
         IrDetect.importYMLDetectParameters(YML_FILE2);
         if (enabelRTMatrices)
