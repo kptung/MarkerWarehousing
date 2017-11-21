@@ -129,10 +129,8 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             double leftL = leftR + offsetLR * rateX - layoutWidth;
             double rightL = rightR + offsetLR * rateX - layoutWidth;
 
-            if (!dbgObjImg && ((leftR < 0 || leftR > layoutWidth) || (topR < 0
-                    || topR > layoutHeight)) && (
-                    (rightR < 0 || rightR > layoutWidth) || (bottomR < 0
-                            || bottomR > layoutHeight)))
+            if ( (topR > layoutHeight) || (bottomR < 0) ||
+                    (rightL < 0) || (leftR > (layoutWidth*2)))
             {
                 data[i] = -1;
             } else {
