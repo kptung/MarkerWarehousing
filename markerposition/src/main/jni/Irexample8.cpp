@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "IrArInterface.h"
 
 using namespace std;
@@ -13,7 +12,7 @@ using namespace cv;
 /****************************************************************************/
 int main(int argc, char **argv)
 {
-	std::string infolder("./data/artest2");
+	std::string infolder("./data/debug");
 	std::string outfolder("./data/arucomarkerout");
 	
 	/************************************************************************/
@@ -56,7 +55,7 @@ int main(int argc, char **argv)
 				mxzdist = markers[j].getXZCameraDistance() * 100;
 				mori = markers[j].getMarkerOri();
 				mcenter = markers[j].getMarkerCenter();
-				markers[j].getCameraAngle(mxzangle, myzangle, mori);
+				markers[j].getCameraAngle(mxzangle, myzangle);
 
 				cout << "marker id: " << mid << endl;
 				cout << "X-Z viewing angle: " << mxzangle << endl;
@@ -86,9 +85,9 @@ int main(int argc, char **argv)
 				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
 				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
 				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
+				putText(src, str1.str(), Point(10, 500), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
 				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-				putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
+				putText(src, str2.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
 
 				imwrite(outfolder + SEP + files[i], src);
 			}

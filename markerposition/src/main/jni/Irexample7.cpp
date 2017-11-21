@@ -75,7 +75,7 @@ int main234(int argc, char **argv)
 
 				mori = markers[j].getMarkerOri();
 				mcenter = markers[j].getMarkerCenter();
-				markers[j].getCameraAngle(mxzangle, myzangle, mori);
+				markers[j].getCameraAngle(mxzangle, myzangle);
 				rvec = markers[j].getRotationMatrix();
 				tvec = markers[j].getTransnslationMatrix();
 

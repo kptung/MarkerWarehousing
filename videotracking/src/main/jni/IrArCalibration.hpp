@@ -14,7 +14,7 @@
 class IrArCalibration3d
 {  
 public:
-	IrArCalibration3d() : m_imgResolution(800,600), m_camIntrinsic(3,3,CV_64F), m_camDistortion(5,1,CV_64F)
+	IrArCalibration3d() : m_camIntrinsic(cv::Mat::eye(3, 3, CV_32F)*-1), m_camDistortion(cv::Mat(5, 1, CV_64F)*-1)
 	{
 	}
 
@@ -50,7 +50,7 @@ public:
 
 private:
 	
-	cv::Size2i m_imgResolution;
+	//cv::Size2i m_imgResolution;
 	// camera intrinsic & distortion 
 	cv::Mat m_camIntrinsic;
 	cv::Mat m_camDistortion;
@@ -114,7 +114,7 @@ inline bool IrArCalibration3d::loadCameraParametersFromYML(const std::string &fi
 
 	if (width > 1 && height > 1 && cv::checkRange(intrinsic) && cv::checkRange(distortion))
 	{
-		m_imgResolution = cv::Size2i(width, height);
+		//m_imgResolution = cv::Size2i(width, height);
 		intrinsic.copyTo(m_camIntrinsic);
 		distortion.copyTo(m_camDistortion);
 	}

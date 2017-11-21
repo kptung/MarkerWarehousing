@@ -31,7 +31,7 @@ class IrArucoMarker
 public:
 
 	/// constructor
-	IrArucoMarker() : m_id(-1), m_ori(0), m_cameraPosition(cv::Point3f()), m_rvec(cv::Mat::eye(3, 3, CV_32F)), y_axis_angle(0), x_axis_angle(0), m_center(cv::Point2f()), m_markerLength(0)
+	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0,-1.0,-1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), y_axis_angle(-1), x_axis_angle(-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
 	{
 	}
 
@@ -74,7 +74,7 @@ public:
 	{
 		m_cameraPosition = cv::Point3f(cameraPose);
 	}
-	const cv::Point3f &getCameraPosition(void)
+	cv::Point3f getCameraPosition(void) const
 	{
 		return m_cameraPosition;
 	}
@@ -84,7 +84,7 @@ public:
 	{
 		m_center = cen;
 	}
-	const cv::Point2f getMarkerCenter()
+	cv::Point2f getMarkerCenter() const
 	{
 		return m_center;
 	}
@@ -94,17 +94,17 @@ public:
 	{
 		m_markerLength = i;
 	}
-	float getMarkerLen(void)
+	float getMarkerLen(void) const
 	{
 		return m_markerLength;
 	}
 
 	// get camera distance
-	double getXZCameraDistance(void)
+	float getXZCameraDistance(void) const
 	{
-		double x = (double)m_cameraPosition.x;
-		double y = (double)m_cameraPosition.y;
-		double z = (double)m_cameraPosition.z;
+		float x = (float)m_cameraPosition.x;
+		float y = (float)m_cameraPosition.y;
+		float z = (float)m_cameraPosition.z;
 		cv::Point3f XYZ(x, y, z);
 		if (m_ori == 90)
 			XYZ = cv::Point3f(y, -x, z);
@@ -115,17 +115,17 @@ public:
 		return sqrt(XYZ.x*XYZ.x+XYZ.z*XYZ.z);
 		//return z;
 	}
-	double getCameraDistance(void)
+	float getCameraDistance(void) const
 	{
-		double x = (double)m_cameraPosition.x;
-		double y = (double)m_cameraPosition.y;
-		double z = (double)m_cameraPosition.z;
+		float x = (float)m_cameraPosition.x;
+		float y = (float)m_cameraPosition.y;
+		float z = (float)m_cameraPosition.z;
 		return sqrt(x*x + y*y + z*z);
 		//return z;
 	}
 
 	// get camera angle
-	bool getCameraAngle(int& xzangle, int& yzangle, const int& angle)
+	bool getCameraAngle(int& xzangle, int& yzangle) const
 	{
 		float x = (float)m_cameraPosition.x;
 		float y = (float)m_cameraPosition.y;
@@ -139,7 +139,7 @@ public:
 		/*  | y'|   | sin(theta), cos(theta)  | | y |       | y'|   | -sin(theta), cos(theta)  | | y | */
 		/**********************************************************************************************/
 		cv::Point3f XYZ(x, y, z);
-		XYZ = cv::Point3f(x*cos(angle)+y*sin(angle), x*-sin(angle) + y*cos(angle), z);
+		XYZ = cv::Point3f(x*cos(m_ori)+y*sin(m_ori), x*-sin(m_ori) + y*cos(m_ori), z);
 
 		// define XZ Quadrant
 		int xzflag = 1;
@@ -168,7 +168,7 @@ public:
 	{
 		m_rvec = cv::Mat(rvec);
 	}
-	cv::Mat getRotationMatrix(void)
+	cv::Mat getRotationMatrix(void) const
 	{
 		return m_rvec;
 	}
@@ -178,7 +178,7 @@ public:
 	{
 		m_tvec = cv::Mat(tvec);
 	}
-	cv::Mat getTransnslationMatrix(void)
+	cv::Mat getTransnslationMatrix(void) const
 	{
 		return m_tvec;
 	}

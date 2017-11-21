@@ -82,7 +82,7 @@ public:
 				_markers[i].setRotationMatrix(rvecs[i]);
 				_markers[i].setTransnslationMatrix(tvecs[i]);
 
-				//cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
+				cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
 
 				markers.push_back(_markers[i]);
 			}
