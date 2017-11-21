@@ -16,7 +16,7 @@ public class MarkerHelper {
         }
     }
     private static final String TAG = "MarkerHelper";
-    private static final String YML_FILE = "/sdcard/camera.yml";
+    private static final String YML_FILE = "/sdcard/a6k_mr/bt300jj130-camera.yml";
     private static final String YML_FILE2 = "/sdcard/detector_params.yml";
     private static final String YML_FILE3 = "/sdcard/bt300-RTmatrices.yml";
     private static boolean enabelRTMatrices = false;
