@@ -31,4 +31,5 @@ dependencies {
     compile project(':videotracking')
     compile(name: 'streamlibrary-release', ext: 'aar')
     compile project(':drawer')
+    compile files('libs/BT300Ctrl.jar')
 }

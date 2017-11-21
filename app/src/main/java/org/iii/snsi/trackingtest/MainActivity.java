@@ -12,6 +12,8 @@ import android.view.SurfaceView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.epson.moverio.btcontrol.DisplayControl;
+
 import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.streamlibrary.CameraController;
 import org.iii.snsi.videotracking.IrArucoMarker;
@@ -28,6 +30,7 @@ public class MainActivity extends Activity{
 	private SurfaceView surfaceView;
     private FrameLayout cameraLayout;
 	private DrawStereoRect2D drawer;
+	private DisplayControl bt300Control;
 	CameraController cameraController;
 
 	/// camera captured frame
@@ -48,6 +51,11 @@ public class MainActivity extends Activity{
 		cameraController = new CameraController(this);
 		surfaceView = (SurfaceView)findViewById(R.id.camera_view);
         cameraLayout = (FrameLayout)findViewById(R.id.camera_layout);
+		if(Build.MODEL.contains("EMBT3C")){
+			bt300Control = new DisplayControl(this);
+			bt300Control.setMode(DisplayControl.DISPLAY_MODE_3D, false);
+		}
+
 		drawer = new DrawStereoRect2D(this);
 		drawer.setTrackingCalibration(91,90,92,53);
 		drawer.setLayoutSize(1280, 720);
@@ -170,6 +178,10 @@ public class MainActivity extends Activity{
 		super.onDestroy();
 		if (cameraController != null) {
 			cameraController.stopCamera();
+		}
+
+		if(Build.MODEL.contains("EMBT3C")){
+			bt300Control.setMode(DisplayControl.DISPLAY_MODE_2D, false);
 		}
 	}
 
