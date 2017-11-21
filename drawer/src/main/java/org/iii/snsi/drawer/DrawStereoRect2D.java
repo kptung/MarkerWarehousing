@@ -15,8 +15,11 @@ import java.util.Map;
 public class DrawStereoRect2D extends DrawTrackingRect {
 
     private boolean dbgObjImg = false;
-    private HashMap<Integer, int[]> rectSets;
-    private HashMap<Integer, int[]> rectSetsLR;
+    private boolean calibrateInside = false;
+    private HashMap<Integer, int[]> rectSets;//old item
+    private HashMap<Integer, int[]> rectSetsLR;//old item
+    private HashMap<Integer, int[]> rectSetsL;//new item
+    private HashMap<Integer, int[]> rectSetsR;//new item
     private HashMap<Integer, Bitmap> objImg;
     private int layoutWidth;
     private int layoutHeight;
@@ -33,6 +36,8 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         objImg = new HashMap<Integer, Bitmap>();
         rectSets = new HashMap<Integer, int[]>();
         rectSetsLR = new HashMap<Integer, int[]>();
+        rectSetsL = new HashMap<Integer, int[]>();
+        rectSetsR = new HashMap<Integer, int[]>();
     }
 
     public void setDbgObjImg(int flag) {
@@ -63,10 +68,22 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         roiScopeR[1] = offsetHeight;
         roiScopeR[2] = offsetWidth + roiWidth;
         roiScopeR[3] = offsetHeight + roiHeight;
+        calibrateInside = true;
     }
 
     public void setOffsetLR(int offsetLR) {
         this.offsetLR = offsetLR;
+        calibrateInside = true;
+    }
+
+    public void drawLeftRect(int left, int top, int right, int bottom) {
+        calibrateInside = false;
+        rectSetsL.put(0, new int[] {left, top, right, bottom});
+    }
+
+    public void drawRightRect(int left, int top, int right, int bottom) {
+        calibrateInside = false;
+        rectSetsR.put(0, new int[] {left, top, right, bottom});
     }
 
     @Override
@@ -139,6 +156,14 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (calibrateInside) {
+            calibrateInsideDraw(canvas);
+        } else {
+            calibrateOutsideDraw(canvas);
+        }
+    }
+
+    private void calibrateInsideDraw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
@@ -202,5 +227,13 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             }
             //----------------end left eye
         }
+    }
+
+    private void calibrateOutsideDraw(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(5);
     }
 }
