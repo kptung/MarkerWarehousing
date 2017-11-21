@@ -19,9 +19,8 @@ import org.iii.snsi.streamlibrary.CameraController;
 import org.iii.snsi.videotracking.IrArucoMarker;
 
 public class MainActivity extends Activity {
-
-    // debug
     private static final String TAG = "MainActivity";
+    private static final String EMBT3C_RESOLUTION = "640x480";
     // marker
     private TextView mMarkerInfoText;
     private IrArucoMarker[] fullMarkerSet1;
@@ -43,27 +42,18 @@ public class MainActivity extends Activity {
         mMarkerInfoText = (TextView) findViewById(R.id.marker_id);
         cameraController = new CameraController(this);
         surfaceView = (SurfaceView) findViewById(R.id.camera_view);
-        cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
+
         if (Build.MODEL.contains("EMBT3C")) {
             bt300Control = new DisplayControl(this);
             bt300Control.setMode(DisplayControl.DISPLAY_MODE_3D, false);
         }
 
-        drawer = new DrawStereoRect2D(this);
-        drawer.setTrackingCalibration(91, 90, 92, 53);
-        drawer.setLayoutSize(1280, 720);
-        drawer.setOffsetLR(26);
+        initializeDrawer();
+
+        cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
         cameraLayout.addView(drawer);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    REQUEST_WRITE_STORAGE);
-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                    REQUEST_READ_STORAGE);
-            requestPermission(Manifest.permission.CAMERA, REQUEST_CAMERA);
-            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                    REQUEST_COARSE_LOCATION);
-        }
+        requestPermission();
 
         MarkerHelper.initialization();
 
@@ -73,9 +63,8 @@ public class MainActivity extends Activity {
             public void surfaceCreated(SurfaceHolder holder) {
                 String[] cameraFormatList =
                         cameraController.getCameraFormatList();
-                int index = 0;
                 for (int i = 0; i < cameraFormatList.length; ++i) {
-                    if (cameraFormatList[i].contains("640x480")) {
+                    if (cameraFormatList[i].contains(EMBT3C_RESOLUTION)) {
                         cameraController.changePreviewFormat(i);
                         break;
                     }
@@ -89,44 +78,7 @@ public class MainActivity extends Activity {
                             public void onIncomingCallbackFrame(byte[] bytes,
                                     int width, int height) {
                                 sleep(10);
-
-                                fullMarkerSet1 = MarkerHelper
-                                        .nFindArucoMarkersWithMarkerSize(bytes,
-                                                width, height, 0.03f, -0.04f);
-                                fullMarkerSet2 = MarkerHelper
-                                        .nFindArucoMarkersWithMarkerSize(bytes,
-                                                width, height, 0.03f, -0.065f);
-
-                                if (fullMarkerSet1 != null
-                                        && fullMarkerSet1.length > 0)
-                                {
-                                    IrArucoMarker marker0 = fullMarkerSet1[0];
-                                    IrArucoMarker marker1 = fullMarkerSet2[0];
-                                    System.out.println(
-                                            "injectpoints x = " + (int) Math
-                                                    .round(marker0.injectpoints[0].x));
-                                    System.out.println(
-                                            "injectpoints y = " + (int) Math
-                                                    .round(marker1.injectpoints[0].y));
-                                    drawer.processTrackingRect(width, height,
-                                            new int[] {0, (int) Math
-                                                    .round(marker0.injectpoints[0].x
-                                                            - 20), (int) Math
-                                                    .round(marker0.injectpoints[0].y),
-                                                    40, (int) Math
-                                                    .round(marker1.injectpoints[0].y)});
-                                    drawer.postInvalidate();
-                                }
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-//                                        MarkerHelper.printFullMarkerSet(
-//                                                fullMarkerSet1,
-//                                                mMarkerInfoText);
-                                    }
-                                });
-
+                                drawInjectionArea(bytes, width, height);
                             }
                         });
             }
@@ -145,6 +97,64 @@ public class MainActivity extends Activity {
             }
         });
 
+    }
+
+    private void drawInjectionArea(byte[] bytes, int width, int height) {
+        fullMarkerSet1 = MarkerHelper
+                .nFindArucoMarkersWithMarkerSize(bytes,
+                        width, height, 0.03f, -0.04f);
+        fullMarkerSet2 = MarkerHelper
+                .nFindArucoMarkersWithMarkerSize(bytes,
+                        width, height, 0.03f, -0.065f);
+
+        if (fullMarkerSet1 != null
+                && fullMarkerSet1.length > 0)
+        {
+            IrArucoMarker marker0 = fullMarkerSet1[0];
+            IrArucoMarker marker1 = fullMarkerSet2[0];
+            System.out.println(
+                    "injectpoints x = " + (int) Math
+                            .round(marker0.injectpoints[0].x));
+            System.out.println(
+                    "injectpoints y = " + (int) Math
+                            .round(marker1.injectpoints[0].y));
+            drawer.processTrackingRect(width, height,
+                    new int[] {0, (int) Math
+                            .round(marker0.injectpoints[0].x
+                                    - 20), (int) Math
+                            .round(marker0.injectpoints[0].y),
+                            40, (int) Math
+                            .round(marker1.injectpoints[0].y)});
+            drawer.postInvalidate();
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                                        MarkerHelper.printFullMarkerSet(
+//                                                fullMarkerSet1,
+//                                                mMarkerInfoText);
+            }
+        });
+    }
+
+    private void initializeDrawer() {
+        drawer = new DrawStereoRect2D(this);
+        drawer.setTrackingCalibration(91, 90, 92, 53);
+        drawer.setLayoutSize(1280, 720);
+        drawer.setOffsetLR(26);
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    REQUEST_WRITE_STORAGE);
+            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                    REQUEST_READ_STORAGE);
+            requestPermission(Manifest.permission.CAMERA, REQUEST_CAMERA);
+            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+                    REQUEST_COARSE_LOCATION);
+        }
     }
 
     private void requestPermission(String permissionType, int requestCode) {
