@@ -49,7 +49,7 @@ public class MainActivity extends Activity{
         cameraLayout = (FrameLayout)findViewById(R.id.camera_layout);
 		drawer = new DrawStereoRect2D(this);
 		drawer.setTrackingCalibration(91,90,92,53);
-		drawer.setLayoutSize(640,720);
+		drawer.setLayoutSize(1280, 720);
 		drawer.setOffsetLR(26);
         cameraLayout.addView(drawer);
 
@@ -70,7 +70,7 @@ public class MainActivity extends Activity{
 				int index = 0;
 				for (int i= 0; i < cameraFormatList.length; ++i)
 				{
-					if (cameraFormatList[i].contains("1024")) {
+					if (cameraFormatList[i].contains("640x480")) {
 						cameraController.changePreviewFormat(i);
 						break;
 					}
@@ -91,8 +91,7 @@ public class MainActivity extends Activity{
 //									basicMarkerSet =
 //											IrDetector.findBasicMarkers(
 //													bytes, 640, 480);
-									drawer.processTrackingRect(width,height,new int[]{0, 0, 0, 640, 720});
-									drawer.postInvalidate();
+
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
@@ -102,6 +101,16 @@ public class MainActivity extends Activity{
 								} else {
 									fullMarkerSet = MarkerHelper.nFindArucoMarkersWithMarkerSize(
 											bytes, width, height, 0.03f, -0.05f);
+
+									if(fullMarkerSet!=null && fullMarkerSet.length>0) {
+										IrArucoMarker marker = fullMarkerSet[0];
+										System.out.println("injectpoints x = " + (int)Math.round(marker.injectpoints[0].x));
+										System.out.println("injectpoints y = " + (int)Math.round(marker.injectpoints[0].y));
+										drawer.processTrackingRect(width, height,
+												new int[] {0, (int)Math.round(marker.injectpoints[0].x), (int)Math.round(marker.injectpoints[0].y), 30, 30});
+										drawer.postInvalidate();
+									}
+
 									runOnUiThread(new Runnable() {
 										@Override
 										public void run() {
