@@ -184,8 +184,7 @@ Java_org_iii_snsi_videotracking_IrDetect_findArucoMarkersWithMarkerSize(
 //            if(gid==0)
 //                mInjectPoints = findInjection(assist.getInjectionPoints(), rvec, tvec, mOri, mCenter);
 //            else
-                mInjectPoints = findInjection(assist.getInjectionPoints(), mOri, mCenter);
-
+                mInjectPoints = findInjection(assist.getInjectionPoints(), rvec, tvec, mOri, markers[i].getMarkerCenter());
             int injectPoints_len = (int) mInjectPoints.size();
 
             // Create an object instance
