@@ -1,2 +1,2 @@
-include ':app', ':videotracking', ':drawer', ':streamlibrary-release'
+include ':app', ':videotracking', ':drawer'
 
