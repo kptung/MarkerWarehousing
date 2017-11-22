@@ -18,7 +18,7 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, rvec, tvec, ori, center);
 }
-
+/*
 std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, const int &ori, const cv::Point2f &center)
 {
 	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
@@ -27,7 +27,7 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 	calib3d.getRTfromDualEyes(lrvec, rrvec, ltvec, rtvec);
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, lrvec, ltvec, rrvec, rtvec, ori, center);
 }
-
+*/
 /************************************************************************/
 /*         Aruco marker detection                                 */
 /************************************************************************/
@@ -48,7 +48,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLen, std::vector<
 	cv::Ptr<cv::aruco::Dictionary> dictionary =
 		cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
 	// (d) detect marker
-	return mdet.findArMarkers(gray, markerLen, markers, intrinsic, distortion, detectparas);
+	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, detectparas);
 
 }
 

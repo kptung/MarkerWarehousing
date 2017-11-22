@@ -34,10 +34,10 @@ public:
 	/************************************************************************/
 	/*         Aruco marker detection                                 */
 	/************************************************************************/
-	bool findArMarkers(const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
+	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
 	{
 		cv::Mat origin;
-		gray.copyTo(origin);
+		src.copyTo(origin);
 		// (a) define aruco dictionary
 		cv::Ptr<cv::aruco::Dictionary> dictionary =
 			cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
@@ -73,21 +73,24 @@ public:
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setMarkerCenter(cent);
 				cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-				// Calculate the camera pose
+				// (e) Calculate the camera pose
 				cv::Mat R;
 				cv::Rodrigues(rvecs[i], R);
 				cv::Mat cameraPose = -R.t() * (cv::Mat)tvecs[i];
 				_markers[i].setCameraPos(cameraPose);
+
 				_markers[i].setRotationMatrix(rvecs[i]);
 				_markers[i].setTransnslationMatrix(tvecs[i]);
 
-				//cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
+				cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
 
 				markers.push_back(_markers[i]);
 			}
+			return true;
 		}
-
-		return true;
+		else
+			return false;
+		
 	}
 
 	std::vector<cv::Point2f> findInjectPoints(const std::vector<cv::Point3f>& objpts, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Mat& rvec, const cv::Mat& tvec, const int &ori, const cv::Point2f &center)
@@ -108,14 +111,14 @@ public:
 				else if (ori == 270)
 					outPoint = cv::Point2f(-inpoint.y, inpoint.x);
 				outPoint += center;
+				outpts.push_back(outPoint);
 			}
-			outpts.push_back(outPoint);
 			return outpts;
 		}
 		else
 			return pts;
 	}
-
+	/*
 	std::vector<cv::Point2f> findInjectPoints(const std::vector<cv::Point3f>& objpts, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Mat& lrvec, const cv::Mat& ltvec, const cv::Mat& rrvec, const cv::Mat& rtvec, const int &ori, const cv::Point2f &center)
 	{
 		std::vector<cv::Point2f> lpts, rpts, outpts;
@@ -164,7 +167,7 @@ public:
 			return outpts;
 		}
 	}
-
+	*/
 private:
 
 
