@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -129,16 +130,29 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             double leftL = leftR + offsetLR * rateX - layoutWidth;
             double rightL = rightR + offsetLR * rateX - layoutWidth;
 
-            if ( (topR > layoutHeight) || (bottomR < 0) ||
-                    (rightL < 0) || (leftR > (layoutWidth*2)))
+            if ((topR > layoutHeight) || (bottomR < 0) || (rightL < 0) || (leftR
+                    > (layoutWidth * 2)))
             {
-                data[i] = -1;
+                //                System.out.println("not added : " + data[i]);
+                //                System.out.println("leftR = " + leftR);
+                //                System.out.println("topR = " + topR);
+                //                System.out.println("bottomR = " + bottomR);
+                //                System.out.println("leftR = " + leftR);
             } else {
+//                System.out.println("add : " + data[i]);
+//                System.out.println("leftR = " + leftR);
+//                System.out.println("topR = " + topR);
+//                System.out.println("bottomR = " + bottomR);
+//                System.out.println("leftR = " + leftR);
+//                System.out.println("leftL = " + leftL);
+//                System.out.println("rightL = " + rightL);
+
                 rectSets.put(data[i], new int[] {(int) Math.round(leftR),
                         (int) Math.round(topR), (int) Math.round(rightR),
                         (int) Math.round(bottomR)});
                 rectSetsLR.put(data[i], new int[] {(int) Math.round(leftL),
                         (int) Math.round(rightL)});
+
             }
         }
 
@@ -164,66 +178,29 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     private void calibrateInsideDraw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5);
+        Point topLeftPointLeftEye;
+        Point bottomRightPointLeftEye;
+        Point topLeftPointRightEye;
+        Point bottomRightPointRightEye;
+
         for (Map.Entry entry : rectSets.entrySet()) {
             Object key = entry.getKey();
             int[] rectData = rectSets.get(key);
             int[] rectLR = rectSetsLR.get(key);
-            //---------------left eye
-            if (rectLR[0] < layoutWidth) {
-                //left line
-                canvas.drawLine(rectLR[0], rectData[1], rectLR[0], rectData[3],
-                        paint);
-
-                if (rectLR[1] >= layoutWidth) {
-                    //top line
-                    canvas.drawLine(rectLR[0], rectData[1], layoutWidth - 1,
-                            rectData[1], paint);
-                    //bottom line
-                    canvas.drawLine(rectLR[0], rectData[3], layoutWidth - 1,
-                            rectData[3], paint);
-                } else {
-                    //top line
-                    canvas.drawLine(rectLR[0], rectData[1], rectLR[1],
-                            rectData[1], paint);
-                    //right line
-                    canvas.drawLine(rectLR[1], rectData[1], rectLR[1],
-                            rectData[3], paint);
-                    //bottom line
-                    canvas.drawLine(rectLR[0], rectData[3], rectLR[1],
-                            rectData[3], paint);
-                }
+            topLeftPointLeftEye = new Point(rectLR[0], rectData[1]);
+            bottomRightPointLeftEye = new Point(rectLR[1], rectData[3]);
+            topLeftPointRightEye = new Point(rectData[0], rectData[1]);
+            bottomRightPointRightEye = new Point(rectData[2], rectData[3]);
+            if (key.equals(0)) {
+                paint.setColor(Color.argb(128, 0, 255, 255));
+            } else {
+                paint.setColor(Color.argb(128, 255, 0, 255));
             }
-            //---------------end left eye
-            //------------------right eye
+            drawFilledRect(canvas, paint, topLeftPointLeftEye,
+                    bottomRightPointLeftEye, topLeftPointRightEye,
+                    bottomRightPointRightEye);
 
-            if (rectData[2] >= layoutWidth) {
-                //right line
-                canvas.drawLine(rectData[2], rectData[1], rectData[2],
-                        rectData[3], paint);
-
-                if (rectData[0] < layoutWidth) {
-                    //top line
-                    canvas.drawLine(layoutWidth, rectData[1], rectData[2],
-                            rectData[1], paint);
-                    //bottom line
-                    canvas.drawLine(layoutWidth, rectData[3], rectData[2],
-                            rectData[3], paint);
-                } else {
-                    //left line
-                    canvas.drawLine(rectData[0], rectData[1], rectData[0],
-                            rectData[3], paint);
-                    //top line
-                    canvas.drawLine(rectData[0], rectData[1], rectData[2],
-                            rectData[1], paint);
-                    //bottom line
-                    canvas.drawLine(rectData[0], rectData[3], rectData[2],
-                            rectData[3], paint);
-                }
-            }
-            //----------------end left eye
         }
     }
 
@@ -231,7 +208,110 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5);
+    }
+
+    private void drawFilledRect(Canvas canvas, Paint paint,
+            Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
+            Point topLeftPointRightEye, Point bottomRightPointRightEye) {
+        paint.setStyle(Paint.Style.FILL);
+        //---------------left eye
+        Point realBottomRightPointLeftEye = bottomRightPointLeftEye;
+        if (topLeftPointLeftEye.x < layoutWidth) {
+
+            if (bottomRightPointLeftEye.x >= layoutWidth) {
+                realBottomRightPointLeftEye = new Point(layoutWidth - 1,
+                        topLeftPointLeftEye.y);
+            }
+
+            canvas.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+                    realBottomRightPointLeftEye.x,
+                    realBottomRightPointLeftEye.y, paint);
+        }
+        //---------------end left eye
+        //------------------right eye
+        Point realTopLeftPointRightEye = topLeftPointRightEye;
+
+        if (bottomRightPointRightEye.x >= layoutWidth) {
+
+            if (topLeftPointRightEye.x < layoutWidth) {
+                realTopLeftPointRightEye = new Point(layoutWidth,
+                        topLeftPointRightEye.y);
+            }
+
+            canvas.drawRect(realTopLeftPointRightEye.x,
+                    realTopLeftPointRightEye.y, bottomRightPointRightEye.x,
+                    bottomRightPointRightEye.y, paint);
+        }
+        //----------------end left eye
+    }
+
+    private void drawHollowRect(Canvas canvas, Paint paint,
+            Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
+            Point topLeftPointRightEye, Point bottomRightPointRightEye) {
+        paint.setStyle(Paint.Style.STROKE);
+        //---------------left eye
+        if (topLeftPointLeftEye.x < layoutWidth) {
+            //left line
+            canvas.drawLine(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+                    topLeftPointLeftEye.x, bottomRightPointLeftEye.y, paint);
+
+            if (bottomRightPointLeftEye.x >= layoutWidth) {
+                //top line
+                canvas.drawLine(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+                        layoutWidth - 1, topLeftPointLeftEye.y, paint);
+                //bottom line
+                canvas.drawLine(topLeftPointLeftEye.x,
+                        bottomRightPointLeftEye.y, layoutWidth - 1,
+                        bottomRightPointLeftEye.y, paint);
+            } else {
+                //top line
+                canvas.drawLine(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+                        bottomRightPointLeftEye.x, topLeftPointLeftEye.y,
+                        paint);
+                //right line
+                canvas.drawLine(bottomRightPointLeftEye.x,
+                        topLeftPointLeftEye.y, bottomRightPointLeftEye.x,
+                        bottomRightPointLeftEye.y, paint);
+                //bottom line
+                canvas.drawLine(topLeftPointLeftEye.x,
+                        bottomRightPointLeftEye.y, bottomRightPointLeftEye.x,
+                        bottomRightPointLeftEye.y, paint);
+            }
+        }
+        //---------------end left eye
+        //------------------right eye
+
+        if (bottomRightPointRightEye.x >= layoutWidth) {
+            //right line
+            canvas.drawLine(bottomRightPointRightEye.x, topLeftPointRightEye.y,
+                    bottomRightPointRightEye.x, bottomRightPointRightEye.y,
+                    paint);
+
+            if (topLeftPointRightEye.x < layoutWidth) {
+                //top line
+                canvas.drawLine(layoutWidth, topLeftPointRightEye.y,
+                        bottomRightPointRightEye.x, topLeftPointRightEye.y,
+                        paint);
+                //bottom line
+                canvas.drawLine(layoutWidth, bottomRightPointRightEye.y,
+                        bottomRightPointRightEye.x, bottomRightPointRightEye.y,
+                        paint);
+            } else {
+                //left line
+                canvas.drawLine(topLeftPointRightEye.x, topLeftPointRightEye.y,
+                        topLeftPointRightEye.x, bottomRightPointRightEye.y,
+                        paint);
+                //top line
+                canvas.drawLine(topLeftPointRightEye.x, topLeftPointRightEye.y,
+                        bottomRightPointRightEye.x, topLeftPointRightEye.y,
+                        paint);
+                //bottom line
+                canvas.drawLine(topLeftPointRightEye.x,
+                        bottomRightPointRightEye.y, bottomRightPointRightEye.x,
+                        bottomRightPointRightEye.y, paint);
+            }
+        }
+        //----------------end left eye
     }
 }
