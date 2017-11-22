@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/drawer/drawer.iml" filepath="$PROJECT_DIR$/drawer/drawer.iml" />
       <module fileurl="file://$PROJECT_DIR$/videotracking/videotracking.iml" filepath="$PROJECT_DIR$/videotracking/videotracking.iml" />
-      <module fileurl="file://I:\netbeans\MarkerPositioning\videotracking\videotracking.iml" filepath="I:\netbeans\MarkerPositioning\videotracking\videotracking.iml" />
     </modules>
   </component>
 </project>
