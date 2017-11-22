@@ -1,4 +1,4 @@
-package org.iii.snsi.videotracking;
+package org.iii.snsi.markerposition;
 
 public class Point2D {
 

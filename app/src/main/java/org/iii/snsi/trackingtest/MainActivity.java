@@ -16,7 +16,7 @@ import com.epson.moverio.btcontrol.DisplayControl;
 
 import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.streamlibrary.CameraController;
-import org.iii.snsi.videotracking.IrArucoMarker;
+import org.iii.snsi.markerposition.IrArucoMarker;
 
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";

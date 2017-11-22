@@ -3,8 +3,8 @@ package org.iii.snsi.trackingtest;
 import android.util.Log;
 import android.widget.TextView;
 
-import org.iii.snsi.videotracking.IrArucoMarker;
-import org.iii.snsi.videotracking.IrDetect;
+import org.iii.snsi.markerposition.IrArucoMarker;
+import org.iii.snsi.markerposition.IrDetect;
 
 public class MarkerHelper {
     static {

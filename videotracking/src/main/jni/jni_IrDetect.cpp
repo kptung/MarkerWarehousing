@@ -13,13 +13,13 @@ using namespace cv;
 
 static bool debug_mode = false;
 
-#ifndef org_iii_snsi_videotracking_IrDetect
-#define org_iii_snsi_videotracking_IrDetect
+#ifndef org_iii_snsi_markerposition_IrDetect
+#define org_iii_snsi_markerposition_IrDetect
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jboolean JNICALL Java_org_iii_snsi_videotracking_IrDetect_importYMLCameraParameters
+JNIEXPORT jboolean JNICALL Java_org_iii_snsi_markerposition_IrDetect_importYMLCameraParameters
         (JNIEnv *env, jclass jIrDetect, jstring jfilename) {
     // Reconstruct Java structure to C++ structure
     string filename;
@@ -32,7 +32,7 @@ JNIEXPORT jboolean JNICALL Java_org_iii_snsi_videotracking_IrDetect_importYMLCam
 }
 
 JNIEXPORT jboolean JNICALL
-Java_org_iii_snsi_videotracking_IrDetect_importYMLDetectParameters(
+Java_org_iii_snsi_markerposition_IrDetect_importYMLDetectParameters(
         JNIEnv *env, jclass type, jstring jfilename) {
     // Reconstruct Java structure to C++ structure
     string filename;
@@ -45,7 +45,7 @@ Java_org_iii_snsi_videotracking_IrDetect_importYMLDetectParameters(
 }
 
 JNIEXPORT jboolean JNICALL
-Java_org_iii_snsi_videotracking_IrDetect_importYMLRTParameters(
+Java_org_iii_snsi_markerposition_IrDetect_importYMLRTParameters(
         JNIEnv *env, jclass type, jstring jfilename) {
     // Reconstruct Java structure to C++ structure
     string filename;
@@ -60,7 +60,7 @@ Java_org_iii_snsi_videotracking_IrDetect_importYMLRTParameters(
 
 
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_videotracking_IrDetect_findArucoMarkersWithMarkerSize(
+Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(
         JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height,
         jfloat markerSizeInMeter, jfloat distanceBelowMarkerCenter) {
 
@@ -126,13 +126,13 @@ Java_org_iii_snsi_videotracking_IrDetect_findArucoMarkersWithMarkerSize(
         }
 
         // Get a class reference
-        jclass classIrArucoMarker = env->FindClass("org/iii/snsi/videotracking/IrArucoMarker");
+        jclass classIrArucoMarker = env->FindClass("org/iii/snsi/markerposition/IrArucoMarker");
         assert(classIrArucoMarker != NULL);
 
-        jclass classCvPoint = env->FindClass("org/iii/snsi/videotracking/Point2D");
+        jclass classCvPoint = env->FindClass("org/iii/snsi/markerposition/Point2D");
         assert(classCvPoint != NULL);
 
-        jclass classCvPoint3 = env->FindClass("org/iii/snsi/videotracking/Point3D");
+        jclass classCvPoint3 = env->FindClass("org/iii/snsi/markerposition/Point3D");
         assert(classCvPoint3 != NULL);
 
         // Get the Field ID of the instance variables
@@ -145,13 +145,13 @@ Java_org_iii_snsi_videotracking_IrDetect_findArucoMarkersWithMarkerSize(
         jfieldID fidDistance = env->GetFieldID( classIrArucoMarker, "distance", "D");
         assert(fidDistance != NULL);
 
-        jfieldID fidCorners = env->GetFieldID( classIrArucoMarker, "corners", "[Lorg/iii/snsi/videotracking/Point2D;" );
+        jfieldID fidCorners = env->GetFieldID( classIrArucoMarker, "corners", "[Lorg/iii/snsi/markerposition/Point2D;" );
         assert(fidCorners != NULL);
 
-        jfieldID fidPosition = env->GetFieldID( classIrArucoMarker, "position", "Lorg/iii/snsi/videotracking/Point3D;" );
+        jfieldID fidPosition = env->GetFieldID( classIrArucoMarker, "position", "Lorg/iii/snsi/markerposition/Point3D;" );
         assert(fidPosition != NULL);
 
-        jfieldID fidInjectpoints = env->GetFieldID( classIrArucoMarker, "injectpoints", "[Lorg/iii/snsi/videotracking/Point2D;");
+        jfieldID fidInjectpoints = env->GetFieldID( classIrArucoMarker, "injectpoints", "[Lorg/iii/snsi/markerposition/Point2D;");
         assert(fidInjectpoints != NULL);
 
         // Get the Method ID of the constructor
