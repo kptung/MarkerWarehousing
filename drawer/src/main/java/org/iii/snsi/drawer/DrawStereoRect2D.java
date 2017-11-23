@@ -197,6 +197,9 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             } else {
                 paint.setColor(Color.argb(128, 255, 0, 255));
             }
+
+            System.out.println("rectLR[0] , rectData[1] =  " + rectLR[0] + " , " + rectData[1]);
+            System.out.println("rectLR[1] , rectData[3] =  " + rectLR[1] + " , " + rectData[3]);
             drawFilledRect(canvas, paint, topLeftPointLeftEye,
                     bottomRightPointLeftEye, topLeftPointRightEye,
                     bottomRightPointRightEye);
@@ -221,7 +224,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
 
             if (bottomRightPointLeftEye.x >= layoutWidth) {
                 realBottomRightPointLeftEye = new Point(layoutWidth - 1,
-                        topLeftPointLeftEye.y);
+                        bottomRightPointLeftEye.y);
             }
 
             canvas.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,

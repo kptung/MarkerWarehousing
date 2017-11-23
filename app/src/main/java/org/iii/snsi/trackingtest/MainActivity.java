@@ -3,20 +3,26 @@ package org.iii.snsi.trackingtest;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.epson.moverio.btcontrol.DisplayControl;
 
+import org.iii.snsi.drawer.DrawOnCameraFrame;
 import org.iii.snsi.drawer.DrawStereoRect2D;
-import org.iii.snsi.streamlibrary.CameraController;
 import org.iii.snsi.markerposition.IrArucoMarker;
+import org.iii.snsi.streamlibrary.CameraController;
 
 public class MainActivity extends Activity {
 
@@ -31,9 +37,16 @@ public class MainActivity extends Activity {
     // marker
     private TextView mMarkerInfoText;
     private SurfaceView surfaceView;
+    private ViewGroup.LayoutParams camViewParams;
+    private StereoImageView stereoImage;
     private FrameLayout cameraLayout;
-    private DrawStereoRect2D drawer;
+    private FrameLayout drawerLayout;
+    private DrawStereoRect2D drawerStereo;
+    private DrawOnCameraFrame drawerCam;
     private DisplayControl bt300Control;
+    private boolean modeFlag = false;//true for preview mode
+    private int originSurfaceWidth;
+    private int originSurfaceHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +54,65 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mMarkerInfoText = (TextView) findViewById(R.id.marker_id);
         cameraController = new CameraController(this);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Bitmap bmp = ImageUtil.loadBitmap(getResources(),
+                R.drawable.stage_border);
+        stereoImage = (StereoImageView) findViewById(R.id.stereo_image);
+        stereoImage.setBitmap(bmp);
         surfaceView = (SurfaceView) findViewById(R.id.camera_view);
+
+        stereoImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() != MotionEvent.ACTION_DOWN) {
+                    return true;
+                }
+
+                modeFlag = !modeFlag;
+                if (modeFlag) {
+                    if (Build.MODEL.contains("EMBT3C")) {
+                        bt300Control.setMode(DisplayControl.DISPLAY_MODE_2D,
+                                false);
+                    }
+
+                    camViewParams.width = originSurfaceWidth;
+                    camViewParams.height = originSurfaceHeight;
+                    surfaceView.setLayoutParams(camViewParams);
+                    stereoImage.set3dMode(false);
+                    drawerLayout.removeView(drawerStereo);
+                    drawerLayout.addView(drawerCam);
+
+                } else {
+                    if (Build.MODEL.contains("EMBT3C")) {
+                        bt300Control.setMode(DisplayControl.DISPLAY_MODE_3D,
+                                false);
+                    }
+
+                    camViewParams.width = 0;
+                    camViewParams.height = 0;
+                    surfaceView.setLayoutParams(camViewParams);
+                    stereoImage.set3dMode(true);
+                    drawerLayout.removeView(drawerCam);
+                    drawerLayout.addView(drawerStereo);
+
+                }
+
+                return true;
+            }
+        });
 
         if (Build.MODEL.contains("EMBT3C")) {
             bt300Control = new DisplayControl(this);
             bt300Control.setMode(DisplayControl.DISPLAY_MODE_3D, false);
         }
 
+        stereoImage.set3dMode(true);
         initializeDrawer();
 
         cameraLayout = (FrameLayout) findViewById(R.id.camera_layout);
-        cameraLayout.addView(drawer);
+        drawerLayout = (FrameLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.addView(drawerStereo);
 
         requestPermission();
 
@@ -70,9 +131,11 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                if (ENABLE_PREVIEW) {
-                    cameraController.setSurfaceHolder(holder);
-                }
+                camViewParams = surfaceView.getLayoutParams();
+                originSurfaceWidth = camViewParams.width;
+                originSurfaceHeight = camViewParams.height;
+
+                cameraController.setSurfaceHolder(holder);
                 cameraController.startCamera();
                 cameraController.setCallbackFrameListener(
                         new CameraController.CallbackFrameListener() {
@@ -83,6 +146,11 @@ public class MainActivity extends Activity {
                                 drawInjectionArea(bytes, width, height);
                             }
                         });
+
+                camViewParams.width = 0;
+                camViewParams.height = 0;
+                surfaceView.setLayoutParams(camViewParams);
+
             }
 
             @Override
@@ -108,7 +176,6 @@ public class MainActivity extends Activity {
         IrArucoMarker marker666A = null;
         IrArucoMarker marker666B = null;
         IrArucoMarker marker777A = null;
-        IrArucoMarker marker777B = null;
         find666MarkersPointA = MarkerHelper.nFindArucoMarkersWithMarkerSize(
                 bytes, width, height, 0.03f, -0.04f);
         find666MarkersPointB = MarkerHelper.nFindArucoMarkersWithMarkerSize(
@@ -143,6 +210,7 @@ public class MainActivity extends Activity {
         int[] drawInfo = new int[10];
         drawInfo[0] = 0;
         drawInfo[5] = 1;
+
         if (marker666A != null && marker666B != null) {
             drawInfo[1] = (int) Math.round(marker666A.injectpoints[0].x - 400);
             drawInfo[2] = (int) Math.round(marker666A.injectpoints[0].y);
@@ -168,16 +236,20 @@ public class MainActivity extends Activity {
             drawInfo[9] = 0;
         }
 
-        drawer.processTrackingRect(width, height, drawInfo);
-        drawer.postInvalidate();
+        drawerStereo.processTrackingRect(width, height, drawInfo);
+        drawerCam.processTrackingRect(width, height, drawInfo);
+        drawerStereo.postInvalidate();
+        drawerCam.postInvalidate();
 
     }
 
     private void initializeDrawer() {
-        drawer = new DrawStereoRect2D(this);
-        drawer.setTrackingCalibration(91, 90, 92, 53);
-        drawer.setLayoutSize(1280, 720);
-        drawer.setOffsetLR(26);
+        drawerStereo = new DrawStereoRect2D(this);
+        drawerStereo.setTrackingCalibration(91, 90, 92, 53);
+        drawerStereo.setLayoutSize(1280, 720);
+        drawerStereo.setOffsetLR(26);
+        drawerCam = new DrawOnCameraFrame(this);
+        drawerCam.setLayoutSize(1280, 720);
     }
 
     private void requestPermission() {

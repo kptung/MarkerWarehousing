@@ -2,7 +2,7 @@
 			 xmlns:tools="http://schemas.android.com/tools"
 			 android:layout_width="match_parent"
 			 android:layout_height="match_parent"
-			 android:background="#0099cc"
+			 android:background="#000000"
 			 tools:context=".MainActivity">
 
 	<FrameLayout
@@ -14,7 +14,18 @@
 			android:id="@+id/camera_view"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>
+
+		<org.iii.snsi.trackingtest.StereoImageView
+			android:id="@+id/stereo_image"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
 	</FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 	<FrameLayout
 		android:id="@+id/info_content"
@@ -31,7 +42,8 @@
 			android:gravity="bottom|start"
 			android:text="init"
 			android:textColor="#ffffff"
-			android:textSize="16sp" />
+			android:textSize="16sp"
+			tools:ignore="HardcodedText"/>
 	</FrameLayout>
 
 </FrameLayout>
