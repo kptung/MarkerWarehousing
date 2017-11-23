@@ -33,6 +33,11 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
+	float alpha = 0.8f, alpha2=0.2f;
+
+	cv::Mat src2 = imread("data/stage_border.png");
+	cv::resize(src2, src2, cv::Size(1280, 720), 1);
+
 	std::vector<std::string> files;
 	get_files_in_directory(infolder, files);
 
@@ -43,6 +48,9 @@ int main(int argc, char **argv)
 
 		//CV_LOAD_IMAGE_UNCHANGED, CV_LOAD_IMAGE_GRAYSCALE, CV_LOAD_IMAGE_COLOR
 		cv::Mat src = imread(infolder + SEP + files[i], CV_LOAD_IMAGE_COLOR);
+		cv::Mat imcopy;
+		src.copyTo(imcopy);
+		cv::resize(src, src, cv::Size(1280, 720), 1);
 		vector<IrArucoMarker> markers;
 		if (findArucoMarkers(src, markerLength, markers))
 		{
@@ -79,38 +87,26 @@ int main(int argc, char **argv)
 					// find injection pts
 					cv::Point3f Injection(0.05f, 0, 0);
 					Injectionpts = make_vector<cv::Point3f>() << Injection;
+					Injectionpts.push_back(cv::Point3f(0, 0.05f, 0));
 				}
 				std::vector<cv::Point2f> injpts = findInjection(Injectionpts, rvec, tvec, mori, mcenter);
 				cv::Mat overlay;
 				src.copyTo(overlay);
 				if (mid == 666)
 				{
-					cv::rectangle(overlay, cv::Point2f(0, injpts[0].y), cv::Point2f(src.rows, injpts[1].y), cv::Scalar(255, 0, 0), -1, 8, 0);
-					cv::addWeighted(overlay, 0.4f, src, 0.6f, 0, src);
-					cv::circle(src, mcenter, 10, cv::Scalar(0, 0, 255), -1, 10);
+					cv::rectangle(overlay, cv::Point2f(injpts[0].x-100, injpts[0].y), cv::Point2f(injpts[1].x+100, injpts[1].y), cv::Scalar(0, 255, 255), -1, 8, 0);
+					cv::addWeighted(src2, alpha, src, 1 - alpha, 0, src);
+					cv::addWeighted(overlay, alpha2, src, 1 - alpha2, 0, src);
 				}
 				if (mid == 777)
 				{
-					cv::rectangle(overlay, cv::Point2f(mcenter.x, 0), cv::Point2f(injpts[0].x, mcenter.y), cv::Scalar(255, 0, 0), -1, 8, 0);
-					cv::addWeighted(overlay, 0.4f, src, 0.6f, 0, src);
-					// add marker center
-					cv::circle(src, mcenter, 10, cv::Scalar(0, 255, 0), -1, 10);
+					cv::rectangle(overlay, cv::Point2f(mcenter.x, injpts[1].y), cv::Point2f(injpts[0].x, mcenter.y), cv::Scalar(0, 255, 255), -1, 8, 0);
+					cv::addWeighted(src2, alpha, src, 1 - alpha, 0, src);
+					cv::addWeighted(overlay, alpha2, src, 1 - alpha2, 0, src);
 				}
 				
-				std::ostringstream str1, str2;
-				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				putText(src, str1.str(), Point(mcenter.x-50, mcenter.y - 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
-				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-				putText(src, str2.str(), Point(mcenter.x - 50, mcenter.y - 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 0), 5, 8, false);
 			}
+			src.convertTo(src, -1, 2.2, 10);
 			imwrite(outfolder + SEP + files[i], src);
 		}
 		else
