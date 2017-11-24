@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __IrArDetector_hpp__
 #define __IrArDetector_hpp__
 
@@ -41,24 +41,32 @@ public:
 		// (a) define aruco dictionary
 		cv::Ptr<cv::aruco::Dictionary> dictionary =
 			cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-		// (b) detect the markers
+		
+		// (b) detect the markers and estimate pose
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejected;
 		std::vector< cv::Vec3d > rvecs, tvecs;
-		// detect markers and estimate pose
 		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejected, intrinsic, distortion);
 		cv::aruco::drawDetectedMarkers(origin, corners, ids);
-		// estimate the camera pose; the unit is meter
+		
+		// (c) estimate the camera pose; the unit is meter
+		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
+		
+		// (d) marker information
 		if (ids.size() > 0)
 		{
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
-				// (c) get marker orientation
-				cv::Point2f cent(0, 0);
-				for (int p = 0; p < 4; p++)
-					cent += corners.at(i).at(p);
-				cent = cent / 4.;
+				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
+				_markers[i].setMarkerId(ids.at(i));
+				_markers[i].setCorners(corners.at(i));
+				_markers[i].setMarkerCenter(corners.at(i));
+				_markers[i].setRotationMatrix(rvecs[i]);
+				_markers[i].setTransnslationMatrix(tvecs[i]);
+
+				// (d2) get marker orientation
+				cv::Point2f cent= _markers[i].getMarkerCenter();
 				if (corners.at(i).at(0).x > cent.x && corners.at(i).at(0).y < cent.y)
 					_markers[i].setMarkerOri(90);
 				else if (corners.at(i).at(0).x > cent.x && corners.at(i).at(0).y > cent.y)
@@ -68,20 +76,13 @@ public:
 				else
 					_markers[i].setMarkerOri(0);
 
-				// (d) estimate the camera pose; the unit is meter
-				_markers[i].setMarkerId(ids.at(i));
-				_markers[i].setCorners(corners.at(i));
-				_markers[i].setMarkerCenter(cent);
-				cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-				// (e) Calculate the camera pose
+				// (d3) Calculate the camera pose
 				cv::Mat R;
 				cv::Rodrigues(rvecs[i], R);
 				cv::Mat cameraPose = -R.t() * (cv::Mat)tvecs[i];
 				_markers[i].setCameraPos(cameraPose);
 
-				_markers[i].setRotationMatrix(rvecs[i]);
-				_markers[i].setTransnslationMatrix(tvecs[i]);
-
+				// (d4) draw marker orientation
 				cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
 
 				markers.push_back(_markers[i]);
@@ -103,13 +104,18 @@ public:
 			for (int i = 0; i < pts.size(); i++)
 			{
 				cv::Point2f inpoint = pts.at(i) - center;
-				// rotate point by clockwise
-				if (ori == 90)
-					outPoint = cv::Point2f(inpoint.y, -inpoint.x);
-				else if (ori == 180)
-					outPoint = cv::Point2f(-inpoint.x, -inpoint.y);
-				else if (ori == 270)
-					outPoint = cv::Point2f(-inpoint.y, inpoint.x);
+				// rotate camera in counterclockwise by marker's orientation
+				// when the position is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+				// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°), 
+				// and clockwise if θ is negative (e.g. −90°).
+				/**************************************************************************************/
+				/*           1) clockwise                               2) counterclockwise           */
+				/*  | x'|   | cos(θ),  -sin(θ)   | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |    */
+				/*  |   | = |                    | |   |       |   | = |                   | |   |    */
+				/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
+				/**************************************************************************************/
+				outPoint = cv::Point2f(inpoint.x * cos(ori * PI / 180) + inpoint.y * sin(ori*PI / 180), inpoint.x * -sin(ori*PI / 180) + inpoint.y * cos(ori * PI / 180));
+
 				outPoint += center;
 				outpts.push_back(outPoint);
 			}
@@ -118,56 +124,7 @@ public:
 		else
 			return pts;
 	}
-	/*
-	std::vector<cv::Point2f> findInjectPoints(const std::vector<cv::Point3f>& objpts, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Mat& lrvec, const cv::Mat& ltvec, const cv::Mat& rrvec, const cv::Mat& rtvec, const int &ori, const cv::Point2f &center)
-	{
-		std::vector<cv::Point2f> lpts, rpts, outpts;
-		cv::projectPoints(objpts, lrvec, ltvec, intrinsic, distortion, lpts);
-		cv::projectPoints(objpts, rrvec, rtvec, intrinsic, distortion, rpts);
-
-		int numPts = objpts.size();
-		if (ori > 0)
-		{
-			cv::Point2f outPoint;
-			for (int i = 0; i < numPts; i++)
-			{
-				cv::Point2f inpoint = lpts.at(i) - center;
-				// rotate point by clockwise
-				if (ori == 90)
-					outPoint = cv::Point2f(inpoint.y, -inpoint.x);
-				else if (ori == 180)
-					outPoint = cv::Point2f(-inpoint.x, -inpoint.y);
-				else if (ori == 270)
-					outPoint = cv::Point2f(-inpoint.y, inpoint.x);
-				outPoint += center;
-				outpts.push_back(outPoint);
-			}
-
-			for (int i = 0; i < numPts; i++)
-			{
-				cv::Point2f inpoint = rpts.at(i) - center;
-				// rotate point by clockwise
-				if (ori == 90)
-					outPoint = cv::Point2f(inpoint.y, -inpoint.x);
-				else if (ori == 180)
-					outPoint = cv::Point2f(-inpoint.x, -inpoint.y);
-				else if (ori == 270)
-					outPoint = cv::Point2f(-inpoint.y, inpoint.x);
-				outPoint += center;
-				outpts.push_back(outPoint);
-			}
-			return outpts;
-		}
-		else
-		{
-			for (int i = 0; i < numPts; i++)
-				outpts.push_back(lpts.at(i));
-			for (int i = 0; i < numPts; i++)
-				outpts.push_back(rpts.at(i));
-			return outpts;
-		}
-	}
-	*/
+	
 private:
 
 

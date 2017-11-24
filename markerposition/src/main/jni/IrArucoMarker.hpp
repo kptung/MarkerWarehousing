@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef __IrArucoMarker_hpp__
 #define __IrArucoMarker_hpp__
 
@@ -41,12 +41,26 @@ public:
 		m_corners.clear();
 		for (size_t i = 0; i < corners.size(); i++)
 		{
-			m_corners.push_back(corners[i]);
+			m_corners.push_back(corners.at(i));
 		}
 	}
 	const std::vector<cv::Point2f> &getCorners(void) const
 	{
 		return m_corners;
+	}
+
+	// set/get marker reject corners
+	void setRejected(const std::vector<cv::Point2f> &rejects)
+	{
+		m_rejects.clear();
+		for (size_t i = 0; i < rejects.size(); i++)
+		{
+			m_rejects.push_back(rejects.at(i));
+		}
+	}
+	const std::vector<cv::Point2f> &getRejected(void) const
+	{
+		return m_rejects;
 	}
 	
 	// set/get marker ID
@@ -80,9 +94,12 @@ public:
 	}
 
 	// set/get marker center
-	void setMarkerCenter(const cv::Point2f& cen)
+	void setMarkerCenter(const std::vector< cv::Point2f >& corners)
 	{
-		m_center = cen;
+		cv::Point2f cent(0, 0);
+		for (int p = 0; p < 4; p++)
+			cent += corners.at(p);
+		m_center = cent / 4.;
 	}
 	cv::Point2f getMarkerCenter() const
 	{
@@ -100,21 +117,6 @@ public:
 	}
 
 	// get camera distance
-	float getXZCameraDistance(void) const
-	{
-		float x = (float)m_cameraPosition.x;
-		float y = (float)m_cameraPosition.y;
-		float z = (float)m_cameraPosition.z;
-		cv::Point3f XYZ(x, y, z);
-		if (m_ori == 90)
-			XYZ = cv::Point3f(y, -x, z);
-		else if (m_ori == 180)
-			XYZ = cv::Point3f(-x, -y, z);
-		else if (m_ori == 270)
-			XYZ = cv::Point3f(-y, x, z);
-		return sqrt(XYZ.x*XYZ.x+XYZ.z*XYZ.z);
-		//return z;
-	}
 	float getCameraDistance(void) const
 	{
 		float x = (float)m_cameraPosition.x;
@@ -123,7 +125,28 @@ public:
 		return sqrt(x*x + y*y + z*z);
 		//return z;
 	}
-
+	// get X-Z camera distance
+	float getXZCameraDistance(void) const
+	{
+		float x = (float)m_cameraPosition.x;
+		float y = (float)m_cameraPosition.y;
+		float z = (float)m_cameraPosition.z;
+		// rotate camera in counterclockwise by marker's orientation
+		// when the position is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+		// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°), 
+		// and clockwise if θ is negative (e.g. −90°).
+		/**************************************************************************************/
+		/*           1) clockwise                               2) counterclockwise           */
+		/*  | x'|   | cos(θ),  -sin(θ)   | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |    */
+		/*  |   | = |                    | |   |       |   | = |                   | |   |    */
+		/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
+		/**************************************************************************************/
+		cv::Point3f XYZ(x, y, z);
+		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
+		return sqrt(XYZ.x*XYZ.x + XYZ.z*XYZ.z);
+		//return z;
+	}
+	
 	// get camera angle
 	bool getCameraAngle(int& xzangle, int& yzangle) const
 	{
@@ -132,14 +155,17 @@ public:
 		float z = (float)m_cameraPosition.z;
 
 		// rotate camera in counterclockwise by marker's orientation
-		/**********************************************************************************************/
-		/*           1) clockwise                                    2) counterclockwise              */
-		/*  | x'|   | cos(theta), -sin(theta) | | x |       | x'|   | cos(theta),  sin(theta)  | | x | */
-		/*  |   | = |                         | |   |       |   | = |                          | |   | */
-		/*  | y'|   | sin(theta), cos(theta)  | | y |       | y'|   | -sin(theta), cos(theta)  | | y | */
-		/**********************************************************************************************/
+		// when the position is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+		// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°), 
+		// and clockwise if θ is negative (e.g. −90°).
+		/**************************************************************************************/
+		/*           1) clockwise                               2) counterclockwise           */
+		/*  | x'|   | cos(θ),  -sin(θ)   | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |    */
+		/*  |   | = |                    | |   |       |   | = |                   | |   |    */
+		/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
+		/**************************************************************************************/
 		cv::Point3f XYZ(x, y, z);
-		XYZ = cv::Point3f(x*cos(m_ori)+y*sin(m_ori), x*-sin(m_ori) + y*cos(m_ori), z);
+		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
 
 		// define XZ Quadrant
 		int xzflag = 1;
@@ -158,8 +184,7 @@ public:
 		yzangle = atan2(XYZ.z, XYZ.y) / (PI / 180);
 		if (yzflag == 1 || yzflag == 2) yzangle = 90 - yzangle;
 		else yzangle = 90 + yzangle;
-		
-		
+	
 		return true;
 	}
 
@@ -194,24 +219,23 @@ private:
 	// marker corner
 	std::vector<cv::Point2f> m_corners;
 
+	// marker rejected points
+	std::vector<cv::Point2f> m_rejects;
+
 	// camera position
 	cv::Point3f m_cameraPosition;
 
 	// camera rotation and translation matrix
 	cv::Mat m_rvec, m_tvec;
 
-	/******************************************************************************************************/
-	/* angle definition: the coordinate system is shown as X(Right), Y(Up) and Z(Front)                   */
-	/******************************************************************************************************/
-	float y_axis_angle;
-	float x_axis_angle;
+	
+	// angle definition: the coordinate system is shown as X(Right), Y(Up) and Z(Front)  
+	float x_axis_angle, y_axis_angle;
 
 	// marker center
 	cv::Point2f m_center;
 
-	/************************************************************************/
-	/*  marker length                                                       */
-	/************************************************************************/
+	//  marker length    
 	float m_markerLength;
 
 };
