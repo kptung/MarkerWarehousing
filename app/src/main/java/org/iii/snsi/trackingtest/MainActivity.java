@@ -58,10 +58,9 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Bitmap bmp = ImageUtil.loadBitmap(getResources(),
                 R.drawable.stage_border);
+        surfaceView = (SurfaceView) findViewById(R.id.camera_view);
         stereoImage = (StereoImageView) findViewById(R.id.stereo_image);
         stereoImage.setBitmap(bmp);
-        surfaceView = (SurfaceView) findViewById(R.id.camera_view);
-
         stereoImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -69,36 +68,31 @@ public class MainActivity extends Activity {
                     return true;
                 }
 
-                modeFlag = !modeFlag;
-                if (modeFlag) {
-                    if (Build.MODEL.contains("EMBT3C")) {
-                        bt300Control.setMode(DisplayControl.DISPLAY_MODE_2D,
-                                false);
-                    }
-
-                    camViewParams.width = originSurfaceWidth;
-                    camViewParams.height = originSurfaceHeight;
-                    surfaceView.setLayoutParams(camViewParams);
-                    stereoImage.set3dMode(false);
-                    drawerLayout.removeView(drawerStereo);
-                    drawerLayout.addView(drawerCam);
-
-                } else {
-                    if (Build.MODEL.contains("EMBT3C")) {
-                        bt300Control.setMode(DisplayControl.DISPLAY_MODE_3D,
-                                false);
-                    }
-
-                    camViewParams.width = 0;
-                    camViewParams.height = 0;
-                    surfaceView.setLayoutParams(camViewParams);
-                    stereoImage.set3dMode(true);
-                    drawerLayout.removeView(drawerCam);
-                    drawerLayout.addView(drawerStereo);
-
-                }
+                toggleMode();
 
                 return true;
+            }
+
+            private void toggleMode() {
+                modeFlag = !modeFlag;
+                if (modeFlag) {
+                    setMode("EMBT3C", DisplayControl.DISPLAY_MODE_2D, originSurfaceWidth, originSurfaceHeight, drawerStereo, drawerCam);
+                } else {
+                    setMode("EMBT3C", DisplayControl.DISPLAY_MODE_3D, 0, 0, drawerCam, drawerStereo);
+                }
+            }
+
+            private void setMode(String modelName, int displayMode,int cameraViewWidth,int cameraViewHeight, View removedView, View addedView) {
+                if (Build.MODEL.contains(modelName)) {
+                    bt300Control.setMode(displayMode,
+                            false);
+                }
+                camViewParams.width = cameraViewWidth;
+                camViewParams.height = cameraViewHeight;
+                surfaceView.setLayoutParams(camViewParams);
+                stereoImage.set3dMode((displayMode == DisplayControl.DISPLAY_MODE_2D) ? false : true);
+                drawerLayout.removeView(removedView);
+                drawerLayout.addView(addedView);
             }
         });
 
