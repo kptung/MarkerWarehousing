@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MarkerPositioning.iml" filepath="$PROJECT_DIR$/MarkerPositioning.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/drawer/drawer.iml" filepath="$PROJECT_DIR$/drawer/drawer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/videotracking/videotracking.iml" filepath="$PROJECT_DIR$/videotracking/videotracking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/markerposition/markerposition.iml" filepath="$PROJECT_DIR$/markerposition/markerposition.iml" />
     </modules>
   </component>
 </project>
