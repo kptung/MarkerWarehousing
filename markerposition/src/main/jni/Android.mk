@@ -15,6 +15,6 @@ LOCAL_SRC_FILES := IrArInterface.cpp \
                    aruco.cpp \
                    jni_IrDetect.cpp
 LOCAL_LDLIBS += -llog -latomic
-LOCAL_MODULE := videotracking
+LOCAL_MODULE := markerposition
 
 include $(BUILD_SHARED_LIBRARY)

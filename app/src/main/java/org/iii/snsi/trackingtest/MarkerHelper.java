@@ -10,7 +10,7 @@ public class MarkerHelper {
     static {
         try {
             System.loadLibrary("opencv_java3");
-            System.loadLibrary("videotracking");
+            System.loadLibrary("markerposition");
         } catch (Exception e) {
             Log.d("TAG", "Load Lib Fail...");
         }
