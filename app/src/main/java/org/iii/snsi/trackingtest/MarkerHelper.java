@@ -28,11 +28,11 @@ public class MarkerHelper {
             IrDetect.importYMLRTParameters(YML_FILE3);
     }
 
-    public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter, float distanceBelowMarkerCenter){
+    public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter){
         if (bytes == null)
             return null;
 
-        return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSizeInMeter, distanceBelowMarkerCenter);
+        return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSizeInMeter);
     }
 
     public static void printFullMarkerSet(IrArucoMarker[] markerSet, TextView tv) {
@@ -41,10 +41,6 @@ public class MarkerHelper {
             tv.append("<<<< ---- ---- ----\n");
             for (int i = 0; i < markerSet.length; i++) {
                 tv.append("ID: " + markerSet[i].id + "; ");
-                //                mMarkerInfoText.append(
-                //                        "Orientation: " + fullMarkerSet[i].ori + "; ");
-                //                mMarkerInfoText.append(
-                //                        "Score: " + fullMarkerSet[i].score + "\n");
 
                 if (markerSet[i].corners != null
                         && markerSet[i].corners.length == 4)
@@ -60,23 +56,6 @@ public class MarkerHelper {
                             + ", " + markerSet[i].corners[3].y + ")\n");
                 }
 
-                //                mMarkerInfoText.append(
-                //                        "Position: (" + fullMarkerSet[i].position.x + ", "
-                //                                + fullMarkerSet[i].position.y + ", "
-                //                                + fullMarkerSet[i].position.z + ")\n");
-                //                mMarkerInfoText.append(
-                //                        "Rotation: (" + fullMarkerSet[i].rotation.dump()
-                //                                + ")\n");
-
-                //                if (fullMarkerSet[i].keypoints != null) {
-                //                    for (int j = 0; j < fullMarkerSet[i].keypoints.length; j++)
-                //                    {
-                //                        mMarkerInfoText.append(
-                //                                "KeyPoint: (" + fullMarkerSet[i].keypoints[j].x
-                //                                        + ", " + fullMarkerSet[i].keypoints[j].y
-                //                                        + ")\n");
-                //                    }
-                //                }
 
                 if (markerSet[i].injectpoints != null) {
                     tv.append("InjectPoint: ("

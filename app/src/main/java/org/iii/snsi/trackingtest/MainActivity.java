@@ -164,71 +164,35 @@ public class MainActivity extends Activity {
     }
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
-        IrArucoMarker[] find666MarkersPointA;
-        IrArucoMarker[] find666MarkersPointB;
-        IrArucoMarker[] find777MarkersPointA;
-        IrArucoMarker marker666A = null;
-        IrArucoMarker marker666B = null;
-        IrArucoMarker marker777A = null;
-        find666MarkersPointA = MarkerHelper.nFindArucoMarkersWithMarkerSize(
-                bytes, width, height, 0.03f, -0.04f);
-        find666MarkersPointB = MarkerHelper.nFindArucoMarkersWithMarkerSize(
-                bytes, width, height, 0.03f, -0.065f);
-        find777MarkersPointA = MarkerHelper.nFindArucoMarkersWithMarkerSize(
-                bytes, width, height, 0.03f, 0.0f);
+        IrArucoMarker[] findInjectionsBasedOnMarkers;
 
-        if (find666MarkersPointA.length > 0) {
-            for (int i = 0; i < find666MarkersPointA.length; i++) {
-                if (find666MarkersPointA[i].id == 666) {
-                    marker666A = find666MarkersPointA[i];
-                }
-            }
-        }
-
-        if (find666MarkersPointB.length > 0) {
-            for (int i = 0; i < find666MarkersPointB.length; i++) {
-                if (find666MarkersPointB[i].id == 666) {
-                    marker666B = find666MarkersPointB[i];
-                }
-            }
-        }
-
-        if (find777MarkersPointA.length > 0) {
-            for (int i = 0; i < find777MarkersPointA.length; i++) {
-                if (find777MarkersPointA[i].id == 777) {
-                    marker777A = find777MarkersPointA[i];
-                }
-            }
-        }
+        findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
 
         int[] drawInfo = new int[10];
-        drawInfo[0] = 0;
-        drawInfo[5] = 1;
+        drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
+        drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
 
-        if (marker666A != null && marker666B != null) {
-            drawInfo[1] = (int) Math.round(marker666A.injectpoints[0].x - 400);
-            drawInfo[2] = (int) Math.round(marker666A.injectpoints[0].y);
-            drawInfo[3] = 800;
-            drawInfo[4] = (int) Math.round(marker666B.injectpoints[0].y
-                    - marker666A.injectpoints[0].y);
-        } else {
-            drawInfo[1] = -1;
-            drawInfo[2] = -1;
-            drawInfo[3] = 0;
-            drawInfo[4] = 0;
+        if (findInjectionsBasedOnMarkers.length > 0)
+        {
+            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
+            {
+                if (findInjectionsBasedOnMarkers[i].id == 666)
+                {
+                    drawInfo[1] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400);
+                    drawInfo[2] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    drawInfo[3] = 800;
+                    drawInfo[4] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                }
+                if (findInjectionsBasedOnMarkers[i].id == 777)
+                {
+                    drawInfo[6] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x + 30);
+                    drawInfo[7] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y - 50);
+                    drawInfo[8] = 200;
+                    drawInfo[9] = 50;
+                }
+            }
         }
 
-        if (marker777A != null) {
-            drawInfo[6] = (int) Math.round(marker777A.injectpoints[0].x - 25);
-            drawInfo[7] = (int) Math.round(marker777A.injectpoints[0].y - 50);
-            drawInfo[8] = 200;
-            drawInfo[9] = 50;
-        } else {
-            drawInfo[6] = -1;
-            drawInfo[7] = -1;
-            drawInfo[8] = 0;
-            drawInfo[9] = 0;
-        }
 
         drawerStereo.processTrackingRect(width, height, drawInfo);
         drawerCam.processTrackingRect(width, height, drawInfo);

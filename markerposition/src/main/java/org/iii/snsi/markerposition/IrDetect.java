@@ -8,7 +8,7 @@ public class IrDetect {
 
     public native static boolean importYMLRTParameters(String filename);
 
-    public native static IrArucoMarker[] findArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter, float distanceBelowMarkerCenter);
+    public native static IrArucoMarker[] findArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter);
 
 
 
