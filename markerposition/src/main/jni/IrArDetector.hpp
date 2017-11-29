@@ -44,9 +44,9 @@ public:
 		
 		// (b) detect the markers and estimate pose
 		std::vector< int > ids;
-		std::vector< std::vector< cv::Point2f > > corners, rejected;
+		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
 		std::vector< cv::Vec3d > rvecs, tvecs;
-		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejected, intrinsic, distortion);
+		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
 		cv::aruco::drawDetectedMarkers(origin, corners, ids);
 		
 		// (c) estimate the camera pose; the unit is meter
@@ -61,6 +61,7 @@ public:
 				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
+				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 				_markers[i].setRotationMatrix(rvecs[i]);
 				_markers[i].setTransnslationMatrix(tvecs[i]);

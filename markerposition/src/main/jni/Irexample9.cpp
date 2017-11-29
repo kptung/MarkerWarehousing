@@ -12,8 +12,8 @@ using namespace cv;
 /****************************************************************************/
 int main(int argc, char **argv)
 {
-	std::string infolder("./data/ar2ms");
-	std::string outfolder("./data/arucomarkerout");
+	std::string infolder("./data/artest");
+	std::string outfolder("./data/arout");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 				}
 				
 			}
-			src.convertTo(src, -1, 2.2, 10);
+			src.convertTo(src, -1, 2.5, 20);
 			imwrite(outfolder + SEP + files[i], src);
 		}
 		else

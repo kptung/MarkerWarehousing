@@ -176,14 +176,14 @@ public class MainActivity extends Activity {
         {
             for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
             {
-                if (findInjectionsBasedOnMarkers[i].id == 666)
+                if (findInjectionsBasedOnMarkers[i].mid == 666)
                 {
                     drawInfo[1] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400);
                     drawInfo[2] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                     drawInfo[3] = 800;
                     drawInfo[4] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                 }
-                if (findInjectionsBasedOnMarkers[i].id == 777)
+                if (findInjectionsBasedOnMarkers[i].mid == 777)
                 {
                     drawInfo[6] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x + 30);
                     drawInfo[7] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y - 50);

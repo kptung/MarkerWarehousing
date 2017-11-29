@@ -90,20 +90,26 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     assert(classCvPoint3 != NULL);
 
     // Get the Field ID of the instance variables
-    jfieldID fidId = env->GetFieldID( classIrArucoMarker, "id", "I" );
-    assert(fidId != NULL);
+    jfieldID fidmId = env->GetFieldID( classIrArucoMarker, "mid", "I" );
+    assert(fidmId != NULL);
 
-    jfieldID fidOri = env->GetFieldID( classIrArucoMarker, "ori", "I" );
-    assert(fidOri != NULL);
+    jfieldID fidmOri = env->GetFieldID( classIrArucoMarker, "mori", "I" );
+    assert(fidmOri != NULL);
 
-    jfieldID fidDistance = env->GetFieldID( classIrArucoMarker, "distance", "D");
-    assert(fidDistance != NULL);
+    jfieldID fidmDistance = env->GetFieldID( classIrArucoMarker, "mdistance", "D");
+    assert(fidmDistance != NULL);
 
-    jfieldID fidCorners = env->GetFieldID( classIrArucoMarker, "corners", "[Lorg/iii/snsi/markerposition/Point2D;" );
-    assert(fidCorners != NULL);
+    jfieldID fidmCorners = env->GetFieldID( classIrArucoMarker, "mcorners", "[Lorg/iii/snsi/markerposition/Point2D;" );
+    assert(fidmCorners != NULL);
 
-    jfieldID fidPosition = env->GetFieldID( classIrArucoMarker, "position", "Lorg/iii/snsi/markerposition/Point3D;" );
-    assert(fidPosition != NULL);
+    jfieldID fidmRejecteds = env->GetFieldID( classIrArucoMarker, "mrejecteds", "[Lorg/iii/snsi/markerposition/Point2D;" );
+    assert(fidmRejecteds != NULL);
+
+    jfieldID fidcamPosition = env->GetFieldID( classIrArucoMarker, "camposition", "Lorg/iii/snsi/markerposition/Point3D;" );
+    assert(fidcamPosition != NULL);
+
+    jfieldID fidmCenter = env->GetFieldID( classIrArucoMarker, "mcenter", "Lorg/iii/snsi/markerposition/Point2D;" );
+    assert(fidmCenter != NULL);
 
     jfieldID fidInjectpoints = env->GetFieldID( classIrArucoMarker, "injectpoints", "[Lorg/iii/snsi/markerposition/Point2D;");
     assert(fidInjectpoints != NULL);
@@ -122,12 +128,14 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     for (int i = 0; i < arrayLength; i++)
     {
         int mId = markers[i].getMarkerId();
-        double xzdist = markers[i].getXZCameraDistance() * 100;
+        double mXZdist = markers[i].getXZCameraDistance() * 100;
         int mOri = markers[i].getMarkerOri();
         cv::Point2f mCenter = markers[i].getMarkerCenter();
-        const vector<Point2f> &mCorners = markers[i].getCorners();
+        const std::vector<cv::Point2f> &mCorners = markers[i].getCorners();
         int corner_len = (int) mCorners.size();
-        const Point3f &m_cameraPosition = markers[i].getCameraPosition();
+        const std::vector<cv::Point2f> &mRejecteds = markers[i].getRejecteds();
+        int rejected_len = (int) mRejecteds.size();
+        const cv::Point3f &m_cameraPosition = markers[i].getCameraPosition();
         cv::Mat rvec = markers[i].getRotationMatrix();
         cv::Mat tvec = markers[i].getTransnslationMatrix();
 
@@ -152,9 +160,9 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
         jobject objIrArucoMarker = env->AllocObject( classIrArucoMarker );
 
         // Change the variable
-        env->SetIntField( objIrArucoMarker, fidId, mId );
-        env->SetIntField( objIrArucoMarker, fidOri, mOri );
-        env->SetDoubleField( objIrArucoMarker, fidDistance, xzdist );
+        env->SetIntField( objIrArucoMarker, fidmId, mId );
+        env->SetIntField( objIrArucoMarker, fidmOri, mOri );
+        env->SetDoubleField( objIrArucoMarker, fidmDistance, mXZdist );
 
         jobjectArray pointCornersArray = env->NewObjectArray( corner_len, classCvPoint, NULL );
         for (int j = 0; j < corner_len; j++)
@@ -163,12 +171,26 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             env->SetObjectArrayElement( pointCornersArray, j, objCvPoint );
             env->DeleteLocalRef(objCvPoint);
         }
-        env->SetObjectField( objIrArucoMarker, fidCorners, pointCornersArray );
+        env->SetObjectField( objIrArucoMarker, fidmCorners, pointCornersArray );
         env->DeleteLocalRef(pointCornersArray);
 
+        jobjectArray pointRejectedsArray = env->NewObjectArray( rejected_len, classCvPoint, NULL );
+        for (int j = 0; j < rejected_len; j++)
+        {
+            jobject objCvPoint = env->NewObject( classCvPoint, pointInit, (double)mRejecteds[j].x, (double)mRejecteds[j].y );
+            env->SetObjectArrayElement( pointRejectedsArray, j, objCvPoint );
+            env->DeleteLocalRef(objCvPoint);
+        }
+        env->SetObjectField( objIrArucoMarker, fidmRejecteds, pointRejectedsArray);
+        env->DeleteLocalRef(pointRejectedsArray);
+
         jobject objCvPoint3 = env->NewObject( classCvPoint3, point3Init, (double)m_cameraPosition.x, (double)m_cameraPosition.y, (double)m_cameraPosition.z);
-        env->SetObjectField( objIrArucoMarker, fidPosition, objCvPoint3 );
+        env->SetObjectField( objIrArucoMarker, fidcamPosition, objCvPoint3 );
         env->DeleteLocalRef(objCvPoint3);
+
+        jobject objCvPoint = env->NewObject( classCvPoint, pointInit, (double)mCenter.x, (double)mCenter.y);
+        env->SetObjectField( objIrArucoMarker, fidmCenter, objCvPoint);
+        env->DeleteLocalRef(objCvPoint);
 
         jobjectArray injectPointArray = env->NewObjectArray( injectPoints_len, classCvPoint, NULL );
         for (int j = 0; j < injectPoints_len; j++)

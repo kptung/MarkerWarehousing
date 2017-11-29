@@ -108,11 +108,13 @@
   <ItemGroup>
     <ClCompile Include="aruco.cpp" />
     <ClCompile Include="charuco.cpp" />
+    <ClCompile Include="create_marker.cpp" />
     <ClCompile Include="IrArExample8.cpp" />
     <ClCompile Include="IrArInterface.cpp" />
     <ClCompile Include="IrArMarkerCreator.cpp" />
     <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="ippe.cpp" />
+    <ClCompile Include="Irexample9.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aruco\aruco.hpp" />

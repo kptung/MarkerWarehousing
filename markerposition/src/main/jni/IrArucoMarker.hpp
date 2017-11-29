@@ -50,17 +50,17 @@ public:
 	}
 
 	// set/get marker reject corners
-	void setRejected(const std::vector<cv::Point2f> &rejects)
+	void setRejecteds(const std::vector<cv::Point2f> &rejects)
 	{
-		m_rejects.clear();
+		m_rejecteds.clear();
 		for (size_t i = 0; i < rejects.size(); i++)
 		{
-			m_rejects.push_back(rejects.at(i));
+			m_rejecteds.push_back(rejects.at(i));
 		}
 	}
-	const std::vector<cv::Point2f> &getRejected(void) const
+	const std::vector<cv::Point2f> &getRejecteds(void) const
 	{
-		return m_rejects;
+		return m_rejecteds;
 	}
 	
 	// set/get marker ID
@@ -220,7 +220,7 @@ private:
 	std::vector<cv::Point2f> m_corners;
 
 	// marker rejected points
-	std::vector<cv::Point2f> m_rejects;
+	std::vector<cv::Point2f> m_rejecteds;
 
 	// camera position
 	cv::Point3f m_cameraPosition;

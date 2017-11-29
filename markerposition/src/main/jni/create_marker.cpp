@@ -10,7 +10,7 @@ using namespace std;
 /*  Author: opencv_contrib                                              */
 /*  Modified: kptung, 2017/11/09                                        */
 /************************************************************************/
-int main00(int argc, char *argv[]) 
+int main12345(int argc, char *argv[]) 
 {
 	int dictionaryId = 16;
     int markerId = 139;

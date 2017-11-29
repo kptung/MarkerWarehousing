@@ -40,20 +40,20 @@ public class MarkerHelper {
             tv.append("Markers: " + markerSet.length + "\n");
             tv.append("<<<< ---- ---- ----\n");
             for (int i = 0; i < markerSet.length; i++) {
-                tv.append("ID: " + markerSet[i].id + "; ");
+                tv.append("ID: " + markerSet[i].mid + "; ");
 
-                if (markerSet[i].corners != null
-                        && markerSet[i].corners.length == 4)
+                if (markerSet[i].mcorners != null
+                        && markerSet[i].mcorners.length == 4)
                 {
                     tv.append(
-                            "Top-left: (" + markerSet[i].corners[0].x + ", "
-                                    + markerSet[i].corners[0].y + "); ");
-                    tv.append("Top-right: (" + markerSet[i].corners[1].x
-                            + ", " + markerSet[i].corners[1].y + "); ");
-                    tv.append("Bottom-right: (" + markerSet[i].corners[2].x
-                            + ", " + markerSet[i].corners[2].y + "); ");
-                    tv.append("Bottom-left: (" + markerSet[i].corners[3].x
-                            + ", " + markerSet[i].corners[3].y + ")\n");
+                            "Top-left: (" + markerSet[i].mcorners[0].x + ", "
+                                    + markerSet[i].mcorners[0].y + "); ");
+                    tv.append("Top-right: (" + markerSet[i].mcorners[1].x
+                            + ", " + markerSet[i].mcorners[1].y + "); ");
+                    tv.append("Bottom-right: (" + markerSet[i].mcorners[2].x
+                            + ", " + markerSet[i].mcorners[2].y + "); ");
+                    tv.append("Bottom-left: (" + markerSet[i].mcorners[3].x
+                            + ", " + markerSet[i].mcorners[3].y + ")\n");
                 }
 
 
@@ -63,7 +63,7 @@ public class MarkerHelper {
                             + markerSet[i].injectpoints[0].y + ")\n");
                 }
 
-                tv.append("Distance: " + markerSet[i].distance);
+                tv.append("Distance: " + markerSet[i].mdistance);
             }
             tv.append("---- ---- ---- >>>>\n");
         } else {
