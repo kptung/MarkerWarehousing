@@ -164,9 +164,8 @@ public class MainActivity extends Activity {
     }
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
-        IrArucoMarker[] findInjectionsBasedOnMarkers;
 
-        findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
+        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
 
         int[] drawInfo = new int[10];
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
@@ -179,14 +178,18 @@ public class MainActivity extends Activity {
                 if (findInjectionsBasedOnMarkers[i].mid == 666)
                 {
                     drawInfo[1] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400);
+                    drawInfo[1] = (drawInfo[1]>=0)?drawInfo[1]:0;
                     drawInfo[2] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    drawInfo[2] = (drawInfo[2]>=0)?drawInfo[2]:0;
                     drawInfo[3] = 800;
                     drawInfo[4] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                 }
                 if (findInjectionsBasedOnMarkers[i].mid == 777)
                 {
                     drawInfo[6] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x + 30);
+                    drawInfo[6] = (drawInfo[6]>=0)?drawInfo[6]:0;
                     drawInfo[7] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y - 50);
+                    drawInfo[7] = (drawInfo[7]>=0)?drawInfo[7]:0;
                     drawInfo[8] = 200;
                     drawInfo[9] = 50;
                 }
