@@ -102,7 +102,7 @@ inline bool IrArCalibration3d::loadCameraParametersFromYML(const std::string &fi
 
 	cv::FileStorage fs(filename, cv::FileStorage::READ);
 	if (!fs.isOpened())
-		return -1;
+		return false;
 	fs["image_width"] >> width;
 	fs["image_height"] >> height;
 	fs["camera_matrix"] >> intrinsic;
@@ -128,7 +128,7 @@ inline bool IrArCalibration3d::loadRTParametersFromYML(const std::string &filena
 {
 	cv::FileStorage fs(filename, cv::FileStorage::READ);
 	if (!fs.isOpened())
-		return -1;
+		return false;
 	
 	fs["left_eye_rotate_vec"] >> m_Lrvec;
 	fs["right_eye_rotate_vec"] >> m_Rrvec;

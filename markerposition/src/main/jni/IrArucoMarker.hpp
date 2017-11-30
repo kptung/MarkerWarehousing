@@ -228,7 +228,6 @@ private:
 	// camera rotation and translation matrix
 	cv::Mat m_rvec, m_tvec;
 
-	
 	// angle definition: the coordinate system is shown as X(Right), Y(Up) and Z(Front)  
 	float x_axis_angle, y_axis_angle;
 

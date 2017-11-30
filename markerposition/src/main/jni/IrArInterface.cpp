@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "IrArInterface.h"
 #include "IrArCalibration.hpp"
 #include "IrArucoMarker.hpp"
@@ -18,21 +17,13 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, rvec, tvec, ori, center);
 }
-/*
-std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, const int &ori, const cv::Point2f &center)
-{
-	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
-	const cv::Mat &distortion = calib3d.getDistortionMatrix();
-	cv::Mat lrvec, rrvec, ltvec, rtvec;
-	calib3d.getRTfromDualEyes(lrvec, rrvec, ltvec, rtvec);
-	return mdet.findInjectPoints(objpts, intrinsic, distortion, lrvec, ltvec, rrvec, rtvec, ori, center);
-}
-*/
 /************************************************************************/
 /*         Aruco marker detection                                 */
 /************************************************************************/
 bool findArucoMarkers(const cv::Mat &image, const float& markerLen, std::vector<IrArucoMarker> &markers)
 {
+	if (image.rows == 0 || image.cols == 0)
+		return false;
 	// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);

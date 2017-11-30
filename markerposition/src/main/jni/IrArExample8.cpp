@@ -1,5 +1,6 @@
 #include "IrArInterface.h"
-
+#include <chrono>
+#include <ctime>
 using namespace std;
 using namespace cv;
 
@@ -10,7 +11,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main23456(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
@@ -48,7 +49,21 @@ int main23456(int argc, char **argv)
 		//CV_LOAD_IMAGE_UNCHANGED, CV_LOAD_IMAGE_GRAYSCALE, CV_LOAD_IMAGE_COLOR
 		cv::Mat src = imread(infolder + SEP + files[i], CV_LOAD_IMAGE_COLOR);
 		vector<IrArucoMarker> markers;
-		if (findArucoMarkers(src, markerLength, markers))
+		auto tstart = std::chrono::high_resolution_clock::now();
+		bool flag = findArucoMarkers(src, markerLength, markers);
+		auto tend = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
+		bool wflag = true;
+		if (wflag)
+		{
+			ofstream out1;
+			char *ptimefile_name;
+			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
+			out1.open(ptimefile_name, ios::app);
+			out1 << "Call: " << (long)(1000 * diff.count()) << std::endl;
+			out1.close();
+		}
+		if (flag)
 		{
 			for (unsigned int j = 0; j < markers.size(); j++)
 			{

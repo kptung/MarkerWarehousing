@@ -164,9 +164,11 @@ public class MainActivity extends Activity {
     }
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
-
+long t1 = System.currentTimeMillis();
         IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
-
+long t2 = System.currentTimeMillis();
+ long diff = t2-t1;
+        System.out.println("time =  " + diff);
         int[] drawInfo = new int[10];
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
         drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;

@@ -10,6 +10,14 @@
 #include <opencv2/opencv.hpp>
 #include "IrArGlobalMethods.hpp"
 #include "IrArucoMarker.hpp"
+#include <chrono>
+#include <string>
+#include <list>
+#include <iostream>
+#include <ctime>
+#include <fstream>
+
+
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
@@ -39,19 +47,36 @@ public:
 		cv::Mat origin;
 		src.copyTo(origin);
 		// (a) define aruco dictionary
-		cv::Ptr<cv::aruco::Dictionary> dictionary =
-			cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
+		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
 		
 		// (b) detect the markers and estimate pose
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
 		std::vector< cv::Vec3d > rvecs, tvecs;
+		
+		auto tstart = std::chrono::high_resolution_clock::now();
 		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
-		cv::aruco::drawDetectedMarkers(origin, corners, ids);
+		// cv::aruco::drawDetectedMarkers(origin, corners, ids);
 		
 		// (c) estimate the camera pose; the unit is meter
 		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-		
+		//
+		auto tend = std::chrono::high_resolution_clock::now();
+		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
+		bool wflag = true;
+		if (wflag)
+		{
+			std::ofstream out1;
+			char *ptimefile_name;
+			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
+#ifdef ANDROID
+			ptimefile_name = "/sdcard/marker/mtime.txt";
+#endif
+			out1.open(ptimefile_name, std::ios_base::app);
+			out1 << "Func: " << (long)(1000 * diff.count()) << ", ";
+			out1.close();
+		}
+
 		// (d) marker information
 		if (ids.size() > 0)
 		{
@@ -84,10 +109,11 @@ public:
 				_markers[i].setCameraPos(cameraPose);
 
 				// (d4) draw marker orientation
-				cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs[i], tvecs[i], markerLen * 0.5f);
+				//cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs.at(i), tvecs.at(i), markerLen * 0.5f);
 
 				markers.push_back(_markers[i]);
 			}
+			
 			return true;
 		}
 		else
