@@ -15,6 +15,8 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 {
 	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
+	if (objpts.size() == 0)
+		return make_vector<cv::Point2f>();
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, rvec, tvec, ori, center);
 }
 /************************************************************************/

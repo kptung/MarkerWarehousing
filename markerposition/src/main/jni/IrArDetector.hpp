@@ -60,11 +60,12 @@ public:
 		
 		// (c) estimate the camera pose; the unit is meter
 		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-		//
 		auto tend = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
-		bool wflag = true;
-		if (wflag)
+		
+		// time estimation
+		bool tflag = false;
+		if (tflag)
 		{
 			std::ofstream out1;
 			char *ptimefile_name;

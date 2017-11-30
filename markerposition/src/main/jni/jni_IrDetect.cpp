@@ -89,9 +89,9 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     bool flag = findArucoMarkers(matObjectAddress, markerSizeInMeter, markers);
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
-    //
-    bool wflag=true;
-    if(wflag)
+    // time estimation
+    bool tflag=false;
+    if(tflag)
     {
         ofstream out1;
         char *ptimefile_name = "/sdcard/marker/mtime.txt";

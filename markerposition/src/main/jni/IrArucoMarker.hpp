@@ -31,7 +31,7 @@ class IrArucoMarker
 public:
 
 	/// constructor
-	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0,-1.0,-1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), y_axis_angle(-1), x_axis_angle(-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
+	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), y_axis_angle(-1), x_axis_angle(-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
 	{
 	}
 
@@ -201,6 +201,7 @@ public:
 	// set/get translation matrix
 	void setTransnslationMatrix(const cv::Vec3d& tvec)
 	{
+		m_tvec.release();
 		m_tvec = cv::Mat(tvec);
 	}
 	cv::Mat getTransnslationMatrix(void) const
