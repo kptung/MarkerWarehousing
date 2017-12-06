@@ -68,7 +68,7 @@ public class DrawMonoRect2D extends DrawTrackingRect {
         rectSets.clear();
     }
 
-    public int[] processTrackingRect(int width, int height, int data[]) {
+    public int[] processTrackingRect(int width, int height, double data[]) {
 
         rectSets.clear();
         if (data == null) {
@@ -97,13 +97,14 @@ public class DrawMonoRect2D extends DrawTrackingRect {
             {
                 data[i] = -1;
             } else {
-                rectSets.put(data[i], new int[] {(int) Math.round(left),
+                rectSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(left),
                         (int) Math.round(top), (int) Math.round(right),
                         (int) Math.round(bottom)});
             }
         }
 
-        return data;
+        int[] xx = new int [1];
+        return xx;
     }
 
     @Override

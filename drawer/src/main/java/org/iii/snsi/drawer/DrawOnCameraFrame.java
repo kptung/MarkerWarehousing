@@ -36,7 +36,7 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     }
 
     @Override
-    public int[] processTrackingRect(int width, int height, int[] data) {
+    public int[] processTrackingRect(int width, int height, double[] data) {
         rectSets.clear();
         if (data == null) {
             return null;
@@ -67,14 +67,14 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
                 //                System.out.println("leftL = " + leftL);
                 //                System.out.println("rightL = " + rightL);
 
-                rectSets.put(data[i], new int[] {(int) Math.round(left),
+                rectSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(left),
                         (int) Math.round(top), (int) Math.round(right),
                         (int) Math.round(bottom)});
 
             }
         }
-
-        return data;
+        int[] xx = new int [1];
+        return xx;
     }
 
     @Override

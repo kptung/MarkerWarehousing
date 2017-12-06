@@ -90,7 +90,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
     // time estimation
-    bool tflag=false;
+    bool tflag=true;
     if(tflag)
     {
         ofstream out1;
@@ -103,7 +103,6 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     // Allocate a jobjectArray
     int arrayLength = (int)markers.size();
     jobjectArray outJNIArray = env->NewObjectArray( arrayLength, classIrArucoMarker, NULL );
-
     if(flag)
     {
         // Get the Field ID of the instance variables
@@ -113,8 +112,8 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
         jfieldID fidmOri = env->GetFieldID( classIrArucoMarker, "mori", "I" );
         assert(fidmOri != NULL);
 
-        jfieldID fidmDistance = env->GetFieldID( classIrArucoMarker, "mdistance", "D");
-        assert(fidmDistance != NULL);
+        jfieldID fidmxzDistance = env->GetFieldID( classIrArucoMarker, "mxzdistance", "D");
+        assert(fidmxzDistance != NULL);
 
         jfieldID fidmCorners = env->GetFieldID( classIrArucoMarker, "mcorners", "[Lorg/iii/snsi/markerposition/Point2D;" );
         assert(fidmCorners != NULL);
@@ -164,8 +163,9 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             else if (mId == 777)
             {
           	    // find injection pts
-          	    cv::Point3f Injection(0, 0, 0);
+          	    cv::Point3f Injection(0, 0.08f, 0);
           	    Injectionpts = make_vector<cv::Point3f>() << Injection;
+          	    Injectionpts.push_back(cv::Point3f(0.08f, 0, 0));
             }
             std::vector<cv::Point2f> mInjectPoints = findInjection(Injectionpts, rvec, tvec, mOri, markers[i].getMarkerCenter());
             int injectPoints_len = (int) mInjectPoints.size();
@@ -176,7 +176,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             // Change the variable
             env->SetIntField( objIrArucoMarker, fidmId, mId );
             env->SetIntField( objIrArucoMarker, fidmOri, mOri );
-            env->SetDoubleField( objIrArucoMarker, fidmDistance, mXZdist );
+            env->SetDoubleField( objIrArucoMarker, fidmxzDistance, mXZdist );
 
             jobjectArray pointCornersArray = env->NewObjectArray( corner_len, classCvPoint, NULL );
             for (int j = 0; j < corner_len; j++)

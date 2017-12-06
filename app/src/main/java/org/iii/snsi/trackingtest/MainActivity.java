@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
     private DrawStereoRect2D drawerStereo;
     private DrawOnCameraFrame drawerCam;
     private DisplayControl bt300Control;
-    private boolean modeFlag = false;//true for preview mode
+    private boolean modeFlag = false;//true for preview mode; false for stereo mode
     private int originSurfaceWidth;
     private int originSurfaceHeight;
 
@@ -169,7 +169,7 @@ long t1 = System.currentTimeMillis();
 long t2 = System.currentTimeMillis();
  long diff = t2-t1;
         System.out.println("time =  " + diff);
-        int[] drawInfo = new int[10];
+        double[] drawInfo = new double[10];
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
         drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
 
@@ -179,21 +179,37 @@ long t2 = System.currentTimeMillis();
             {
                 if (findInjectionsBasedOnMarkers[i].mid == 666)
                 {
-                    drawInfo[1] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400);
-                    drawInfo[1] = (drawInfo[1]>=0)?drawInfo[1]:0;
-                    drawInfo[2] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                    drawInfo[2] = (drawInfo[2]>=0)?drawInfo[2]:0;
-                    drawInfo[3] = 800;
-                    drawInfo[4] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    if(!modeFlag) {
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400;
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[3] = 200;
+                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    }
+                    else
+                    {
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[3] = 200;
+                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    }
                 }
                 if (findInjectionsBasedOnMarkers[i].mid == 777)
                 {
-                    drawInfo[6] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].x + 30);
-                    drawInfo[6] = (drawInfo[6]>=0)?drawInfo[6]:0;
-                    drawInfo[7] = (int) Math.round(findInjectionsBasedOnMarkers[i].injectpoints[0].y - 50);
-                    drawInfo[7] = (drawInfo[7]>=0)?drawInfo[7]:0;
-                    drawInfo[8] = 200;
-                    drawInfo[9] = 50;
+                    if(!modeFlag)
+                    {
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].injectpoints[0].x + 40;
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[8] = 150;
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                    }
+                    else
+                    {
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].injectpoints[0].x;
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[8] = 150;
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                    }
+
                 }
             }
         }

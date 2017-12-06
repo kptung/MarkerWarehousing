@@ -104,7 +104,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     }
 
     @Override
-    public int[] processTrackingRect(int width, int height, int[] data) {
+    public int[] processTrackingRect(int width, int height, double[] data) {
         rectSets.clear();
         rectSetsLR.clear();
         if (data == null) {
@@ -147,16 +147,16 @@ public class DrawStereoRect2D extends DrawTrackingRect {
 //                System.out.println("leftL = " + leftL);
 //                System.out.println("rightL = " + rightL);
 
-                rectSets.put(data[i], new int[] {(int) Math.round(leftR),
+                rectSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftR),
                         (int) Math.round(topR), (int) Math.round(rightR),
                         (int) Math.round(bottomR)});
-                rectSetsLR.put(data[i], new int[] {(int) Math.round(leftL),
+                rectSetsLR.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftL),
                         (int) Math.round(rightL)});
 
             }
         }
-
-        return data;
+        int[] xx = new int [1];
+        return xx;
     }
 
     @Override

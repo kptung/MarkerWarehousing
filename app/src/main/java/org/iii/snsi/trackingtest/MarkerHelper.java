@@ -16,16 +16,12 @@ public class MarkerHelper {
         }
     }
     private static final String TAG = "MarkerHelper";
-    private static final String YML_FILE = "/sdcard/a6k_mr/bt300jj130-camera.yml";
-    private static final String YML_FILE2 = "/sdcard/detector_params.yml";
-    private static final String YML_FILE3 = "/sdcard/bt300-RTmatrices.yml";
-    private static boolean enabelRTMatrices = false;
+    private static final String YML_FILE = "/sdcard/markpos/bt300-camera.yml";
+    private static final String YML_FILE2 = "/sdcard/markpos/detector_params.yml";
 
     public static void initialization() {
         IrDetect.importYMLCameraParameters(YML_FILE);
         IrDetect.importYMLDetectParameters(YML_FILE2);
-        if (enabelRTMatrices)
-            IrDetect.importYMLRTParameters(YML_FILE3);
     }
 
     public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter){
@@ -33,7 +29,7 @@ public class MarkerHelper {
             return null;
 
         return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSizeInMeter);
-    }
+    }       //IrDetect.importYMLRTParameters(YML_FILE3);
 
     public static void printFullMarkerSet(IrArucoMarker[] markerSet, TextView tv) {
         if (markerSet != null && markerSet.length > 0) {
@@ -63,7 +59,7 @@ public class MarkerHelper {
                             + markerSet[i].injectpoints[0].y + ")\n");
                 }
 
-                tv.append("Distance: " + markerSet[i].mdistance);
+                tv.append("Distance: " + markerSet[i].mxzdistance);
             }
             tv.append("---- ---- ---- >>>>\n");
         } else {

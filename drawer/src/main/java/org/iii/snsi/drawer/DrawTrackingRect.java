@@ -16,7 +16,7 @@ public abstract class DrawTrackingRect extends View {
 
     public abstract void removeTrackingRect();
 
-    public abstract int[] processTrackingRect(int width, int height, int data[]);
+    public abstract int[] processTrackingRect(int width, int height, double data[]);
 
     public abstract void setLayoutSize(int width, int height);
 

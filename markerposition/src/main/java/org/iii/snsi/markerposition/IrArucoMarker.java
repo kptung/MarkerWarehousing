@@ -3,7 +3,7 @@ public class IrArucoMarker {
     private static final String TAG = "IrMarker";
     public int mid;
     public int mori;
-    public double mdistance;
+    public double mxzdistance;
     public Point2D[] mcorners;
     public Point2D[] mrejecteds;
     public Point3D camposition;
@@ -18,7 +18,7 @@ public class IrArucoMarker {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("id:%d", mid));
         stringBuilder.append(String.format("ori:%d", mori));
-        stringBuilder.append(String.format("distance:%f", mdistance));
+        stringBuilder.append(String.format("distance:%f", mxzdistance));
         stringBuilder.append(camposition.toString());
         stringBuilder.append(mcenter.toString());
         for (Point2D corner:
