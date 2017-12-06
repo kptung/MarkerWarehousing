@@ -49,6 +49,8 @@ Java_org_iii_snsi_markerposition_IrDetect_importYMLDetectParameters(
     return (jboolean)importYMLDetectParameters(filename);
 }
 
+
+
 JNIEXPORT jboolean JNICALL
 Java_org_iii_snsi_markerposition_IrDetect_importYMLRTParameters(
         JNIEnv *env, jclass type, jstring jfilename) {
@@ -90,7 +92,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
     // time estimation
-    bool tflag=true;
+    bool tflag=false;
     if(tflag)
     {
         ofstream out1;

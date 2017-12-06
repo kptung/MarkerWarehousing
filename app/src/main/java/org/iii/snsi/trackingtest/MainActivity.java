@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
@@ -23,6 +24,10 @@ import org.iii.snsi.drawer.DrawOnCameraFrame;
 import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.streamlibrary.CameraController;
+
+import java.io.File;
+import java.util.List;
+
 
 public class MainActivity extends Activity {
 
@@ -47,6 +52,7 @@ public class MainActivity extends Activity {
     private boolean modeFlag = false;//true for preview mode; false for stereo mode
     private int originSurfaceWidth;
     private int originSurfaceHeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +206,7 @@ long t2 = System.currentTimeMillis();
                         drawInfo[6] = findInjectionsBasedOnMarkers[i].injectpoints[0].x + 40;
                         drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                         drawInfo[8] = 150;
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
                     }
                     else
                     {
@@ -214,19 +220,30 @@ long t2 = System.currentTimeMillis();
             }
         }
 
-
         drawerStereo.processTrackingRect(width, height, drawInfo);
         drawerCam.processTrackingRect(width, height, drawInfo);
         drawerStereo.postInvalidate();
         drawerCam.postInvalidate();
-
     }
 
     private void initializeDrawer() {
         drawerStereo = new DrawStereoRect2D(this);
-        drawerStereo.setTrackingCalibration(91, 90, 92, 53);
+        String ini_FILE ="/streamer.ini";
+        String filename= Environment.getExternalStorageDirectory().getPath()+ini_FILE;
+        IniDocument document = new IniDocument(new File(new File("").getAbsoluteFile(), filename).getAbsolutePath()).parse();
+        List<String> roiheight = document.get("ROIHeight");
+        int roih = Integer.parseInt(roiheight.get(0));
+        List<String> offsetwidth = document.get("OffsetWidth");
+        int offsetw = Integer.parseInt(offsetwidth.get(0));
+        List<String> roiwidth = document.get("ROIWidth");
+        int roiw = Integer.parseInt(roiwidth.get(0));
+        List<String> offsetheight = document.get("OffsetHeight");
+        int offseth = Integer.parseInt(offsetheight.get(0));
+        List<String> offsetwidthlr = document.get("OffsetWidthLR");
+        int offsetwlr = Integer.parseInt(offsetwidthlr.get(0));
+        drawerStereo.setTrackingCalibration(offsetw, offseth, roiw, roih);
         drawerStereo.setLayoutSize(1280, 720);
-        drawerStereo.setOffsetLR(26);
+        drawerStereo.setOffsetLR(offsetwlr);
         drawerCam = new DrawOnCameraFrame(this);
         drawerCam.setLayoutSize(1280, 720);
     }

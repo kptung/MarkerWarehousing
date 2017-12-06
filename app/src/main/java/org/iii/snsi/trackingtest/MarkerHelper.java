@@ -1,10 +1,13 @@
 package org.iii.snsi.trackingtest;
 
+import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.markerposition.IrDetect;
+
+import java.io.File;
 
 public class MarkerHelper {
     static {
@@ -16,12 +19,30 @@ public class MarkerHelper {
         }
     }
     private static final String TAG = "MarkerHelper";
-    private static final String YML_FILE = "/sdcard/markpos/bt300-camera.yml";
-    private static final String YML_FILE2 = "/sdcard/markpos/detector_params.yml";
+    private static final String YML_FILE = "/markpos/bt300-camera.yml";
+    private static final String YML_FILE2 = "/markpos/detector_params.yml";
 
     public static void initialization() {
-        IrDetect.importYMLCameraParameters(YML_FILE);
-        IrDetect.importYMLDetectParameters(YML_FILE2);
+        String camfile = Environment.getExternalStorageDirectory().getPath() + YML_FILE;
+        String detfile = Environment.getExternalStorageDirectory().getPath() + YML_FILE2;
+        File f1=new File(camfile);
+        File f2=new File(detfile);
+
+        if(f1.exists()) {
+            IrDetect.importYMLCameraParameters(camfile);
+        }
+        else
+        {
+            return;
+        }
+        if(f2.exists()){
+            IrDetect.importYMLDetectParameters(detfile);
+        }
+        else
+        {
+            return;
+        }
+
     }
 
     public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter){
@@ -29,7 +50,7 @@ public class MarkerHelper {
             return null;
 
         return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSizeInMeter);
-    }       //IrDetect.importYMLRTParameters(YML_FILE3);
+    }
 
     public static void printFullMarkerSet(IrArucoMarker[] markerSet, TextView tv) {
         if (markerSet != null && markerSet.length > 0) {

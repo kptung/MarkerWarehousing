@@ -57,8 +57,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     }
 
     @Override
-    public void setTrackingCalibration(int offsetWidth, int offsetHeight,
-            int roiWidth, int roiHeight) {
+    public void setTrackingCalibration(int offsetWidth, int offsetHeight, int roiWidth, int roiHeight) {
         this.offsetWidth = offsetWidth;
         this.offsetHeight = offsetHeight;
         this.roiWidth = roiWidth;
