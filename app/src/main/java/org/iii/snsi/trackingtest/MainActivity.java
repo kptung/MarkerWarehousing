@@ -28,9 +28,8 @@ import org.iii.snsi.streamlibrary.CameraController;
 import java.io.File;
 import java.util.List;
 
-
-public class MainActivity extends Activity {
-
+public class MainActivity extends Activity
+{
     private static final String TAG = "MainActivity";
     private static final String EMBT3C_RESOLUTION = "640x480";
     private static final int REQUEST_CAMERA = 111;
@@ -53,9 +52,9 @@ public class MainActivity extends Activity {
     private int originSurfaceWidth;
     private int originSurfaceHeight;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMarkerInfoText = (TextView) findViewById(R.id.marker_id);
@@ -138,10 +137,11 @@ public class MainActivity extends Activity {
                 cameraController.setSurfaceHolder(holder);
                 cameraController.startCamera();
                 cameraController.setCallbackFrameListener(
-                        new CameraController.CallbackFrameListener() {
+                        new CameraController.CallbackFrameListener()
+                        {
                             @Override
-                            public void onIncomingCallbackFrame(byte[] bytes,
-                                    int width, int height) {
+                            public void onIncomingCallbackFrame(byte[] bytes, int width, int height)
+                            {
                                 sleep(10);
                                 drawInjectionArea(bytes, width, height);
                             }
@@ -169,12 +169,18 @@ public class MainActivity extends Activity {
 
     }
 
-    private void drawInjectionArea(byte[] bytes, int width, int height) {
-long t1 = System.currentTimeMillis();
+    private void drawInjectionArea(byte[] bytes, int width, int height)
+    {
+        long t1 = System.currentTimeMillis();
         IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
-long t2 = System.currentTimeMillis();
- long diff = t2-t1;
+        long t2 = System.currentTimeMillis();
+        long diff = t2-t1;
         System.out.println("time =  " + diff);
+
+
+
+
+
         double[] drawInfo = new double[10];
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
         drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
@@ -203,19 +209,18 @@ long t2 = System.currentTimeMillis();
                 {
                     if(!modeFlag)
                     {
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].injectpoints[0].x + 40;
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
                         drawInfo[8] = 150;
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
                     }
                     else
                     {
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].injectpoints[0].x;
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-                        drawInfo[8] = 150;
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
                     }
-
                 }
             }
         }
@@ -226,7 +231,8 @@ long t2 = System.currentTimeMillis();
         drawerCam.postInvalidate();
     }
 
-    private void initializeDrawer() {
+    private void initializeDrawer()
+    {
         drawerStereo = new DrawStereoRect2D(this);
         String ini_FILE ="/streamer.ini";
         String filename= Environment.getExternalStorageDirectory().getPath()+ini_FILE;
@@ -248,57 +254,60 @@ long t2 = System.currentTimeMillis();
         drawerCam.setLayoutSize(1280, 720);
     }
 
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    REQUEST_WRITE_STORAGE);
-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                    REQUEST_READ_STORAGE);
+    private void requestPermission()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_WRITE_STORAGE);
+            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READ_STORAGE);
             requestPermission(Manifest.permission.CAMERA, REQUEST_CAMERA);
-            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                    REQUEST_COARSE_LOCATION);
+            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_COARSE_LOCATION);
         }
     }
-
-    private void requestPermission(String permissionType, int requestCode) {
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                permissionType) == PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[] {permissionType}, requestCode);
+    private void requestPermission(String permissionType, int requestCode)
+    {
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this, permissionType) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission)
+        {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[] {permissionType}, requestCode);
         }
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         super.onPause();
-        if (cameraController != null) {
+        if (cameraController != null)
+        {
             cameraController.stopCamera();
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
     }
-
-    public void onDestroy() {
+    public void onDestroy()
+    {
         super.onDestroy();
-        if (cameraController != null) {
+        if (cameraController != null)
+        {
             cameraController.stopCamera();
         }
-
-        if (Build.MODEL.contains("EMBT3C")) {
+        if (Build.MODEL.contains("EMBT3C"))
+        {
             bt300Control.setMode(DisplayControl.DISPLAY_MODE_2D, false);
         }
     }
 
-    public void sleep(long time) {
-        try {
+    public void sleep(long time)
+    {
+        try
+        {
             Thread.sleep(time);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
     }
-
 }

@@ -10,7 +10,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main23456(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
@@ -20,8 +20,9 @@ int main23456(int argc, char **argv)
 	/************************************************************************/
 	float markerLength = 0.03f; // the unit is meter
 
-	std::string cameraFilename("camera-z2.yml");
-	//std::string cameraFilename("bt300jj130-camera.yml");
+	std::string cameraFilename("a6k_mr/bt300kassia-camera.yml");
+	//std::string cameraFilename("camera-z2.yml");
+	//std::string cameraFilename("bt300kassia-camera.yml");
 	bool camflag = importYMLCameraParameters(cameraFilename);
 	if (!camflag)
 		return 0;
@@ -33,7 +34,7 @@ int main23456(int argc, char **argv)
 		return 0;
 	}
 
-	float alpha = 0.8f, alpha2=0.2f;
+	float alpha = 0.8f, alpha2 = 0.2f;
 
 	cv::Mat src2 = imread("data/stage_border.png");
 	cv::resize(src2, src2, cv::Size(1280, 720), 1);
@@ -41,6 +42,7 @@ int main23456(int argc, char **argv)
 	std::vector<std::string> files;
 	get_files_in_directory(infolder, files);
 
+	bool wflag = true;
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
 		cout << "i: " << i + 1 << "/" << files.size() << endl;
@@ -51,7 +53,7 @@ int main23456(int argc, char **argv)
 		cv::Mat imcopy;
 		src.copyTo(imcopy);
 		cv::resize(src, src, cv::Size(1280, 720), 1);
-		vector<IrArucoMarker> markers;
+		std::vector<IrArucoMarker> markers;
 		if (findArucoMarkers(src, markerLength, markers))
 		{
 			cv::Mat rvec, tvec;
@@ -85,9 +87,9 @@ int main23456(int argc, char **argv)
 				else if (mid == 777)
 				{
 					// find injection pts
-					cv::Point3f Injection(0.05f, 0, 0);
+					cv::Point3f Injection(0.08f, 0, 0);
 					Injectionpts = make_vector<cv::Point3f>() << Injection;
-					Injectionpts.push_back(cv::Point3f(0, 0.05f, 0));
+					Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
 				}
 				std::vector<cv::Point2f> injpts = findInjection(Injectionpts, rvec, tvec, mori, mcenter);
 				cv::Mat overlay;
@@ -104,10 +106,19 @@ int main23456(int argc, char **argv)
 					cv::addWeighted(src2, alpha, src, 1 - alpha, 0, src);
 					cv::addWeighted(overlay, alpha2, src, 1 - alpha2, 0, src);
 				}
+				if (wflag)
+				{
+					std::string outputFilename("data/arout/injectbox.yml");
+					cv::FileStorage fs(outputFilename, FileStorage::WRITE);
+					fs << "left" << (int)mcenter.x;
+					fs << "top" << (int)injpts[1].y;
+					fs << "right" << (int)injpts[0].x;
+					fs << "bottom" << (int)mcenter.y;
+				}
 				
 			}
 			src.convertTo(src, -1, 2.5, 20);
-			imwrite(outfolder + SEP + files[i], src);
+			cv::imwrite(outfolder + SEP + files[i], src);
 		}
 		else
 		{
@@ -115,7 +126,7 @@ int main23456(int argc, char **argv)
 			cout << "No Detected Marker!!!" << endl;
 			str3 << "No Detected Marker!!!";
 			putText(src, str3.str(), Point(10, 700), FONT_HERSHEY_SIMPLEX, 3, Scalar(255, 255, 0), 5, 8, false);
-			imwrite(outfolder + SEP + files[i], src);
+			cv::imwrite(outfolder + SEP + files[i], src);
 		}
 	}
 	return 1;

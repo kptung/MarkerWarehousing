@@ -43,15 +43,12 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
         }
 
         for (int i = 0; i < data.length; i += 5) {
-            double left = (double) (data[i + 1]) / width * layoutWidth;
-            double top = (double) (data[i + 2]) / height * layoutHeight;
-            double right =
-                    (double) (data[i + 1] + data[i + 3]) / width * layoutWidth;
-            double bottom = (double) (data[i + 2] + data[i + 4]) / height
-                    * layoutHeight;
+            double left = (double) ((data[i + 1]) / width) * layoutWidth;
+            double top = (double) ((data[i + 2]) / height) * layoutHeight;
+            double right = (double) ((data[i + 1] + data[i + 3]) / width) * layoutWidth;
+            double bottom = (double) ((data[i + 2] + data[i + 4]) / height) * layoutHeight;
 
-            if ((top > layoutHeight) || (bottom < 0) || (right < 0) || (left
-                    > layoutWidth))
+            if ((top > layoutHeight) || (bottom < 0) || (right < 0) || (left > layoutWidth))
             {
                 //                System.out.println("not added : " + data[i]);
                 //                System.out.println("leftR = " + leftR);

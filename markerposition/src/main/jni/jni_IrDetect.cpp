@@ -70,9 +70,19 @@ JNIEXPORT jobjectArray JNICALL
 Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSizeInMeter)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
-	Mat matObjectAddress;
+	Mat image;
 	Mat myuv(height + height/2, width, CV_8UC1, (uchar *)frame);
-	cv::cvtColor(myuv, matObjectAddress, CV_YUV420sp2BGR);
+	//cv::cvtColor(myuv, image, CV_YUV420sp2BGR);
+    cv::cvtColor(myuv, image, CV_YUV2BGR_NV21);
+    cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
+
+    if (image.data == NULL)
+    {
+    	if (JNI_DBG) {
+    		LOGD("image convert fail");
+    	}
+    	return NULL;
+    }
 
     // Get a class reference
     jclass classIrArucoMarker = env->FindClass("org/iii/snsi/markerposition/IrArucoMarker");
@@ -88,7 +98,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
         LOGD("findArucoMarkersWithMarkerSize");
     vector<IrArucoMarker> markers = vector<IrArucoMarker>();
     auto tstart = std::chrono::high_resolution_clock::now();
-    bool flag = findArucoMarkers(matObjectAddress, markerSizeInMeter, markers);
+    bool flag = findArucoMarkers(image, markerSizeInMeter, markers);
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
     // time estimation
@@ -165,9 +175,9 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             else if (mId == 777)
             {
           	    // find injection pts
-          	    cv::Point3f Injection(0, 0.08f, 0);
+          	    cv::Point3f Injection(0.08f, 0, 0);
           	    Injectionpts = make_vector<cv::Point3f>() << Injection;
-          	    Injectionpts.push_back(cv::Point3f(0.08f, 0, 0));
+          	    Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
             }
             std::vector<cv::Point2f> mInjectPoints = findInjection(Injectionpts, rvec, tvec, mOri, markers[i].getMarkerCenter());
             int injectPoints_len = (int) mInjectPoints.size();
@@ -229,7 +239,10 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     env->DeleteLocalRef(classCvPoint);
     env->DeleteLocalRef(classCvPoint3);
 
+    env->ReleaseByteArrayElements(bytes_, frame, 0);
+
     return outJNIArray;
+    //return 0;
 }
 
 #ifdef __cplusplus

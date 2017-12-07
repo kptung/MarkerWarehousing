@@ -28,21 +28,14 @@ public class MarkerHelper {
         File f1=new File(camfile);
         File f2=new File(detfile);
 
-        if(f1.exists()) {
+        if(f1.exists()&&f2.exists()) {
             IrDetect.importYMLCameraParameters(camfile);
-        }
-        else
-        {
-            return;
-        }
-        if(f2.exists()){
             IrDetect.importYMLDetectParameters(detfile);
         }
         else
         {
             return;
         }
-
     }
 
     public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter){
