@@ -17,7 +17,7 @@ cornerRefinementWinSize: 5
 cornerRefinementMaxIterations: 30
 cornerRefinementMinAccuracy: 0.1
 markerBorderBits: 1
-perspectiveRemovePixelPerCell: 4
+perspectiveRemovePixelPerCell: 8
 perspectiveRemoveIgnoredMarginPerCell: 0.13
 maxErroneousBitsInBorderRate: 0.04
 minOtsuStdDev: 5.0

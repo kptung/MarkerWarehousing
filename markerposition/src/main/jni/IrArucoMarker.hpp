@@ -209,6 +209,33 @@ public:
 		return m_tvec;
 	}
 
+	// save the marker infomation
+	void saveMarkInfo(const std::string filename)
+	{
+		cv::FileStorage fs(filename, cv::FileStorage::WRITE);
+		fs << "marker_id" << m_id;
+		fs << "marker_orientation" << m_ori;
+		fs << "marker_center" << m_center;
+		fs << "marker_length" << m_markerLength;
+		fs << "camera_position" << m_cameraPosition;
+		fs << "camera_rotation_matrix" << m_rvec;
+		fs << "camera_translation_matrix" << m_tvec;
+		fs << "marker_corners" << "{";
+		for (int i = 0; i < m_corners.size(); i++)
+		{
+			fs << "Corners_" + std::to_string(i);
+			fs << m_corners.at(i);
+		}
+		fs << "}";
+		fs << "marker_rejecteds" << "{";
+		for (int i = 0; i < m_rejecteds.size(); i++)
+		{
+			fs << "Rejecteds_" + std::to_string(i);
+			fs << m_rejecteds.at(i);
+		}
+		fs << "}";
+		fs.release();
+	}
 private:
 
 	// Id of the marker
