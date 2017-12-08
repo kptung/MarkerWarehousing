@@ -9,6 +9,8 @@
 #include <algorithm>    // std::min
 #include <opencv2/opencv.hpp>
 #include "IrArGlobalMethods.hpp"
+#include <string>
+
 #ifdef ANDROID
 #include <jni.h>
 #include <android/log.h>
@@ -209,6 +211,14 @@ public:
 		return m_tvec;
 	}
 
+	template <typename T>
+	std::string ToString(const T value)
+	{
+		std::ostringstream stream;
+		stream << value;
+		return stream.str();
+	}
+
 	// save the marker infomation
 	void saveMarkInfo(const std::string filename)
 	{
@@ -223,14 +233,14 @@ public:
 		fs << "marker_corners" << "{";
 		for (int i = 0; i < m_corners.size(); i++)
 		{
-			fs << "Corners_" + std::to_string(i);
+			fs << "Corners_" + ToString(i);
 			fs << m_corners.at(i);
 		}
 		fs << "}";
 		fs << "marker_rejecteds" << "{";
 		for (int i = 0; i < m_rejecteds.size(); i++)
 		{
-			fs << "Rejecteds_" + std::to_string(i);
+			fs << "Rejecteds_" + ToString(i);
 			fs << m_rejecteds.at(i);
 		}
 		fs << "}";

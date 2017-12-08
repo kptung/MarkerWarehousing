@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 
 	float alpha = 0.8f, alpha2 = 0.2f;
 
+	bool bgflag = true;
 	cv::Mat src2 = imread("data/stage_border.png");
 	cv::resize(src2, src2, cv::Size(1280, 720), 1);
 
@@ -52,7 +53,8 @@ int main(int argc, char **argv)
 		cv::Mat src = imread(infolder + SEP + files[i], CV_LOAD_IMAGE_COLOR);
 		cv::Mat imcopy;
 		src.copyTo(imcopy);
-		cv::resize(src, src, cv::Size(1280, 720), 1);
+		if(bgflag)
+			cv::resize(src, src, cv::Size(src2.cols, src2.rows), 1);
 		std::vector<IrArucoMarker> markers;
 		if (findArucoMarkers(src, markerLength, markers))
 		{

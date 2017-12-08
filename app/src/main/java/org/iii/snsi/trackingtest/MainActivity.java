@@ -4,6 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,6 +29,7 @@ import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.streamlibrary.CameraController;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -59,10 +64,8 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
         mMarkerInfoText = (TextView) findViewById(R.id.marker_id);
         cameraController = new CameraController(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Bitmap bmp = ImageUtil.loadBitmap(getResources(),
-                R.drawable.stage_border);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Bitmap bmp = ImageUtil.loadBitmap(getResources(), R.drawable.stage_border);
         surfaceView = (SurfaceView) findViewById(R.id.camera_view);
         stereoImage = (StereoImageView) findViewById(R.id.stereo_image);
         stereoImage.setBitmap(bmp);
@@ -134,7 +137,7 @@ public class MainActivity extends Activity
                 originSurfaceWidth = camViewParams.width;
                 originSurfaceHeight = camViewParams.height;
 
-                cameraController.setSurfaceHolder(holder);
+               //cameraController.setSurfaceHolder(holder);
                 cameraController.startCamera();
                 cameraController.setCallbackFrameListener(
                         new CameraController.CallbackFrameListener()
@@ -143,7 +146,14 @@ public class MainActivity extends Activity
                             public void onIncomingCallbackFrame(byte[] bytes, int width, int height)
                             {
                                 sleep(10);
+                                YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height, null);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                im.compressToJpeg(new Rect(0,0,width,height), 90, baos);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
+                                drawerCam.SetBitmap(bitmap);
+
                                 drawInjectionArea(bytes, width, height);
+                                //sleep(10);
                             }
                         });
 
@@ -154,8 +164,8 @@ public class MainActivity extends Activity
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format,
-                    int width, int height) {
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+            {
 
             }
 
@@ -169,6 +179,8 @@ public class MainActivity extends Activity
 
     }
 
+
+
     private void drawInjectionArea(byte[] bytes, int width, int height)
     {
         long t1 = System.currentTimeMillis();
@@ -176,10 +188,6 @@ public class MainActivity extends Activity
         long t2 = System.currentTimeMillis();
         long diff = t2-t1;
         System.out.println("time =  " + diff);
-
-
-
-
 
         double[] drawInfo = new double[10];
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
@@ -192,7 +200,8 @@ public class MainActivity extends Activity
                 if (findInjectionsBasedOnMarkers[i].mid == 666)
                 {
                     if(!modeFlag) {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 400;
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
+                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
                         drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                         drawInfo[3] = 200;
                         drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
@@ -200,6 +209,7 @@ public class MainActivity extends Activity
                     else
                     {
                         drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
+                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
                         drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                         drawInfo[3] = 200;
                         drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
@@ -210,6 +220,7 @@ public class MainActivity extends Activity
                     if(!modeFlag)
                     {
                         drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
                         drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
                         drawInfo[8] = 150;
                         drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
@@ -225,10 +236,17 @@ public class MainActivity extends Activity
             }
         }
 
-        drawerStereo.processTrackingRect(width, height, drawInfo);
-        drawerCam.processTrackingRect(width, height, drawInfo);
-        drawerStereo.postInvalidate();
-        drawerCam.postInvalidate();
+        if(!modeFlag)
+        {
+            drawerStereo.processTrackingRect(width, height, drawInfo);
+            drawerStereo.postInvalidate();
+        }
+        else
+        {
+            drawerCam.processTrackingRect(width, height, drawInfo);
+            drawerCam.postInvalidate();
+        }
+
     }
 
     private void initializeDrawer()

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 
@@ -31,6 +32,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     private int offsetLR;
     private int[] roiScopeR;
     private int[] roiScopeMix;
+    private Bitmap bbitmap;
 
     public DrawStereoRect2D(Context context) {
         super(context);
@@ -39,6 +41,26 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         rectSetsLR = new HashMap<Integer, int[]>();
         rectSetsL = new HashMap<Integer, int[]>();
         rectSetsR = new HashMap<Integer, int[]>();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    public void SetBitmap(Bitmap bitmap)
+    {
+        bbitmap = getResizedBitmap(bitmap, layoutHeight, layoutWidth);
     }
 
     public void setDbgObjImg(int flag) {

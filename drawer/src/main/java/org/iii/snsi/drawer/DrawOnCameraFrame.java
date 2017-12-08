@@ -1,8 +1,10 @@
 package org.iii.snsi.drawer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 
@@ -17,10 +19,32 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     private HashMap<Integer, int[]> rectSets;
     private int layoutWidth;
     private int layoutHeight;
+    private Bitmap bbitmap;
+
 
     public DrawOnCameraFrame(Context context) {
         super(context);
         rectSets = new HashMap<Integer, int[]>();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    public void SetBitmap(Bitmap bitmap)
+    {
+        bbitmap = getResizedBitmap(bitmap, layoutHeight, layoutWidth);
     }
 
     @Override
@@ -91,10 +115,14 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
 
     }
 
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Paint paint = new Paint();
+        //paint.setFilterBitmap(true);
+        canvas.drawBitmap(bbitmap, 0, 0, paint);
         paint.setAntiAlias(true);
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.FILL);

@@ -2,12 +2,11 @@ package org.iii.snsi.drawer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +25,31 @@ public class DrawMonoRect2D extends DrawTrackingRect {
     private int roiWidth;
     private int roiHeight;
     private int[] roiScope;
+    private Bitmap bbitmap;
 
     public DrawMonoRect2D(Context context) {
         super(context);
         rectSets = new HashMap<Integer, int[]>();
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    public void SetBitmap(Bitmap bitmap)
+    {
+        bbitmap = getResizedBitmap(bitmap, layoutHeight, layoutWidth);
     }
 
     public void setDbgObjImg(int flag) {
