@@ -4,10 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +25,6 @@ import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.streamlibrary.CameraController;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -145,15 +140,16 @@ public class MainActivity extends Activity
                             @Override
                             public void onIncomingCallbackFrame(byte[] bytes, int width, int height)
                             {
-                                sleep(10);
-                                YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height, null);
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                im.compressToJpeg(new Rect(0,0,width,height), 90, baos);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
-                                drawerCam.SetBitmap(bitmap);
+                                // catch the image
+//                                YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height, null);
+//                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                                im.compressToJpeg(new Rect(0,0,width,height), 90, baos);
+//                                Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
+                                drawerCam.SetBitmap(bytes, width, height);
 
+                                // draw injection position
                                 drawInjectionArea(bytes, width, height);
-                                //sleep(10);
+                                sleep(5);
                             }
                         });
 

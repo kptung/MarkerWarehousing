@@ -19,12 +19,12 @@ public class MarkerHelper {
         }
     }
     private static final String TAG = "MarkerHelper";
-    private static final String YML_FILE = "/markpos/bt300-camera.yml";
-    private static final String YML_FILE2 = "/markpos/detector_params.yml";
+    private static final String Cam_YML = "/markpos/bt300-camera.yml";
+    private static final String Det_YML = "/markpos/detector_params.yml";
 
     public static void initialization() {
-        String camfile = Environment.getExternalStorageDirectory().getPath() + YML_FILE;
-        String detfile = Environment.getExternalStorageDirectory().getPath() + YML_FILE2;
+        String camfile = Environment.getExternalStorageDirectory().getPath() + Cam_YML;
+        String detfile = Environment.getExternalStorageDirectory().getPath() + Det_YML;
         File f1=new File(camfile);
         File f2=new File(detfile);
 

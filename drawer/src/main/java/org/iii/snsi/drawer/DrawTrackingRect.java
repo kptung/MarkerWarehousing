@@ -1,7 +1,6 @@
 package org.iii.snsi.drawer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 
 /**
@@ -26,5 +25,5 @@ public abstract class DrawTrackingRect extends View {
     public abstract void setTrackingCalibration(int offsetWidth, int offsetHeight,
             int roiWidth, int roiHeight);
 
-    public abstract void SetBitmap(Bitmap bitmap);
+    public abstract void SetBitmap(byte[] bytes, int width, int height);
 }
