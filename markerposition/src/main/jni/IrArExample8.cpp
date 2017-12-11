@@ -91,7 +91,7 @@ int main2345667(int argc, char **argv)
 				// add marker center
 				cv::circle(src, mcenter, 10, cv::Scalar(0, 255, 0), -1, 10);
 
-				// the angle left/right depends on the camera's position
+				// the angle left/right depends on the camera's position (Z-axis 0 degree)
 				std::ostringstream str1, str2, str3;
 				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
 				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
