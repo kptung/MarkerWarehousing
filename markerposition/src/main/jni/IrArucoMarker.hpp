@@ -33,7 +33,7 @@ class IrArucoMarker
 public:
 
 	/// constructor
-	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), y_axis_angle(-1), x_axis_angle(-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
+	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
 	{
 	}
 
@@ -193,6 +193,7 @@ public:
 	// set/get rotation matrix
 	void setRotationMatrix(const cv::Vec3d& rvec)
 	{
+		m_rvec.release();
 		m_rvec = cv::Mat(rvec);
 	}
 	cv::Mat getRotationMatrix(void) const
@@ -265,9 +266,6 @@ private:
 
 	// camera rotation and translation matrix
 	cv::Mat m_rvec, m_tvec;
-
-	// angle definition: the coordinate system is shown as X(Right), Y(Up) and Z(Front)  
-	float x_axis_angle, y_axis_angle;
 
 	// marker center
 	cv::Point2f m_center;

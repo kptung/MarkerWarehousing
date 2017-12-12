@@ -37,7 +37,6 @@ bool importYMLRTParameters(const std::string &filename);
 /* return injection position                                            */
 /************************************************************************/
 std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpoints, const cv::Mat& rvec, const cv::Mat& tvec, const int& ori, const cv::Point2f &center);
-std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, const int &ori, const cv::Point2f &center);
 
 /************************************************************************/
 /* read aruco detection params                                          */
