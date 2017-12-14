@@ -67,7 +67,7 @@ Java_org_iii_snsi_markerposition_IrDetect_importYMLRTParameters(
 
 
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSizeInMeter)
+Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;

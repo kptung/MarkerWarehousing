@@ -38,11 +38,11 @@ public class MarkerHelper {
         }
     }
 
-    public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSizeInMeter){
+    public static IrArucoMarker[] nFindArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSize){
         if (bytes == null)
             return null;
 
-        return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSizeInMeter);
+        return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSize);
     }
 
     public static void printFullMarkerSet(IrArucoMarker[] markerSet, TextView tv) {

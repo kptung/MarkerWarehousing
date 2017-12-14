@@ -11,7 +11,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main234512(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 			for (unsigned int j = 0; j < markers.size(); j++)
 			{
 				int mid = markers.at(j).getMarkerId();
-				float mxzdist = markers.at(j).getXZCameraDistance() * 100;
+				float mxzdist = markers.at(j).getXZCameraDistance();
 				int mori = markers.at(j).getMarkerOri();
 				cv::Point2f mcenter = markers.at(j).getMarkerCenter();
 				int mxzangle = 0, myzangle = 0;

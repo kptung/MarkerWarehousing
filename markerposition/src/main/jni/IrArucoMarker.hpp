@@ -124,7 +124,10 @@ public:
 		float x = (float)m_cameraPosition.x;
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
-		return sqrt(x*x + y*y + z*z);
+		float dist = sqrt(x*x + y*y + z*z);
+		if (dist < 0)
+			dist *= 100;
+		return dist;
 		//return z;
 	}
 	// get X-Z camera distance
@@ -145,7 +148,10 @@ public:
 		/**************************************************************************************/
 		cv::Point3f XYZ(x, y, z);
 		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
-		return sqrt(XYZ.x*XYZ.x + XYZ.z*XYZ.z);
+		float dist = sqrt(XYZ.x*XYZ.x + XYZ.z*XYZ.z);
+		if (dist < 0)
+			dist *= 100;
+		return dist;
 		//return z;
 	}
 	

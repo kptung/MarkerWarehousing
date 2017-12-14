@@ -180,7 +180,7 @@ public class MainActivity extends Activity
     private void drawInjectionArea(byte[] bytes, int width, int height)
     {
         long t1 = System.currentTimeMillis();
-        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 0.03f);
+        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
         long t2 = System.currentTimeMillis();
         long diff = t2-t1;
         System.out.println("time =  " + diff);
