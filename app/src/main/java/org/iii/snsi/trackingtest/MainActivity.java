@@ -215,7 +215,10 @@ public class MainActivity extends Activity
                 {
                     if(!modeFlag)
                     {
+                        // about 60 cm with drawerStereo.setOffsetLR=26
                         drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
+                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
                         drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
                         drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
                         drawInfo[8] = 150;
@@ -264,6 +267,7 @@ public class MainActivity extends Activity
         drawerStereo.setTrackingCalibration(offsetw, offseth, roiw, roih);
         drawerStereo.setLayoutSize(1280, 720);
         drawerStereo.setOffsetLR(offsetwlr);
+        //drawerStereo.setOffsetLR(40);
         drawerCam = new DrawOnCameraFrame(this);
         drawerCam.setLayoutSize(1280, 720);
     }
