@@ -25,10 +25,11 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vector<IrArucoMarker> &markers)
 {
 	// (0) convert markerLength from centimeter(cm) to meter(m) 
-	float markLen = -1;
-	if(markerLength > 0)
+	float markLen = markerLength;
+	if(markerLength >= 1)
 		markLen = markerLength / 100;
 
+	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
 		return false;
 	// (a) convert bgr -> gray

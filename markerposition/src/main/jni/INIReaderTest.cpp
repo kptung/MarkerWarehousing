@@ -13,7 +13,7 @@ std::string sections(INIReader &reader)
     return ss.str();
 }
 
-int main()
+int main124235363()
 {
     INIReader reader("streamer.ini");
 
@@ -34,13 +34,6 @@ int main()
 	oh = reader.GetInteger("Calibration", "OffsetHeight", -1);
 	ow = reader.GetInteger("Calibration", "OffsetWidth", -1);
 	olr = reader.GetInteger("Calibration", "OffsetWidthLR", -1);
-//     std::cout << "Config loaded from 'streamer.ini': found sections=" << sections(reader)
-//               << " version="
-//               << reader.GetInteger("protocol", "version", -1) << ", name="
-//               << reader.Get("user", "name", "UNKNOWN") << ", email="
-//               << reader.Get("user", "email", "UNKNOWN") << ", multi="
-//               << reader.Get("user", "multi", "UNKNOWN") << ", pi="
-//               << reader.GetReal("user", "pi", -1) << ", active="
-//               << reader.GetBoolean("user", "active", true) << "\n";
+
     return 0;
 }

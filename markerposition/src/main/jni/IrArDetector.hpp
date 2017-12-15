@@ -89,9 +89,10 @@ public:
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
-				_markers[i].setRotationMatrix(rvecs[i]);
 				_markers[i].setTransnslationMatrix(tvecs[i]);
-
+#ifdef ANDROID
+				LOGD("D1 pass");
+#endif
 				// (d2) get marker orientation
 				cv::Point2f cent= _markers[i].getMarkerCenter();
 				if (corners.at(i).at(0).x > cent.x && corners.at(i).at(0).y < cent.y)
@@ -102,14 +103,28 @@ public:
 					_markers[i].setMarkerOri(270);
 				else
 					_markers[i].setMarkerOri(0);
-
-				// (d3) Calculate the camera pose
-				cv::Mat R;
-				cv::Rodrigues(rvecs[i], R);
-				cv::Mat cameraPose = -R.t() * (cv::Mat)tvecs[i];
+#ifdef ANDROID
+				LOGD("D2 pass");
+#endif
+				// (d3) set rotation matrix based on marker orientation
+				_markers[i].setRotationMatrix(rvecs[i]);
+#ifdef ANDROID
+				LOGD("D3 pass");
+#endif				
+				// (d4) Calculate the camera pose based on marker orientation
+				cv::Mat R(3, 3, CV_32FC1);
+				cv::Mat tvec = _markers.at(i).getTransnslationMatrix();
+				tvec.convertTo(tvec, CV_32FC1);
+				cv::Mat rvec = _markers.at(i).getRotationMatrix();
+				rvec.convertTo(rvec, CV_32FC1);
+				cv::Rodrigues(rvec, R);
+				//cv::Mat minusR = -R.t();
+				cv::Mat cameraPose = -R.t()*tvec;
 				_markers[i].setCameraPos(cameraPose);
-
-				// (d4) draw marker orientation
+#ifdef ANDROID
+				LOGD("D4 pass");
+#endif
+				// (d5) draw marker orientation
 				//cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs.at(i), tvecs.at(i), markerLen * 0.5f);
 
 				markers.push_back(_markers[i]);
@@ -126,31 +141,7 @@ public:
 	{
 		std::vector<cv::Point2f> pts, outpts;
 		cv::projectPoints(objpts, rvec, tvec, intrinsic, distortion, pts);
-		cv::Point2f outPoint;
-		if (ori > 0)
-		{
-			for (int i = 0; i < pts.size(); i++)
-			{
-				cv::Point2f inpoint = pts.at(i) - center;
-				// rotate camera in counterclockwise by marker's orientation
-				// when the position is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
-				// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°), 
-				// and clockwise if θ is negative (e.g. −90°).
-				/**************************************************************************************/
-				/*           1) clockwise                               2) counterclockwise           */
-				/*  | x'|   | cos(θ),  -sin(θ)   | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |    */
-				/*  |   | = |                    | |   |       |   | = |                   | |   |    */
-				/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
-				/**************************************************************************************/
-				outPoint = cv::Point2f(inpoint.x * cos(ori * PI / 180) + inpoint.y * sin(ori*PI / 180), inpoint.x * -sin(ori*PI / 180) + inpoint.y * cos(ori * PI / 180));
-
-				outPoint += center;
-				outpts.push_back(outPoint);
-			}
-			return outpts;
-		}
-		else
-			return pts;
+		return pts;
 	}
 	
 private:

@@ -10,7 +10,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main23456(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
@@ -20,8 +20,8 @@ int main23456(int argc, char **argv)
 	/************************************************************************/
 	float markerLength = 0.03f; // the unit is meter
 
-	std::string cameraFilename("a6k_mr/bt300kassia-camera.yml");
-	//std::string cameraFilename("camera-z2.yml");
+	//std::string cameraFilename("a6k_mr/bt300kassia-camera.yml");
+	std::string cameraFilename("camera-z2.yml");
 	//std::string cameraFilename("bt300kassia-camera.yml");
 	bool camflag = importYMLCameraParameters(cameraFilename);
 	if (!camflag)

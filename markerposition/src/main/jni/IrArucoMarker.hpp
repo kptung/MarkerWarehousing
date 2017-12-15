@@ -33,7 +33,7 @@ class IrArucoMarker
 public:
 
 	/// constructor
-	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32F)*-1), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
+	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32FC1)*-1), RX(cv::Mat::eye(3, 3, CV_32FC1)), RY(cv::Mat::eye(3, 3, CV_32FC1)), RZ(cv::Mat::eye(3, 3, CV_32FC1)), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
 	{
 	}
 
@@ -51,7 +51,7 @@ public:
 		return m_corners;
 	}
 
-	// set/get marker reject corners
+	// set/get marker rejected corners
 	void setRejecteds(const std::vector<cv::Point2f> &rejects)
 	{
 		m_rejecteds.clear();
@@ -125,8 +125,7 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 		float dist = sqrt(x*x + y*y + z*z);
-		if (dist < 0)
-			dist *= 100;
+		dist *= 100;
 		return dist;
 		//return z;
 	}
@@ -136,6 +135,9 @@ public:
 		float x = (float)m_cameraPosition.x;
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
+		float dist = sqrt(x * x + z * z);
+		dist *= 100;
+		return dist;
 		// rotate camera in counterclockwise by marker's orientation
 		// when the position is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
 		// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°), 
@@ -146,12 +148,11 @@ public:
 		/*  |   | = |                    | |   |       |   | = |                   | |   |    */
 		/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
 		/**************************************************************************************/
-		cv::Point3f XYZ(x, y, z);
-		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
-		float dist = sqrt(XYZ.x*XYZ.x + XYZ.z*XYZ.z);
-		if (dist < 0)
-			dist *= 100;
-		return dist;
+// 		cv::Point3f XYZ(x, y, z);
+// 		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
+// 		float dist = sqrt(XYZ.x*XYZ.x + XYZ.z*XYZ.z);
+//		dist *= 100;
+//		return dist;
 		//return z;
 	}
 	
@@ -173,7 +174,7 @@ public:
 		/*  | y'|   | sin(θ),   cos(θ)   | | y |       | y'|   | -sin(θ),  cos(θ)  | | y |    */
 		/**************************************************************************************/
 		cv::Point3f XYZ(x, y, z);
-		XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
+		//XYZ = cv::Point3f(x * cos(m_ori * PI / 180) + y * sin(m_ori*PI / 180), x * -sin(m_ori*PI / 180) + y * cos(m_ori * PI / 180), z);
 
 		// define XZ Quadrant
 		int xzflag = 1;
@@ -196,11 +197,150 @@ public:
 		return true;
 	}
 
+	// rotate rotation_matrix by the marker orientation counterclockwise
+	// rotate camera in counterclockwise by marker's orientation
+	// when the marker is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+	// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°),
+	// and clockwise if θ is negative (e.g. −90°).
+	/************************************************************************/
+	/*  Rotation matrix when rotate by x-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | 1,   0   ,     0   |         | 1,   0   ,     0   |          */
+	/*  Rx = | 0, cos(θ),  -sin(θ)|    Rx = | 0, cos(θ),   sin(θ)|          */
+	/*       | 0, sin(θ),  cos(θ) |         | 0, -sin(θ),  cos(θ)|          */
+	/*  Rotation matrix when rotate by y-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       |  cos(θ), 0,  sin(θ)|         | cos(θ), 0,  -sin(θ)|          */
+	/*  Ry = |    0   , 1,    0   |    Ry = |   0   , 1,     0   |          */
+	/*       | -sin(θ), 0,  cos(θ)|         | sin(θ), 0,   cos(θ)|          */
+	/*  Rotation matrix when rotate by z-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | cos(θ),  -sin(θ),  0 |       |  cos(θ),  sin(θ),   0 |       */
+	/*  Rz = | sin(θ),  cos(θ) ,  0 |  Rz = | -sin(θ),  cos(θ) ,  0 |       */
+	/*       |  0    ,    0    ,  1 |       |   0    ,    0    ,  1 |       */
+	/************************************************************************/
+	void rotateZAxis(cv::Mat &rotation)
+	{
+		cv::Mat R(3, 3, CV_32FC1);
+		cv::Rodrigues(rotation, R);
+		//create a rotation matrix for z axis
+		float angleRad = m_ori*PI / 180;
+		/**************************************************************************************/
+		/*           1) clockwise                               2) counterclockwise           */
+		/*  | x'|   |  cos(θ),  -sin(θ) | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |     */
+		/*  |   | = |                   | |   |       |   | = |                   | |   |     */
+		/*  | y'|   |  sin(θ),   cos(θ) | | y |       | y'|   |  -sin(θ), cos(θ)  | | y |     */
+		/**************************************************************************************/
+		RZ.at<float>(0, 0) = cos(angleRad);
+		RZ.at<float>(0, 1) = sin(angleRad);
+		RZ.at<float>(1, 0) = -sin(angleRad);
+		RZ.at<float>(1, 1) = cos(angleRad);
+		//now multiply; !! Rz * R != R * Rz since the results will be inverse; Here is Rz * R is correct
+		R = RZ * R;
+		//finally, the the rodrigues back
+		cv::Rodrigues(R, rotation);
+	}
+	// rotate rotation_matrix by the marker orientation counterclockwise
+	// rotate camera in counterclockwise by marker's orientation
+	// when the marker is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+	// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°),
+	// and clockwise if θ is negative (e.g. −90°).
+	/************************************************************************/
+	/*  Rotation matrix when rotate by x-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | 1,   0   ,     0   |         | 1,   0   ,     0   |          */
+	/*  Rx = | 0, cos(θ),  -sin(θ)|    Rx = | 0, cos(θ),   sin(θ)|          */
+	/*       | 0, sin(θ),  cos(θ) |         | 0, -sin(θ),  cos(θ)|          */
+	/*  Rotation matrix when rotate by y-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       |  cos(θ), 0,  sin(θ)|         | cos(θ), 0,  -sin(θ)|          */
+	/*  Ry = |    0   , 1,    0   |    Ry = |   0   , 1,     0   |          */
+	/*       | -sin(θ), 0,  cos(θ)|         | sin(θ), 0,   cos(θ)|          */
+	/*  Rotation matrix when rotate by z-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | cos(θ),  -sin(θ),  0 |       |  cos(θ),  sin(θ),   0 |       */
+	/*  Rz = | sin(θ),  cos(θ) ,  0 |  Rz = | -sin(θ),  cos(θ) ,  0 |       */
+	/*       |  0    ,    0    ,  1 |       |   0    ,    0    ,  1 |       */
+	/************************************************************************/
+	void rotateXAxis(cv::Mat &rotation)
+	{
+		cv::Mat R(3, 3, CV_32FC1);
+		cv::Rodrigues(rotation, R);
+		//create a rotation matrix for z axis
+		float angleRad = m_ori*PI / 180;
+		/**************************************************************************************/
+		/*           1) clockwise                               2) counterclockwise           */
+		/*  | x'|   |  cos(θ),  -sin(θ) | | x |       | x'|   |  cos(θ),  sin(θ)  | | x |     */
+		/*  |   | = |                   | |   |       |   | = |                   | |   |     */
+		/*  | y'|   |  sin(θ),   cos(θ) | | y |       | y'|   |  -sin(θ), cos(θ)  | | y |     */
+		/**************************************************************************************/
+		RX.at<float>(1, 1) = cos(angleRad);
+		RX.at<float>(1, 2) = sin(angleRad);
+		RX.at<float>(2, 1) = -sin(angleRad);
+		RX.at<float>(2, 2) = cos(angleRad);
+		//now multiply; !! Rx * R != R * Rx since the results will be inverse; Here is Rx * R is correct
+		R = RX * R;
+		//finally, the the rodrigues back
+		cv::Rodrigues(R, rotation);
+	}
+	// rotate rotation_matrix by the marker orientation counterclockwise
+	// rotate camera in counterclockwise by marker's orientation
+	// when the marker is rotated in 90/180/270 clockwise, it needs to be invert-rotated in 90/180/270 counterclockwise
+	// note that The direction of vector rotation is counterclockwise if θ is positive (e.g. 90°),
+	// and clockwise if θ is negative (e.g. −90°).
+	/************************************************************************/
+	/*  Rotation matrix when rotate by x-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | 1,   0   ,     0   |         | 1,   0   ,     0   |          */
+	/*  Rx = | 0, cos(θ),  -sin(θ)|    Rx = | 0, cos(θ),   sin(θ)|          */
+	/*       | 0, sin(θ),  cos(θ) |         | 0, -sin(θ),  cos(θ)|          */
+	/*  Rotation matrix when rotate by y-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       |  cos(θ), 0,  sin(θ)|         | cos(θ), 0,  -sin(θ)|          */
+	/*  Ry = |    0   , 1,    0   |    Ry = |   0   , 1,     0   |          */
+	/*       | -sin(θ), 0,  cos(θ)|         | sin(θ), 0,   cos(θ)|          */
+	/*  Rotation matrix when rotate by z-axis                               */
+	/*  in clockwise                           in counterclockwise          */
+	/*       | cos(θ),  -sin(θ),  0 |       |  cos(θ),  sin(θ),   0 |       */
+	/*  Rz = | sin(θ),  cos(θ) ,  0 |  Rz = | -sin(θ),  cos(θ) ,  0 |       */
+	/*       |  0    ,    0    ,  1 |       |   0    ,    0    ,  1 |       */
+	/************************************************************************/
+	void rotateYAxis(cv::Mat &rotation)
+	{
+		cv::Mat R(3, 3, CV_32FC1);
+		cv::Rodrigues(rotation, R);
+		//create a rotation matrix for z axis
+		float angleRad = m_ori*PI / 180;
+		/**************************************************************************************/
+		/*           1) clockwise                               2) counterclockwise           */
+		/*  | x'|   |  cos(θ),   sin(θ) | | x |       | x'|   |  cos(θ),  -sin(θ)  | | x |     */
+		/*  |   | = |                   | |   |       |   | = |                    | |   |     */
+		/*  | y'|   | -sin(θ),   cos(θ) | | y |       | y'|   |  sin(θ),   cos(θ)  | | y |     */
+		/**************************************************************************************/
+		RY.at<float>(0, 0) = cos(angleRad);
+		RY.at<float>(0, 2) = -sin(angleRad);
+		RY.at<float>(2, 0) = sin(angleRad);
+		RY.at<float>(2, 2) = cos(angleRad);
+		//now multiply; !! Ry * R != R * Ry since the results will be inverse; Here is Ry * R is correct
+		R = RY * R;
+		//finally, the the rodrigues back
+		cv::Rodrigues(R, rotation);
+	}
+
 	// set/get rotation matrix
 	void setRotationMatrix(const cv::Vec3d& rvec)
 	{
 		m_rvec.release();
-		m_rvec = cv::Mat(rvec);
+		if (m_ori > 0)
+		{
+			cv::Mat raux, Rvec;
+			raux = cv::Mat(rvec);
+			raux.convertTo(Rvec, CV_32FC1);
+			rotateZAxis(Rvec);
+			m_rvec = Rvec;
+		}
+		else
+			m_rvec = cv::Mat(rvec);
 	}
 	cv::Mat getRotationMatrix(void) const
 	{
@@ -211,11 +351,29 @@ public:
 	void setTransnslationMatrix(const cv::Vec3d& tvec)
 	{
 		m_tvec.release();
-		m_tvec = cv::Mat(tvec);
+		cv::Mat ttvec = cv::Mat(tvec);
+		ttvec.convertTo(ttvec, CV_32FC1);
+		m_tvec = ttvec;
 	}
 	cv::Mat getTransnslationMatrix(void) const
 	{
 		return m_tvec;
+	}
+
+	// get the rotation matrix based on the marker's orientation
+	cv::Mat getRZ(void) const
+	{
+		return RZ;
+	}
+	// get the rotation matrix based on the marker's orientation
+	cv::Mat getRX(void) const
+	{
+		return RX;
+	}
+	// get the rotation matrix based on the marker's orientation
+	cv::Mat getRY(void) const
+	{
+		return RY;
 	}
 
 	template <typename T>
@@ -270,8 +428,10 @@ private:
 	// camera position
 	cv::Point3f m_cameraPosition;
 
-	// camera rotation and translation matrix
-	cv::Mat m_rvec, m_tvec;
+	// camera rotation, translation matrix, the rotation RX, RY and RZ based on marker's orientation
+	// when do the matrix multiplication, the matrix type (e.g. FLOAT32, FlLOAT64) must be the same
+	// The default type of cv::Mat is FLOAT64 
+	cv::Mat m_rvec, m_tvec, RX, RY, RZ;
 
 	// marker center
 	cv::Point2f m_center;
