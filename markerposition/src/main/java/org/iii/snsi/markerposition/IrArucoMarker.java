@@ -11,5 +11,13 @@ public class IrArucoMarker {
     public Point2D mcenter;
 
     public IrArucoMarker() {
+        mid=-1;
+        mori=-1;
+        mxzdistance=-1;
+        camposition.x=-1;
+        camposition.y=-1;
+        camposition.z=-1;
+        mcenter.x=-1;
+        mcenter.y=-1;
     }
 }

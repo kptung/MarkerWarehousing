@@ -21,9 +21,6 @@
     <ClCompile Include="aruco.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="charuco.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,7 +39,10 @@
     <ClCompile Include="create_marker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Irexample9.cpp">
+    <ClCompile Include="IrArExample9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="INIReaderTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="aruco\predefined_dictionaries.hpp">
       <Filter>Header Files\aruco</Filter>
+    </ClInclude>
+    <ClInclude Include="INIReader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
