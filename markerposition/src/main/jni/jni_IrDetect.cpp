@@ -49,23 +49,6 @@ Java_org_iii_snsi_markerposition_IrDetect_importYMLDetectParameters(
     return (jboolean)importYMLDetectParameters(filename);
 }
 
-
-
-JNIEXPORT jboolean JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_importYMLRTParameters(
-        JNIEnv *env, jclass type, jstring jfilename) {
-    // Reconstruct Java structure to C++ structure
-    string filename;
-    GetJStringContent(env, jfilename, filename);
-
-    // Call IrCalibration method
-    if(JNI_DBG)
-        LOGD("importYMLRTParameters is %s", filename.c_str());
-    return (jboolean)importYMLRTParameters(filename);
-}
-
-
-
 JNIEXPORT jobjectArray JNICALL
 Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
 {

@@ -12,28 +12,4 @@ public class IrArucoMarker {
 
     public IrArucoMarker() {
     }
-//
-//    @Override
-//    public String toString() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(String.format("id:%d", mid));
-//        stringBuilder.append(String.format("ori:%d", mori));
-//        stringBuilder.append(String.format("distance:%f", mxzdistance));
-//        stringBuilder.append(camposition.toString());
-//        stringBuilder.append(mcenter.toString());
-//        for (Point2D corner:
-//        mcorners) {
-//            stringBuilder.append(corner.toString());
-//        }
-//        for (Point2D rejected:
-//                mrejecteds) {
-//            stringBuilder.append(rejected.toString());
-//        }
-//        for (Point2D injectpoint: injectpoints)
-//        {
-//            stringBuilder.append(injectpoint.toString());
-//        }
-//
-//        return stringBuilder.toString();
-//    }
 }
