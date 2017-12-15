@@ -118,7 +118,6 @@ public:
 				cv::Mat rvec = _markers.at(i).getRotationMatrix();
 				rvec.convertTo(rvec, CV_32FC1);
 				cv::Rodrigues(rvec, R);
-				//cv::Mat minusR = -R.t();
 				cv::Mat cameraPose = -R.t()*tvec;
 				_markers[i].setCameraPos(cameraPose);
 #ifdef ANDROID

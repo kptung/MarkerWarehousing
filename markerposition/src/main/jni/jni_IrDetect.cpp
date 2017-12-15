@@ -153,7 +153,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
         for (int i = 0; i < arrayLength; i++)
         {
             int mId = markers[i].getMarkerId();
-            double mXZdist = markers[i].getXZCameraDistance() * 100;
+            double mXZdist = markers[i].getXZCameraDistance(); // the distance unit is cm
             int mOri = markers[i].getMarkerOri();
             cv::Point2f mCenter = markers[i].getMarkerCenter();
             const std::vector<cv::Point2f> &mCorners = markers[i].getCorners();
