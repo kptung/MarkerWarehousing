@@ -253,6 +253,11 @@ public class MainActivity extends Activity
         drawerStereo = new DrawStereoRect2D(this);
         String ini_FILE ="/streamer.ini";
         String filename= Environment.getExternalStorageDirectory().getPath()+ini_FILE;
+        File f1=new File(filename);
+        if(!f1.exists()) {
+            System.out.println("Error!! No parameters. Please check /sdcard/streamer.ini");
+            return;
+        }
         IniDocument document = new IniDocument(new File(new File("").getAbsoluteFile(), filename).getAbsolutePath()).parse();
         List<String> roiheight = document.get("ROIHeight");
         int roih = Integer.parseInt(roiheight.get(0));
