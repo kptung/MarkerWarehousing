@@ -155,6 +155,78 @@ public:
 		
 	}
 
+	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
+	{
+
+#ifdef ANDROID
+		LOGD("C Basic mode lib start");
+#endif
+
+		cv::Mat origin;
+		src.copyTo(origin);
+		// (a) define aruco dictionary
+		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
+#ifdef ANDROID
+		LOGD("dict load pass");
+#endif		
+		// (b) detect the markers and estimate pose
+		std::vector< int > ids;
+		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
+		std::vector< cv::Vec3d > rvecs, tvecs;
+
+		auto tstart = std::chrono::high_resolution_clock::now();
+		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
+		// cv::aruco::drawDetectedMarkers(origin, corners, ids);
+#ifdef ANDROID
+		LOGD("detect pass");
+#endif		
+
+		// (d) marker information
+		if (ids.size() > 0)
+		{
+			std::vector<IrArucoMarker> _markers(ids.size());
+			for (int i = 0; i < ids.size(); i++)
+			{
+				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
+				_markers[i].setMarkerId(ids.at(i));
+				_markers[i].setCorners(corners.at(i));
+				_markers[i].setRejecteds(rejecteds.at(i));
+				_markers[i].setMarkerCenter(corners.at(i));
+#ifdef ANDROID
+				LOGD("D1 pass");
+#endif
+				// (d2) get marker orientation
+				cv::Point2f cent = _markers[i].getMarkerCenter();
+				if (corners.at(i).at(0).x > cent.x && corners.at(i).at(0).y < cent.y)
+					_markers[i].setMarkerOri(90);
+				else if (corners.at(i).at(0).x > cent.x && corners.at(i).at(0).y > cent.y)
+					_markers[i].setMarkerOri(180);
+				else if (corners.at(i).at(0).x < cent.x && corners.at(i).at(0).y > cent.y)
+					_markers[i].setMarkerOri(270);
+				else
+					_markers[i].setMarkerOri(0);
+#ifdef ANDROID
+				LOGD("D2 pass");
+#endif
+				
+				markers.push_back(_markers[i]);
+			}
+#ifdef ANDROID
+			LOGD("C Basic mode lib end");
+#endif
+			return true;
+		}
+		else
+		{
+#ifdef ANDROID
+			LOGD("C lib end");
+#endif
+			return false;
+		}
+
+
+	}
+
 	std::vector<cv::Point2f> findInjectPoints(const std::vector<cv::Point3f>& objpts, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Mat& rvec, const cv::Mat& tvec, const int &ori, const cv::Point2f &center)
 	{
 		std::vector<cv::Point2f> pts, outpts;

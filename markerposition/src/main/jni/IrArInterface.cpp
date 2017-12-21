@@ -51,6 +51,32 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 
 }
 
+bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
+{
+	
+	// (1) processing
+	if (image.rows == 0 || image.cols == 0)
+		return false;
+	// (a) convert bgr -> gray
+	cv::Mat gray, origin;
+	image.copyTo(gray);
+	image.copyTo(origin);
+	cvtColor(gray, gray, COLOR_BGR2GRAY);
+	cv::bitwise_not(gray, gray);
+
+	// (b) camera intrinsic matrices
+	const Mat &intrinsic = calib3d.getIntrinsicMatrix();
+	const Mat &distortion = calib3d.getDistortionMatrix();
+	const cv::Ptr<cv::aruco::DetectorParameters> &detectparas = calib3d.getDetectparas();
+	// (c) define aruco dictionary
+	cv::Ptr<cv::aruco::Dictionary> dictionary =
+		cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
+	// (d) detect marker
+	return mdet.findArMarkers(origin, gray, markers, intrinsic, distortion, detectparas);
+
+}
+
+
 const cv::Mat &getCameraIntrinsicMatrix( void )
 {
 	return calib3d.getIntrinsicMatrix();

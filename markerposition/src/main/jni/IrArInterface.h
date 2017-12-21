@@ -47,7 +47,7 @@ bool importYMLDetectParameters(const std::string &filename);
 /*  find aruco marker                                                   */
 /************************************************************************/
 bool findArucoMarkers(const cv::Mat &image, const float& markerLen, std::vector<IrArucoMarker> &markers);
-
+bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers);
 //// //// ************ //// ////
 //// ////  JNI_Common  //// ////
 //// //// ************ //// ////
