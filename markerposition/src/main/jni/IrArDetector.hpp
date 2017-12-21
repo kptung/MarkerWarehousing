@@ -53,7 +53,9 @@ public:
 		src.copyTo(origin);
 		// (a) define aruco dictionary
 		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-		
+#ifdef ANDROID
+		LOGD("dict load pass");
+#endif		
 		// (b) detect the markers and estimate pose
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
@@ -62,12 +64,16 @@ public:
 		auto tstart = std::chrono::high_resolution_clock::now();
 		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
 		// cv::aruco::drawDetectedMarkers(origin, corners, ids);
-		
+#ifdef ANDROID
+		LOGD("detect pass");
+#endif		
 		// (c) estimate the camera pose; the unit is meter
 		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
 		auto tend = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
-		
+#ifdef ANDROID
+		LOGD("estimate pass");
+#endif		
 		// time estimation
 		bool tflag = false;
 		if (tflag)
