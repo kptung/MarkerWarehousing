@@ -46,4 +46,12 @@ public class MarkerHelper {
         return IrDetect.findArucoMarkersWithMarkerSize(bytes, width, height, markerSize);
     }
 
+    public static IrArucoMarker[] nFindBasicMarkers(byte[] bytes, int width,int height, float markerSize){
+        if (bytes == null) {
+            System.out.println("Error!! Image is NULL. Please check it");
+            return null;
+        }
+        return IrDetect.findBasicMarkers(bytes, width, height, markerSize);
+    }
+
 }

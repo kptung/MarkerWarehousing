@@ -8,6 +8,6 @@ public class IrDetect {
 
     public native static IrArucoMarker[] findArucoMarkersWithMarkerSize(byte[] bytes, int width,int height, float markerSize);
 
-
+    public native static IrArucoMarker[] findBasicMarkers(byte[] bytes, int width,int height, float markerSize);
 
 }
