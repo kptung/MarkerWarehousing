@@ -53,7 +53,6 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 
 bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 {
-	
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
 		return false;

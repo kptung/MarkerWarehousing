@@ -267,7 +267,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
     if(JNI_DBG)
-            LOGD("JNI_findBasicMarkers_End...");
+       LOGD("JNI_findBasicMarkers_End...");
     // time estimation
     bool tflag=false;
     if(tflag)
