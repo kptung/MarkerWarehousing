@@ -218,9 +218,14 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             env->SetObjectArrayElement( outJNIArray, i, objIrArucoMarker );
             env->DeleteLocalRef(objIrArucoMarker);
         }
+        if(JNI_DBG)
+            LOGD("JNI_findMarkers_Value2Java...");
     }
-     if(JNI_DBG)
-        LOGD("JNI_findMarkers_PassValue2Java...");
+    else
+     {
+        if(JNI_DBG)
+            LOGD("JNI_findMarkers_NoValue2Java...");
+     }
     // Release pointer
     env->DeleteLocalRef(classIrArucoMarker);
     env->DeleteLocalRef(classCvPoint);
