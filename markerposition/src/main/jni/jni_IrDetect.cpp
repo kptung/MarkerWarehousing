@@ -78,12 +78,14 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     assert(classCvPoint3 != NULL);
 
     if(JNI_DBG)
-        LOGD("findArucoMarkersWithMarkerSize");
+        LOGD("JNI_findMarkers_Start...");
     vector<IrArucoMarker> markers = vector<IrArucoMarker>();
     auto tstart = std::chrono::high_resolution_clock::now();
     bool flag = findArucoMarkers(image, markerSize, markers);
     auto tend = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
+    if(JNI_DBG)
+            LOGD("JNI_findMarkers_End...");
     // time estimation
     bool tflag=false;
     if(tflag)
@@ -216,7 +218,8 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             env->DeleteLocalRef(objIrArucoMarker);
         }
     }
-
+     if(JNI_DBG)
+        LOGD("JNI_findMarkers_PassValue2Java...");
     // Release pointer
     env->DeleteLocalRef(classIrArucoMarker);
     env->DeleteLocalRef(classCvPoint);
