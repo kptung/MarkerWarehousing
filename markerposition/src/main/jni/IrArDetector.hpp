@@ -44,6 +44,11 @@ public:
 	/************************************************************************/
 	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
 	{
+
+#ifdef ANDROID
+		LOGD("C lib start");
+#endif
+
 		cv::Mat origin;
 		src.copyTo(origin);
 		// (a) define aruco dictionary
@@ -128,11 +133,19 @@ public:
 
 				markers.push_back(_markers[i]);
 			}
-			
+#ifdef ANDROID
+			LOGD("C lib end");
+#endif
 			return true;
 		}
 		else
+		{
+#ifdef ANDROID
+			LOGD("C lib end");
+#endif
 			return false;
+		}
+			
 		
 	}
 
