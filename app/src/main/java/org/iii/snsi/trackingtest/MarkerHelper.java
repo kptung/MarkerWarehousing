@@ -9,14 +9,7 @@ import org.iii.snsi.markerposition.IrDetect;
 import java.io.File;
 
 public class MarkerHelper {
-    static {
-        try {
-            System.loadLibrary("opencv_java3");
-            System.loadLibrary("markerposition");
-        } catch (Exception e) {
-            Log.d("TAG", "Load Lib Fail...");
-        }
-    }
+
     private static final String TAG = "MarkerHelper";
     private static final String Cam_YML = "/markpos/bt300-camera.yml";
     private static final String Det_YML = "/markpos/detector_params.yml";
