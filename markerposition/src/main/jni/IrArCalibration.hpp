@@ -88,6 +88,7 @@ inline bool IrArCalibration3d::readDetectParameters(const std::string& filename)
 	fs["maxErroneousBitsInBorderRate"] >> m_detectParams->maxErroneousBitsInBorderRate;
 	fs["minOtsuStdDev"] >> m_detectParams->minOtsuStdDev;
 	fs["errorCorrectionRate"] >> m_detectParams->errorCorrectionRate;
+	fs.release();
 	m_detectParams->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX; // do corner refinement in markers
 	return true;
 }
