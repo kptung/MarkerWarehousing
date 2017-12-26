@@ -152,7 +152,7 @@ public:
 			return false;
 		}
 	}
-
+	// basic marker
 	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
 	{
 #ifdef ANDROID
@@ -179,9 +179,10 @@ public:
 			for (int i = 0; i < ids.size(); i++)
 			{
 				// (d1) marker id, corners, rejecteds and marker_center
+#ifdef ANDROID
+				LOGD("ids.at(i) = %d", ids.at(i));
+#endif	
 				_markers[i].setMarkerId(ids.at(i));
-				_markers[i].setCorners(corners.at(i));
-				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 #ifdef ANDROID
 				LOGD("D1 pass");

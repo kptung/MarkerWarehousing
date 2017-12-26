@@ -296,12 +296,6 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
         jfieldID fidmOri = env->GetFieldID( classIrArucoMarker, "mori", "I" );
         assert(fidmOri != NULL);
 
-        jfieldID fidmCorners = env->GetFieldID( classIrArucoMarker, "mcorners", "[Lorg/iii/snsi/markerposition/Point2D;" );
-        assert(fidmCorners != NULL);
-
-        jfieldID fidmRejecteds = env->GetFieldID( classIrArucoMarker, "mrejecteds", "[Lorg/iii/snsi/markerposition/Point2D;" );
-        assert(fidmRejecteds != NULL);
-
         jfieldID fidmCenter = env->GetFieldID( classIrArucoMarker, "mcenter", "Lorg/iii/snsi/markerposition/Point2D;" );
         assert(fidmCenter != NULL);
 
@@ -312,43 +306,25 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
         jmethodID point3Init = env->GetMethodID( classCvPoint3, "<init>", "(DDD)V");
         assert(point3Init != NULL);
 
+         if(JNI_DBG)
+            LOGD("JNI_findMarkers_Value2Java_START");
         // marker info
         for (int i = 0; i < arrayLength; i++)
         {
             int mId = markers[i].getMarkerId();
             int mOri = markers[i].getMarkerOri();
             cv::Point2f mCenter = markers[i].getMarkerCenter();
-            const std::vector<cv::Point2f> &mCorners = markers[i].getCorners();
-            int corner_len = (int) mCorners.size();
-            const std::vector<cv::Point2f> &mRejecteds = markers[i].getRejecteds();
-            int rejected_len = (int) mRejecteds.size();
 
             // Create an object instance
             jobject objIrArucoMarker = env->AllocObject( classIrArucoMarker );
 
-            // Change the variable
+            // id, ori
             env->SetIntField( objIrArucoMarker, fidmId, mId );
             env->SetIntField( objIrArucoMarker, fidmOri, mOri );
-
-            jobjectArray pointCornersArray = env->NewObjectArray( corner_len, classCvPoint, NULL );
-            for (int j = 0; j < corner_len; j++)
-            {
-                jobject objCvPoint = env->NewObject( classCvPoint, pointInit, (double)mCorners[j].x, (double)mCorners[j].y );
-                env->SetObjectArrayElement( pointCornersArray, j, objCvPoint );
-                env->DeleteLocalRef(objCvPoint);
-            }
-            env->SetObjectField( objIrArucoMarker, fidmCorners, pointCornersArray );
-            env->DeleteLocalRef(pointCornersArray);
-
-            jobjectArray pointRejectedsArray = env->NewObjectArray( rejected_len, classCvPoint, NULL );
-            for (int j = 0; j < rejected_len; j++)
-            {
-                jobject objCvPoint = env->NewObject( classCvPoint, pointInit, (double)mRejecteds[j].x, (double)mRejecteds[j].y );
-                env->SetObjectArrayElement( pointRejectedsArray, j, objCvPoint );
-                env->DeleteLocalRef(objCvPoint);
-            }
-            env->SetObjectField( objIrArucoMarker, fidmRejecteds, pointRejectedsArray);
-            env->DeleteLocalRef(pointRejectedsArray);
+            // center
+            jobject objCvPoint = env->NewObject( classCvPoint, pointInit, (double)mCenter.x, (double)mCenter.y);
+            env->SetObjectField( objIrArucoMarker, fidmCenter, objCvPoint);
+            env->DeleteLocalRef(objCvPoint);
 
             // Set to the jobjectArray
             env->SetObjectArrayElement( outJNIArray, i, objIrArucoMarker );
@@ -356,7 +332,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
         }
     }
      if(JNI_DBG)
-        LOGD("JNI_findMarkers_PassValue2Java...");
+        LOGD("JNI_findMarkers_Value2Java_END");
     // Release pointer
     env->DeleteLocalRef(classIrArucoMarker);
     env->DeleteLocalRef(classCvPoint);

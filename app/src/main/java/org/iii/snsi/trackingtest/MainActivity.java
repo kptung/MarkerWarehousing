@@ -180,7 +180,10 @@ public class MainActivity extends Activity
     private void drawInjectionArea(byte[] bytes, int width, int height)
     {
         long t1 = System.currentTimeMillis();
-        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
+        //IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
+        System.out.println("bytes length=  " + bytes.length);
+        System.out.println("width x height=  " + (width*height*1.5));
+        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
         long t2 = System.currentTimeMillis();
         long diff = t2-t1;
         System.out.println("time =  " + diff);
@@ -189,51 +192,59 @@ public class MainActivity extends Activity
         drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
         drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
 
-        if (findInjectionsBasedOnMarkers.length > 0)
-        {
-            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
-            {
-                if (findInjectionsBasedOnMarkers[i].mid == 666)
-                {
-                    if(!modeFlag) {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
-                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-                        drawInfo[3] = 200;
-                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                    }
-                    else
-                    {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
-                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-                        drawInfo[3] = 200;
-                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                    }
-                }
-                if (findInjectionsBasedOnMarkers[i].mid == 777)
-                {
-                    if(!modeFlag)
-                    {
-                        // about 60 cm with drawerStereo.setOffsetLR=26
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
-                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
-                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-                        drawInfo[8] = 150;
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
-                    }
-                    else
-                    {
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
-                    }
-                }
+        if (findInjectionsBasedOnMarkers.length > 0) {
+            System.out.println("MID, Marker length "+ findInjectionsBasedOnMarkers.length);
+            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++) {
+                System.out.println("Marker "+i+ ", MID =  " + findInjectionsBasedOnMarkers[i].mid);
             }
         }
+        else
+        {
+            System.out.println(" MID = NULL !! No Detected Marker !!");
+        }
+//            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
+//            {
+//                if (findInjectionsBasedOnMarkers[i].mid == 666)
+//                {
+//                    if(!modeFlag) {
+//                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
+//                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
+//                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+//                        drawInfo[3] = 200;
+//                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+//                    }
+//                    else
+//                    {
+//                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
+//                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
+//                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+//                        drawInfo[3] = 200;
+//                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+//                    }
+//                }
+//                if (findInjectionsBasedOnMarkers[i].mid == 777)
+//                {
+//                    if(!modeFlag)
+//                    {
+//                        // about 60 cm with drawerStereo.setOffsetLR=26
+//                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+//                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
+//                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
+//                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
+//                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+//                        drawInfo[8] = 150;
+//                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+//                    }
+//                    else
+//                    {
+//                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
+//                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+//                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
+//                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+//                    }
+//                }
+//            }
+//        }
 
         if(!modeFlag)
         {
