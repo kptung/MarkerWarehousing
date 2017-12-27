@@ -17,6 +17,7 @@ android {
         //jni.srcDirs = ['src/main/jni']
     }
 
+    packageBuildConfig = false
 
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
         def rootDir = project.rootDir
