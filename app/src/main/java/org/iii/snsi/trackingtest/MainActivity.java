@@ -25,8 +25,10 @@ import org.iii.snsi.drawer.DrawStereoRect2D;
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.streamlibrary.CameraController;
 
-import java.io.File;
+import java.io.*;
+
 import java.util.List;
+
 
 public class MainActivity extends Activity
 {
@@ -51,6 +53,8 @@ public class MainActivity extends Activity
     private boolean modeFlag = false;//true for preview mode; false for stereo mode
     private int originSurfaceWidth;
     private int originSurfaceHeight;
+    // marker mode
+    private int markermode=2;//0: basic mode, 1:adv mode, 2:app mode
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -179,85 +183,94 @@ public class MainActivity extends Activity
 
     private void drawInjectionArea(byte[] bytes, int width, int height)
     {
-        long t1 = System.currentTimeMillis();
-        //IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
-        System.out.println("bytes length=  " + bytes.length);
-        System.out.println("width x height=  " + (width*height*1.5));
-        IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
-        long t2 = System.currentTimeMillis();
-        long diff = t2-t1;
-        System.out.println("time =  " + diff);
+        if (markermode==2) {
+            long t1 = System.currentTimeMillis();
+            IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
+//            System.out.println("bytes length=  " + bytes.length);
+//            System.out.println("width x height=  " + (width*height*1.5));
+            long t2 = System.currentTimeMillis();
+            long diff = t2-t1;
+            System.out.println("time =  " + diff);
 
-        double[] drawInfo = new double[10];
-        drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
-        drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
+            double[] drawInfo = new double[10];
+            drawInfo[0] = 0; drawInfo[1] = -1; drawInfo[2] = -1; drawInfo[3] = -1; drawInfo[4] = -1;
+            drawInfo[5] = 1; drawInfo[6] = -1; drawInfo[7] = -1; drawInfo[8] = -1; drawInfo[9] = -1;
 
-        if (findInjectionsBasedOnMarkers.length > 0) {
-            System.out.println("MID, Marker length "+ findInjectionsBasedOnMarkers.length);
-            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++) {
-                System.out.println("Marker "+i+ ", MID =  " + findInjectionsBasedOnMarkers[i].mid);
+            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
+            {
+                if (findInjectionsBasedOnMarkers[i].mid == 666)
+                {
+                    if(!modeFlag) {
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
+                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[3] = 200;
+                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    }
+                    else
+                    {
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
+                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawInfo[3] = 200;
+                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                    }
+                }
+                if (findInjectionsBasedOnMarkers[i].mid == 777)
+                {
+                    if(!modeFlag)
+                    {
+                        // about 60 cm with drawerStereo.setOffsetLR=26
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
+                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
+                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawInfo[8] = 150;
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                    }
+                    else
+                    {
+                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
+                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
+                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                    }
+                }
+            }
+            if(!modeFlag)
+            {
+                drawerStereo.processTrackingRect(width, height, drawInfo);
+                drawerStereo.postInvalidate();
+            }
+            else
+            {
+                drawerCam.processTrackingRect(width, height, drawInfo);
+                drawerCam.postInvalidate();
+            }
+        }
+
+        else if (markermode==0) {
+            long t1 = System.currentTimeMillis();
+            IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
+            long t2 = System.currentTimeMillis();
+            long diff = t2-t1;
+            System.out.println("time =  " + diff);
+            if (findInjectionsBasedOnMarkers.length > 0) {
+                System.out.println("MID, Marker length " + findInjectionsBasedOnMarkers.length);
+                for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++) {
+                    System.out.println("Marker " + i + ", MID =  " + findInjectionsBasedOnMarkers[i].mid);
+                }
             }
         }
         else
         {
             System.out.println(" MID = NULL !! No Detected Marker !!");
         }
-//            for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++)
-//            {
-//                if (findInjectionsBasedOnMarkers[i].mid == 666)
-//                {
-//                    if(!modeFlag) {
-//                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
-//                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-//                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-//                        drawInfo[3] = 200;
-//                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-//                    }
-//                    else
-//                    {
-//                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
-//                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-//                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-//                        drawInfo[3] = 200;
-//                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-//                    }
-//                }
-//                if (findInjectionsBasedOnMarkers[i].mid == 777)
-//                {
-//                    if(!modeFlag)
-//                    {
-//                        // about 60 cm with drawerStereo.setOffsetLR=26
-//                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
-//                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
-//                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-//                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
-//                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-//                        drawInfo[8] = 150;
-//                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
-//                    }
-//                    else
-//                    {
-//                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-//                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-//                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
-//                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
-//                    }
-//                }
-//            }
-//        }
-
-        if(!modeFlag)
-        {
-            drawerStereo.processTrackingRect(width, height, drawInfo);
-            drawerStereo.postInvalidate();
-        }
-        else
-        {
-            drawerCam.processTrackingRect(width, height, drawInfo);
-            drawerCam.postInvalidate();
-        }
 
     }
+
+
 
     private void initializeDrawer()
     {
@@ -269,17 +282,37 @@ public class MainActivity extends Activity
             System.out.println("Error!! No parameters. Please check /sdcard/streamer.ini");
             return;
         }
+
+        // convert
+
+
+        // read ini by utf-8, if the file encoding is not utf-8, it will cause crash.
         IniDocument document = new IniDocument(new File(new File("").getAbsoluteFile(), filename).getAbsolutePath()).parse();
+        int roih=53, offsetw=91, roiw=92, offseth=90, offsetwlr=26;
         List<String> roiheight = document.get("ROIHeight");
-        int roih = Integer.parseInt(roiheight.get(0));
         List<String> offsetwidth = document.get("OffsetWidth");
-        int offsetw = Integer.parseInt(offsetwidth.get(0));
         List<String> roiwidth = document.get("ROIWidth");
-        int roiw = Integer.parseInt(roiwidth.get(0));
         List<String> offsetheight = document.get("OffsetHeight");
-        int offseth = Integer.parseInt(offsetheight.get(0));
         List<String> offsetwidthlr = document.get("OffsetWidthLR");
-        int offsetwlr = Integer.parseInt(offsetwidthlr.get(0));
+        if(roiheight==null||offsetwidth==null||roiwidth==null||offsetheight==null||offsetwidthlr==null)
+        {
+            System.out.println(" INI Read Fail !! Check INI !!");
+        }
+        if (roiheight!=null) {
+            roih = Integer.parseInt(roiheight.get(0));
+        }
+        if(offsetwidth!=null) {
+            offsetw = Integer.parseInt(offsetwidth.get(0));
+        }
+        if(roiwidth!=null) {
+            roiw = Integer.parseInt(roiwidth.get(0));
+        }
+        if(offsetheight!=null) {
+            offseth = Integer.parseInt(offsetheight.get(0));
+        }
+        if(offsetwidthlr!=null) {
+            offsetwlr = Integer.parseInt(offsetwidthlr.get(0));
+        }
         drawerStereo.setTrackingCalibration(offsetw, offseth, roiw, roih);
         drawerStereo.setLayoutSize(1280, 720);
         drawerStereo.setOffsetLR(offsetwlr);

@@ -82,7 +82,8 @@ public class IniDocument {
     public IniDocument parse() {
         try {
             BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(new File(path)), "utf-8"));
+                    new InputStreamReader(new FileInputStream(new File(path))));
+                    //new InputStreamReader(new FileInputStream(new File(path)), "utf-8"));
             String line = null;
             while ((line = reader.readLine()) != null) {
                 srcLines.add(line);
@@ -95,12 +96,10 @@ public class IniDocument {
                     continue;
                 }
 
-                // 过滤分组标签
                 if (srcLine.contains(IGNORE_TAG_START)) {
                     continue;
                 }
 
-                // 识别关键行, pattern1
                 if (srcLine.contains("=") &&
                         !srcLine.startsWith(IGNORE_COMMENTS_START)) {
                     KeyValue tempLine = new KeyValue();
