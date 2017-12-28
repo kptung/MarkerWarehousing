@@ -109,6 +109,7 @@
     <ClCompile Include="aruco.cpp" />
     <ClCompile Include="create_marker.cpp" />
     <ClCompile Include="INIReaderTest.cpp" />
+    <ClCompile Include="IrArExample10.cpp" />
     <ClCompile Include="IrArExample8.cpp" />
     <ClCompile Include="IrArInterface.cpp" />
     <ClCompile Include="IrArMarkerCreator.cpp" />
