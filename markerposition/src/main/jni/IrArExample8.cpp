@@ -5,7 +5,7 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco sample works well                                                 */
+/*  Aruco application sample for full marker information                    */
 /*  and draw the injection point without considering the marker orientation */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */

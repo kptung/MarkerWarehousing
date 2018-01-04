@@ -5,13 +5,12 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco sample works well                                                 */
-/*  and draw the injection point without considering the marker orientation */
+/*  Aruco basic sample only for ID, orientation and center                  */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
-/*  Modified: kptung, 2017/11/07                                            */
+/*  Modified: kptung, 2017/12/20                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main87645864564868(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");

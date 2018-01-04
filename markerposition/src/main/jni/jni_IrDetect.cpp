@@ -13,6 +13,23 @@
 #include <ctime>
 #include <fstream>
 
+#define LOG_NDEBUG 0
+#define LOG_TAG "JNI_NativeTracking"
+#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+
+#define JNI_DBG 0
+#define VIDEO_TRACKING_LIB_VERSION 0.03
+#define MIN_RECT_VALUE 14
+
+#ifndef JPG
+#define JPG (std::string(".jpg"))
+#endif
+
+#define IR_LIB_VERSION 1.0.0
+#define JNI_DBG 1
+#define LOG_TAG "IrMarkerLib"
+#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+
 using namespace std;
 using namespace cv;
 
@@ -88,15 +105,15 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
     if(JNI_DBG)
             LOGD("JNI_findMarkers_End...");
     // time estimation
-    bool tflag=false;
-    if(tflag)
-    {
-        ofstream out1;
-        char *ptimefile_name = "/sdcard/marker/mtime.txt";
-        out1.open(ptimefile_name, ios::app);
-        out1 << "JNI: "<< (long)(1000 * diff.count()) << std::endl;
-        out1.close();
-    }
+ //   bool tflag=false;
+//    if(tflag)
+ //   {
+  //      ofstream out1;
+   //     char *ptimefile_name = "/sdcard/marker/mtime.txt";
+    //    out1.open(ptimefile_name, ios::app);
+    //    out1 << "JNI: "<< (long)(1000 * diff.count()) << std::endl;
+    //    out1.close();
+   // }
 
     // Allocate a jobjectArray
     int arrayLength = (int)markers.size();
@@ -154,9 +171,9 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             if (mId == 666)
             {
                 // find injection pts
-                cv::Point3f Injection(0, -0.04f, 0);
+                cv::Point3f Injection(0, -0.075, 0);
                 Injectionpts = make_vector<cv::Point3f>() << Injection;
-                Injectionpts.push_back(cv::Point3f(0, -0.065f, 0));
+                Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
             }
             else if (mId == 777)
             {
@@ -274,15 +291,15 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
     if(JNI_DBG)
        LOGD("JNI_findBasicMarkers_End...");
     // time estimation
-    bool tflag=false;
-    if(tflag)
-    {
-        ofstream out1;
-        char *ptimefile_name = "/sdcard/marker/mtime.txt";
-        out1.open(ptimefile_name, ios::app);
-        out1 << "JNI: "<< (long)(1000 * diff.count()) << std::endl;
-        out1.close();
-    }
+//    bool tflag=false;
+//    if(tflag)
+//    {
+//        ofstream out1;
+//        char *ptimefile_name = "/sdcard/marker/mtime.txt";
+//        out1.open(ptimefile_name, ios::app);
+//        out1 << "JNI: "<< (long)(1000 * diff.count()) << std::endl;
+//        out1.close();
+//    }
 
     // Allocate a jobjectArray
     int arrayLength = (int)markers.size();

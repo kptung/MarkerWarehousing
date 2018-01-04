@@ -40,8 +40,16 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	cv::bitwise_not(gray, gray);
 	
 	// (b) camera intrinsic matrices
-	const Mat &intrinsic = calib3d.getIntrinsicMatrix();
-	const Mat &distortion = calib3d.getDistortionMatrix();
+	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
+	const cv::Mat &distortion = calib3d.getDistortionMatrix();
+	if (intrinsic.empty() || distortion.empty())
+	{
+		std::cout << "Lib needs parameters. Please check intrinsic and distortion" << endl;
+#ifdef ANDROID
+		LOGD("Lib needs parameters. Please check intrinsic and distortion");
+#endif
+		return false;
+	}
 	const cv::Ptr<cv::aruco::DetectorParameters> &detectparas = calib3d.getDetectparas();
 	// (c) define aruco dictionary
 	cv::Ptr<cv::aruco::Dictionary> dictionary =

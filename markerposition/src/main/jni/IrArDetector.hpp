@@ -22,7 +22,7 @@
 #include <jni.h>
 #include <android/log.h>
 #define IR_LIB_VERSION 1.0.0
-#define JNI_DBG 1
+#define JNI_DBG 0
 #define LOG_TAG "IrMarkerLib"
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 #endif
@@ -55,7 +55,15 @@ public:
 		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
 #ifdef ANDROID
 		LOGD("dict load pass");
-#endif		
+#endif
+		if (intrinsic.empty() || distortion.empty())
+		{
+			//std::cout << "Lib needs parameters. Please check intrinsic and distortion" << endl;
+#ifdef ANDROID
+			LOGD("Lib needs parameters. Please check intrinsic and distortion");
+#endif
+			return false;
+		}
 		// (b) detect the markers and estimate pose
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
@@ -75,19 +83,19 @@ public:
 		LOGD("estimate pass");
 #endif		
 		// time estimation
-		bool tflag = false;
-		if (tflag)
-		{
-			std::ofstream out1;
-			char *ptimefile_name;
-			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
-#ifdef ANDROID
-			ptimefile_name = "/sdcard/marker/mtime.txt";
-#endif
-			out1.open(ptimefile_name, std::ios_base::app);
-			out1 << "Func: " << (long)(1000 * diff.count()) << ", ";
-			out1.close();
-		}
+// 		bool tflag = false;
+// 		if (tflag)
+// 		{
+// 			std::ofstream out1;
+// 			char *ptimefile_name;
+// 			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
+// #ifdef ANDROID
+// 			ptimefile_name = "/sdcard/marker/mtime.txt";
+// #endif
+// 			out1.open(ptimefile_name, std::ios_base::app);
+// 			out1 << "Func: " << (long)(1000 * diff.count()) << ", ";
+// 			out1.close();
+// 		}
 
 		// (d) marker information
 		if (ids.size() > 0)

@@ -4,13 +4,13 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco sample works well with the given marker length in meters         */
+/*  Aruco application sample 2 with marker size         */
 /*  and draw the injection point without considering the marker orientation */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
-/*  Modified: kptung, 2017/11/07                                            */
+/*  Modified: kptung, 2018/01/03                                            */
 /****************************************************************************/
-int main56468443134(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
@@ -43,7 +43,7 @@ int main56468443134(int argc, char **argv)
 	std::vector<std::string> files;
 	get_files_in_directory(infolder, files);
 
-	bool wflag = true;
+	bool wflag = false;
 	for (unsigned int i = 0; i < files.size(); i++)
 	{
 		cout << "i: " << i + 1 << "/" << files.size() << endl;
@@ -82,9 +82,9 @@ int main56468443134(int argc, char **argv)
 				if (mid == 666)
 				{
 					// find injection pts
-					cv::Point3f Injection(0, -0.04f, 0);
+					cv::Point3f Injection(0, -0.03f, 0);
 					Injectionpts = make_vector<cv::Point3f>() << Injection;
-					Injectionpts.push_back(cv::Point3f(0, -0.065f, 0));
+					Injectionpts.push_back(cv::Point3f(0, -0.06f, 0));
 				}
 				else if (mid == 777)
 				{
@@ -98,7 +98,8 @@ int main56468443134(int argc, char **argv)
 				src.copyTo(overlay);
 				if (mid == 666)
 				{
-					cv::rectangle(overlay, cv::Point2f(injpts[0].x-100, injpts[0].y), cv::Point2f(injpts[1].x+100, injpts[1].y), cv::Scalar(0, 255, 255), -1, 8, 0);
+					//cv::rectangle(overlay, cv::Point2f(injpts[0].x-100, injpts[0].y), cv::Point2f(injpts[1].x+100, injpts[1].y), cv::Scalar(0, 255, 255), -1, 8, 0);
+					cv::circle(overlay, cv::Point2f(injpts[1].x, injpts[1].y), injpts[1].y- injpts[0].y, cv::Scalar(0, 255, 255), -1, 8, 0);
 					cv::addWeighted(src2, alpha, src, 1 - alpha, 0, src);
 					cv::addWeighted(overlay, alpha2, src, 1 - alpha2, 0, src);
 				}
