@@ -55,7 +55,8 @@ public class MainActivity extends Activity
     private int originSurfaceHeight;
     // marker mode
     private int markermode=2;//0: basic mode, 1:adv mode, 2:app mode
-
+    // ini info
+    private int roih=53, offsetw=91, roiw=92, offseth=90, offsetwlr=26;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -101,7 +102,8 @@ public class MainActivity extends Activity
                 drawerLayout.removeView(removedView);
                 drawerLayout.addView(addedView);
             }
-        });
+        }
+        );
 
         if (Build.MODEL.contains("EMBT3C")) {
             bt300Control = new DisplayControl(this);
@@ -145,10 +147,6 @@ public class MainActivity extends Activity
                             public void onIncomingCallbackFrame(byte[] bytes, int width, int height)
                             {
                                 // catch the image
-//                                YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height, null);
-//                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                                im.compressToJpeg(new Rect(0,0,width,height), 90, baos);
-//                                Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
                                 drawerCam.SetBitmap(bytes, width, height);
 
                                 // draw injection position
@@ -186,8 +184,6 @@ public class MainActivity extends Activity
         if (markermode==2) {
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
-//            System.out.println("bytes length=  " + bytes.length);
-//            System.out.println("width x height=  " + (width*height*1.5));
             long t2 = System.currentTimeMillis();
             long diff = t2-t1;
             System.out.println("time =  " + diff);
@@ -201,20 +197,20 @@ public class MainActivity extends Activity
                 if (findInjectionsBasedOnMarkers[i].mid == 666)
                 {
                     if(!modeFlag) {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 50;
-                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-                        drawInfo[3] = 200;
+                        drawInfo[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
                         drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                        drawInfo[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawInfo[3]) + offsetwlr;
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                     }
                     else
                     {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[0].x - 100;
-                        drawInfo[1] = (drawInfo[1] < 0) ? 0 : drawInfo[1];
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
-                        drawInfo[3] = 200;
+                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[1].x;
+                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawInfo[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                         drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                     }
+                   // drawerStereo.processTrackingRect(width, height, drawInfo);
+                   // drawerCam.processTrackingRect(width, height, drawInfo);
                 }
                 if (findInjectionsBasedOnMarkers[i].mid == 777)
                 {
@@ -236,16 +232,20 @@ public class MainActivity extends Activity
                         drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
                         drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
                     }
+                    //drawerStereo.processTrackingRect(width, height, drawInfo);
+                    //drawerCam.processTrackingRect(width, height, drawInfo);
                 }
             }
             if(!modeFlag)
             {
-                drawerStereo.processTrackingRect(width, height, drawInfo);
+                //drawerStereo.processTrackingRect(width, height, drawInfo);
+                drawerStereo.processTrackingCircle(width, height, drawInfo);
                 drawerStereo.postInvalidate();
             }
             else
             {
-                drawerCam.processTrackingRect(width, height, drawInfo);
+                //drawerCam.processTrackingRect(width, height, drawInfo);
+                drawerCam.processTrackingCircle(width, height, drawInfo);
                 drawerCam.postInvalidate();
             }
         }
@@ -283,12 +283,9 @@ public class MainActivity extends Activity
             return;
         }
 
-        // convert
-
-
-        // read ini by utf-8, if the file encoding is not utf-8, it will cause crash.
+       // read ini by utf-8 and ansi, if the file encoding is not utf-8 or ansi, it will cause crash.
         IniDocument document = new IniDocument(new File(new File("").getAbsoluteFile(), filename).getAbsolutePath()).parse();
-        int roih=53, offsetw=91, roiw=92, offseth=90, offsetwlr=26;
+
         List<String> roiheight = document.get("ROIHeight");
         List<String> offsetwidth = document.get("OffsetWidth");
         List<String> roiwidth = document.get("ROIWidth");

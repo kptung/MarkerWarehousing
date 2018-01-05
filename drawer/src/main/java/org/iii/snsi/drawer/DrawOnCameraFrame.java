@@ -104,11 +104,11 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
         }
 
         for (int i = 0; i < data.length; i += 5) {
-            double left = (double) ((data[i + 1]) / width) * layoutWidth;
-            double top = (double) ((data[i + 2]) / height) * layoutHeight;
+            double cx = (double) ((data[i + 1]) / width) * layoutWidth;
+            double cy = (double) ((data[i + 2]) / height) * layoutHeight;
             double radius = (double)  ((data[i + 3]) / width) * layoutWidth;
-            circleSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(left),
-                        (int) Math.round(top), (int) Math.round(radius)});
+            circleSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(cx),
+                        (int) Math.round(cy), (int) Math.round(radius)});
 
         }
         int[] xx = new int [1];
