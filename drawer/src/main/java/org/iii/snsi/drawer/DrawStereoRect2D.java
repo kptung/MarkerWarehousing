@@ -44,6 +44,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     private int[] roiScopeR;
     private int[] roiScopeMix;
     private Bitmap bbitmap;
+    private int drawshape=0;//0:circle, 1:rectangle
 
     public DrawStereoRect2D(Context context) {
         super(context);
@@ -148,6 +149,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     public int[] processTrackingRect(int width, int height, double[] data) {
         rectSets.clear();
         rectSetsLR.clear();
+        drawshape=1;
         if (data == null) {
             return null;
         }
@@ -163,9 +165,9 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                     (double) (data[i + 2] - (offsetHeight * rateY)) / (roiHeight
                             * rateY) * layoutHeight;
             double rightR =
-                    (double) (data[i + 1] + data[i + 3]*2 - (offsetWidth * rateX))
+                    (double) (data[i + 1] + data[i + 3] - (offsetWidth * rateX))
                             / (roiWidth * rateX) * layoutWidth + layoutWidth;
-            double bottomR = (double) (data[i + 2] + data[i + 4]*2 - (offsetHeight
+            double bottomR = (double) (data[i + 2] + data[i + 4] - (offsetHeight
                     * rateY)) / (roiHeight * rateY) * layoutHeight;
 
             double leftL = leftR + offsetLR * rateX - layoutWidth;
@@ -189,6 +191,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     public int[] processTrackingCircle(int width, int height, double[] data) {
         circleSets.clear();
         circleSetsLR.clear();
+        drawshape=0;
         if (data == null) {
             return null;
         }
@@ -242,8 +245,15 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (calibrateInside) {
-            calibrateInsideDrawCircle(canvas);
-            //calibrateInsideDraw(canvas);
+            if(drawshape==0)
+            {
+                calibrateInsideDrawCircle(canvas);
+            }
+            else
+            {
+                calibrateInsideDraw(canvas);
+            }
+            //
         } else {
             calibrateOutsideDraw(canvas);
         }
@@ -295,8 +305,11 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                 realBottomRightPointLeftEye = new Point(layoutWidth - 1,
                         bottomRightPointLeftEye.y);
             }
-            Canvas c1 = new Canvas(b1);
-            c1.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+//            Canvas c1 = new Canvas(b1);
+//            c1.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+//                    realBottomRightPointLeftEye.x,
+//                    realBottomRightPointLeftEye.y, paint);
+            canvas.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
                     realBottomRightPointLeftEye.x,
                     realBottomRightPointLeftEye.y, paint);
         }
@@ -311,23 +324,21 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                         topLeftPointRightEye.y);
             }
             Canvas c2 = new Canvas(b2);
-//            canvas.drawRect(realTopLeftPointRightEye.x,
-//                    realTopLeftPointRightEye.y, bottomRightPointRightEye.x,
-//                    bottomRightPointRightEye.y, paint);
-            int rltx=-1, rrbx=-1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
-            rltx = (realTopLeftPointRightEye.x>=layoutWidth)?realTopLeftPointRightEye.x-layoutWidth:realTopLeftPointRightEye.x;
-            rrbx = (bottomRightPointRightEye.x>=layoutWidth)?bottomRightPointRightEye.x-layoutWidth:bottomRightPointRightEye.x;
-
-
-            c2.drawRect(rltx,
-                    realTopLeftPointRightEye.y, rrbx,
+            canvas.drawRect(realTopLeftPointRightEye.x,
+                    realTopLeftPointRightEye.y, bottomRightPointRightEye.x,
                     bottomRightPointRightEye.y, paint);
+//            int rltx=-1, rrbx=-1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
+//            rltx = (realTopLeftPointRightEye.x>=layoutWidth)?realTopLeftPointRightEye.x-layoutWidth:realTopLeftPointRightEye.x;
+//            rrbx = (bottomRightPointRightEye.x>=layoutWidth)?bottomRightPointRightEye.x-layoutWidth:bottomRightPointRightEye.x;
+//            c2.drawRect(rltx,
+//                    realTopLeftPointRightEye.y, rrbx,
+//                    bottomRightPointRightEye.y, paint);
         }
         //----------------end right eye
-        canvas.drawBitmap(b1, 0, 0, paint);
-        canvas.drawBitmap(b2, layoutWidth, 0, paint);
-        canvas.save(Canvas.ALL_SAVE_FLAG);
-        canvas.restore();
+//        canvas.drawBitmap(b1, 0, 0, paint);
+//        canvas.drawBitmap(b2, layoutWidth, 0, paint);
+//        canvas.save(Canvas.ALL_SAVE_FLAG);
+//        canvas.restore();
     }
 
     private void calibrateInsideDrawCircle(Canvas canvas) {
@@ -377,6 +388,13 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                         bottomRightPointLeftEye.y);
             }
             Canvas c1 = new Canvas(b1);
+//            float cx=-1,cy=-1,longaxis=-1,shortaxis=-1;
+//            cx=(topLeftPointLeftEye.x+realBottomRightPointLeftEye.x)/2;
+//            cy=(topLeftPointLeftEye.y+realBottomRightPointLeftEye.y)/2;
+//            longaxis = Math.abs(topLeftPointLeftEye.y-realBottomRightPointLeftEye.y);
+//            shortaxis = Math.abs(topLeftPointLeftEye.x-realBottomRightPointLeftEye.x)/2;
+//            RectF rectf = new RectF(cx, cy, longaxis, longaxis);
+            //c1.drawOval(rectf, paint);
             c1.drawCircle((topLeftPointLeftEye.x+realBottomRightPointLeftEye.x)/2, (topLeftPointLeftEye.y+realBottomRightPointLeftEye.y)/2, Math.abs(topLeftPointLeftEye.x-realBottomRightPointLeftEye.x), paint);
         }
         //---------------end left eye
@@ -393,13 +411,17 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             int rltx=-1, rrbx=-1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
             rltx = (realTopLeftPointRightEye.x>=layoutWidth)?realTopLeftPointRightEye.x-layoutWidth:realTopLeftPointRightEye.x;
             rrbx = (bottomRightPointRightEye.x>=layoutWidth)?bottomRightPointRightEye.x-layoutWidth:bottomRightPointRightEye.x;
+//            float cx=-1,cy=-1,longaxis=-1,shortaxis=-1;
+//            cx=(rltx+rrbx)/2;
+//            cy=(realTopLeftPointRightEye.y + bottomRightPointRightEye.y)/2;
+//            longaxis = Math.abs(realTopLeftPointRightEye.y - cy);
+//            shortaxis = Math.abs(realTopLeftPointRightEye.x - cx)/2;
+//            RectF rectf = new RectF(cx, cy, longaxis, longaxis);
+//            c2.drawOval(rectf, paint);
             int cx = (rltx+rrbx)/2;
             int cy = (realTopLeftPointRightEye.y + bottomRightPointRightEye.y)/2;
             int r = Math.abs(realTopLeftPointRightEye.y - cy);
             c2.drawCircle(cx, cy, r, paint);
-//            c2.drawRect(rltx,
-//                    realTopLeftPointRightEye.y, rrbx,
-//                    bottomRightPointRightEye.y, paint);
         }
         //----------------end right eye
         canvas.drawBitmap(b1, 0, 0, paint);
