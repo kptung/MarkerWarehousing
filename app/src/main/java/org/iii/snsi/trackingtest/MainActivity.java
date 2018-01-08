@@ -224,6 +224,15 @@ public class MainActivity extends Activity {
 
                 }
             }
+            if(findInjectionsBasedOnMarkers.length==0)
+            {
+                drawerStereo.processTrackingRect(width, height, drawRect);
+                drawerStereo.processTrackingCircle(width, height, drawCircle);
+                drawerStereo.postInvalidate();
+                drawerCam.processTrackingRect(width, height, drawRect);
+                drawerCam.processTrackingCircle(width, height, drawCircle);
+                drawerCam.postInvalidate();
+            }
 //            if (!modeFlag) {
 //                //drawerStereo.processTrackingRect(width, height, drawInfo);
 //                //drawerStereo.processTrackingCircle(width, height, drawInfo);
