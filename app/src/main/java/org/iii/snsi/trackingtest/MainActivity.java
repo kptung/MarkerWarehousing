@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
                     if (!modeFlag) {
                         drawInfo[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
                         drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                        drawInfo[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawInfo[3]) + offsetwlr;
+                        drawInfo[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawInfo[3]) + 40;
                         drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                     } else {
                         drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[1].x;
