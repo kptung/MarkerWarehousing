@@ -9,6 +9,8 @@ import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 
@@ -26,7 +28,7 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     private int layoutWidth;
     private int layoutHeight;
     private Bitmap bbitmap;
-
+    private int drawflag=0; // 0: circle, 1:rectangle
 
     public DrawOnCameraFrame(Context context) {
         super(context);
@@ -75,6 +77,7 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     @Override
     public int[] processTrackingRect(int width, int height, double[] data) {
         rectSets.clear();
+        drawflag=1;
         if (data == null) {
             return null;
         }
@@ -98,7 +101,8 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     }
 
     public int[] processTrackingCircle(int width, int height, double[] data) {
-        rectSets.clear();
+        circleSets.clear();
+        drawflag=0;
         if (data == null) {
             return null;
         }
@@ -138,6 +142,11 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         Paint paint = new Paint();
+        // clear screen
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        canvas.drawPaint(paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        // draw
         paint.setFilterBitmap(true);
         if(bbitmap!=null)
         {
@@ -148,27 +157,30 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(5);
         for (Map.Entry entry : rectSets.entrySet()) {
-            Object key = entry.getKey();
-            int[] rectData = rectSets.get(key);
-            if (key.equals(0)) {
-                paint.setColor(Color.argb(128, 0, 255, 255));
-            } else {
-                paint.setColor(Color.argb(128, 255, 0, 255));
+                Object key = entry.getKey();
+                int[] rectData = rectSets.get(key);
+                if (key.equals(0)) {
+                    paint.setColor(Color.argb(128, 0, 255, 255));
+                } else {
+                    paint.setColor(Color.argb(128, 255, 0, 255));
+                }
+                drawFilledRect(canvas, paint, new Point(rectData[0], rectData[1]), new Point(rectData[2], rectData[3]));
+                //canvas.drawCircle(rectData[0], rectData[1], 30, paint);
             }
-            drawFilledRect(canvas, paint, new Point(rectData[0], rectData[1]), new Point(rectData[2], rectData[3]));
-            //canvas.drawCircle(rectData[0], rectData[1], 30, paint);
-        }
+
         for (Map.Entry entry : circleSets.entrySet()) {
-            Object key = entry.getKey();
-            int[] circleData = circleSets.get(key);
-            if (key.equals(0)) {
-                paint.setColor(Color.argb(128, 0, 255, 255));
-            } else {
-                paint.setColor(Color.argb(128, 255, 0, 255));
+                Object key = entry.getKey();
+                int[] circleData = circleSets.get(key);
+                if (key.equals(0)) {
+                    paint.setColor(Color.argb(128, 0, 255, 255));
+                } else {
+                    paint.setColor(Color.argb(128, 255, 0, 255));
+                }
+                //canvas.drawCircle(circleData[0], circleData[1], circleData[2], paint);
+                drawFilledCircle(canvas, paint, new Point(circleData[0], circleData[1]), circleData[2]);
             }
-            canvas.drawCircle(circleData[0], circleData[1], circleData[2], paint);
-            //drawFilledCircle(canvas, paint, new Point(circleData[0], circleData[1]), circleData[2]);
-        }
+
+
     }
 
     private void drawFilledRect(Canvas canvas, Paint paint, Point topLeftPoint,

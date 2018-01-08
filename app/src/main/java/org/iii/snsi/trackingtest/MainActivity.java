@@ -180,64 +180,59 @@ public class MainActivity extends Activity {
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
 
-            double[] drawInfo = new double[10];
-            drawInfo[0] = 0;
-            drawInfo[1] = -1;
-            drawInfo[2] = -1;
-            drawInfo[3] = -1;
-            drawInfo[4] = -1;
-            drawInfo[5] = 1;
-            drawInfo[6] = -1;
-            drawInfo[7] = -1;
-            drawInfo[8] = -1;
-            drawInfo[9] = -1;
+            double[] drawRect = new double[5];
+            double[] drawCircle = new double[5];
+            drawRect[0] = 0; drawRect[1] = -1; drawRect[2] = -1; drawRect[3] = -1; drawRect[4] = -1;
+            drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
             for (int i = 0; i < findInjectionsBasedOnMarkers.length; i++) {
                 if (findInjectionsBasedOnMarkers[i].mid == 666) {
                     if (!modeFlag) {
-                        drawInfo[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
-                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                        drawInfo[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawInfo[3]) + 40;
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawCircle[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].y - findInjectionsBasedOnMarkers[i].injectpoints[1].y);
+                        drawCircle[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                        drawCircle[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawCircle[3]) + 40;
+                        drawCircle[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
+                        drawerStereo.processTrackingCircle(width, height, drawCircle);
+                        drawerStereo.postInvalidate();
                     } else {
-                        drawInfo[1] = findInjectionsBasedOnMarkers[i].injectpoints[1].x;
-                        drawInfo[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-                        drawInfo[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
-                        drawInfo[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                        drawCircle[1] = findInjectionsBasedOnMarkers[i].injectpoints[1].x;
+                        drawCircle[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawCircle[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                        drawCircle[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
+                        drawerCam.processTrackingCircle(width, height, drawCircle);
+                        drawerCam.postInvalidate();
                     }
-                    drawerStereo.processTrackingCircle(width, height, drawInfo);
-                    drawerCam.processTrackingCircle(width, height, drawInfo);
                 }
                 if (findInjectionsBasedOnMarkers[i].mid == 777) {
                     if (!modeFlag) {
-                        // about 60 cm with drawerStereo.setOffsetLR=26
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
-                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x + offsetwlr;
-                        // about 75 cm with drawerStereo.setOffsetLR=40 will error
-                        //drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-                        drawInfo[6] = (drawInfo[6] > width) ? width : drawInfo[6];
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-                        drawInfo[8] = 150;
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawRect[1] = findInjectionsBasedOnMarkers[i].mcenter.x + 40;
+                        drawRect[1] = (drawRect[1] > width) ? width : drawRect[1];
+                        drawRect[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawRect[3] = 150;
+                        drawRect[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawerStereo.processTrackingRect(width, height, drawRect);
+                        drawerStereo.postInvalidate();
                     } else {
-                        drawInfo[6] = findInjectionsBasedOnMarkers[i].mcenter.x;
-                        drawInfo[7] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
-                        drawInfo[8] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[0].x - findInjectionsBasedOnMarkers[i].mcenter.x);
-                        drawInfo[9] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawRect[1] = findInjectionsBasedOnMarkers[i].mcenter.x;
+                        drawRect[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
+                        drawRect[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);;
+                        drawRect[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);
+                        drawerCam.processTrackingRect(width, height, drawRect);
+                        drawerCam.postInvalidate();
                     }
-                    drawerStereo.processTrackingRect(width, height, drawInfo);
-                    drawerCam.processTrackingRect(width, height, drawInfo);
+
+
                 }
             }
-            if (!modeFlag) {
-                //drawerStereo.processTrackingRect(width, height, drawInfo);
-                //drawerStereo.processTrackingCircle(width, height, drawInfo);
-                drawerStereo.postInvalidate();
-            } else {
-                //drawerCam.processTrackingRect(width, height, drawInfo);
-                //drawerCam.processTrackingCircle(width, height, drawInfo);
-                drawerCam.postInvalidate();
-            }
+//            if (!modeFlag) {
+//                //drawerStereo.processTrackingRect(width, height, drawInfo);
+//                //drawerStereo.processTrackingCircle(width, height, drawInfo);
+//                //drawerStereo.postInvalidate();
+//            } else {
+//                //drawerCam.processTrackingRect(width, height, drawInfo);
+//                //drawerCam.processTrackingCircle(width, height, drawInfo);
+//                //drawerCam.postInvalidate();
+//            }
         } else if (markermode == 0) {
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
