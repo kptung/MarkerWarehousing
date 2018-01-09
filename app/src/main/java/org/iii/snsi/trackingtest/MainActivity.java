@@ -194,14 +194,14 @@ public class MainActivity extends Activity {
                         drawCircle[1] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].x - drawCircle[3]) + 40;
                         drawCircle[2] = findInjectionsBasedOnMarkers[i].injectpoints[0].y;
                         drawerStereo.processTrackingCircle(width, height, drawCircle);
-                        drawerStereo.postInvalidate();
+
                     } else {
                         drawCircle[1] = findInjectionsBasedOnMarkers[i].injectpoints[1].x;
                         drawCircle[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
                         drawCircle[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                         drawCircle[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y - findInjectionsBasedOnMarkers[i].injectpoints[0].y);
                         drawerCam.processTrackingCircle(width, height, drawCircle);
-                        drawerCam.postInvalidate();
+                        //drawerCam.postInvalidate();
                     }
                 }
                 if (findInjectionsBasedOnMarkers[i].mid == 777) {
@@ -212,14 +212,14 @@ public class MainActivity extends Activity {
                         drawRect[3] = 150;
                         drawRect[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);
                         drawerStereo.processTrackingRect(width, height, drawRect);
-                        drawerStereo.postInvalidate();
+
                     } else {
                         drawRect[1] = findInjectionsBasedOnMarkers[i].mcenter.x;
                         drawRect[2] = findInjectionsBasedOnMarkers[i].injectpoints[1].y;
                         drawRect[3] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);;
                         drawRect[4] = Math.abs(findInjectionsBasedOnMarkers[i].injectpoints[1].y-findInjectionsBasedOnMarkers[i].mcenter.y);
                         drawerCam.processTrackingRect(width, height, drawRect);
-                        drawerCam.postInvalidate();
+                        //drawerCam.postInvalidate();
                     }
                 }
             }
@@ -231,6 +231,17 @@ public class MainActivity extends Activity {
                 drawerCam.processTrackingRect(width, height, drawRect);
                 drawerCam.processTrackingCircle(width, height, drawCircle);
                 drawerCam.postInvalidate();
+            }
+            else
+            {
+                if (!modeFlag)
+                {
+                    drawerStereo.postInvalidate();
+                }
+                else
+                {
+                    drawerCam.postInvalidate();
+                }
             }
 
         } else if (markermode == 0) {
