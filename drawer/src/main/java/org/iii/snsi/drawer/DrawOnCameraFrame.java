@@ -29,6 +29,8 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
     private int layoutHeight;
     private Bitmap bbitmap;
     private int drawflag=0; // 0: circle, 1:rectangle
+    private int colorrect= Color.argb(255,255,255,0);
+    private int colorcircle= Color.argb(255,255,0,255);
 
     public DrawOnCameraFrame(Context context) {
         super(context);
@@ -153,49 +155,34 @@ public class DrawOnCameraFrame extends DrawTrackingRect {
             canvas.drawBitmap(bbitmap, 0, 0, paint);
         }
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(5);
+        paint.setAlpha(128);
         for (Map.Entry entry : rectSets.entrySet()) {
                 Object key = entry.getKey();
                 int[] rectData = rectSets.get(key);
-                if (key.equals(0)) {
-                    paint.setColor(Color.argb(128, 0, 255, 255));
-                } else {
-                    paint.setColor(Color.argb(128, 255, 0, 255));
-                }
+                paint.setColor(colorrect);
+                System.out.println("Rect (left-top.x , left-top.y, width, height):   "+ rectData[0] + " , " + rectData[1] + " , " + rectData[2] + " , " + rectData[3]);
                 drawFilledRect(canvas, paint, new Point(rectData[0], rectData[1]), new Point(rectData[2], rectData[3]));
-                //canvas.drawCircle(rectData[0], rectData[1], 30, paint);
             }
 
         for (Map.Entry entry : circleSets.entrySet()) {
                 Object key = entry.getKey();
                 int[] circleData = circleSets.get(key);
-                if (key.equals(0)) {
-                    paint.setColor(Color.argb(128, 0, 255, 255));
-                } else {
-                    paint.setColor(Color.argb(128, 255, 0, 255));
-                }
-                //canvas.drawCircle(circleData[0], circleData[1], circleData[2], paint);
+                paint.setColor(colorcircle);
+                System.out.println("Circle (cx , cy, radius):   "+ circleData[0] + " , " + circleData[1] + " , " + circleData[2]);
                 drawFilledCircle(canvas, paint, new Point(circleData[0], circleData[1]), circleData[2]);
             }
-
-
     }
 
-    private void drawFilledRect(Canvas canvas, Paint paint, Point topLeftPoint,
-            Point bottomRightPoint) {
+    private void drawFilledRect(Canvas canvas, Paint paint, Point topLeftPoint, Point bottomRightPoint) {
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(topLeftPoint.x, topLeftPoint.y, bottomRightPoint.x,
-                bottomRightPoint.y, paint);
-
+        canvas.drawRect(topLeftPoint.x, topLeftPoint.y, bottomRightPoint.x, bottomRightPoint.y, paint);
     }
 
-    private void drawFilledCircle(Canvas canvas, Paint paint, Point center,
-                                int radius) {
+    private void drawFilledCircle(Canvas canvas, Paint paint, Point center, int radius) {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(center.x, center.y, radius, paint);
-
     }
 
 

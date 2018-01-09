@@ -1,9 +1,9 @@
 #include "IrArInterface.h"
 #include "IrArCalibration.hpp"
 #include "IrArucoMarker.hpp"
-#include "ippe.h"
 #include "aruco/aruco.hpp"
 #include "IrArDetector.hpp"
+#include "IrArGlobalMethods.hpp"
 
 using namespace std;
 using namespace cv;

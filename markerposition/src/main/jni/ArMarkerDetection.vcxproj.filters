@@ -24,9 +24,6 @@
     <ClCompile Include="dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ippe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IrArMarkerCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -50,9 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ippe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IrArInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>

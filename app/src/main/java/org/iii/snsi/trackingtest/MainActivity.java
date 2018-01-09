@@ -220,8 +220,6 @@ public class MainActivity extends Activity {
                         drawerCam.processTrackingRect(width, height, drawRect);
                         drawerCam.postInvalidate();
                     }
-
-
                 }
             }
             if(findInjectionsBasedOnMarkers.length==0)
@@ -233,15 +231,7 @@ public class MainActivity extends Activity {
                 drawerCam.processTrackingCircle(width, height, drawCircle);
                 drawerCam.postInvalidate();
             }
-//            if (!modeFlag) {
-//                //drawerStereo.processTrackingRect(width, height, drawInfo);
-//                //drawerStereo.processTrackingCircle(width, height, drawInfo);
-//                //drawerStereo.postInvalidate();
-//            } else {
-//                //drawerCam.processTrackingRect(width, height, drawInfo);
-//                //drawerCam.processTrackingCircle(width, height, drawInfo);
-//                //drawerCam.postInvalidate();
-//            }
+
         } else if (markermode == 0) {
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);

@@ -82,9 +82,9 @@ int main(int argc, char **argv)
 				if (mid == 666)
 				{
 					// find injection pts
-					cv::Point3f Injection(0, -0.03f, 0);
+					cv::Point3f Injection(0, -0.075f, 0);
 					Injectionpts = make_vector<cv::Point3f>() << Injection;
-					Injectionpts.push_back(cv::Point3f(0, -0.06f, 0));
+					Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
 				}
 				else if (mid == 777)
 				{

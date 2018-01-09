@@ -114,7 +114,6 @@
     <ClCompile Include="IrArInterface.cpp" />
     <ClCompile Include="IrArMarkerCreator.cpp" />
     <ClCompile Include="dictionary.cpp" />
-    <ClCompile Include="ippe.cpp" />
     <ClCompile Include="IrArExample9.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +124,6 @@
     <ClInclude Include="aruco\predefined_dictionaries.hpp" />
     <ClInclude Include="common.hpp" />
     <ClInclude Include="INIReader.h" />
-    <ClInclude Include="ippe.h" />
     <ClInclude Include="IrArAssistant.hpp" />
     <ClInclude Include="IrArCalibration.hpp" />
     <ClInclude Include="IrArDetector.hpp" />

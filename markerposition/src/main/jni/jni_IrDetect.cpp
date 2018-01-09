@@ -172,7 +172,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findArucoMarkersWithMarkerSize(JNIEnv 
             {
                 // find injection pts
                 // the 1st is up, the 2nd is center, the 3rd is left
-                cv::Point3f Injection(0, -0.075, 0);
+                cv::Point3f Injection(0, -0.075f, 0);
                 Injectionpts = make_vector<cv::Point3f>() << Injection;
                 Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
 

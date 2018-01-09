@@ -19,6 +19,16 @@
 #define _RAD2DEG_ (57.2957795786)
 #endif
 
+#ifdef ANDROID
+#include <jni.h>
+#include <android/log.h>
+#define IR_LIB_VERSION 1.0.0
+#define JNI_DBG 0
+#define LOG_TAG "IrMarkerLib"
+#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+#endif
+
+
 #ifdef _WIN32
 #include "win32\dirent.h"
 #else

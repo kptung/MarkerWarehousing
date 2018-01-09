@@ -10,7 +10,6 @@ OPENCV_LIB_TYPE:=SHARED
 include ${OPENCVROOT}/sdk/native/jni/OpenCV.mk
 
 LOCAL_SRC_FILES := IrArInterface.cpp \
-                   ippe.cpp \
                    dictionary.cpp \
                    aruco.cpp \
                    jni_IrDetect.cpp
