@@ -174,6 +174,7 @@ public class MainActivity extends Activity {
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
         if (markermode == 2) {
+            System.out.println("Application Mode");
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindArucoMarkersWithMarkerSize(bytes, width, height, 3);
             long t2 = System.currentTimeMillis();
@@ -233,6 +234,7 @@ public class MainActivity extends Activity {
             }
 
         } else if (markermode == 0) {
+            System.out.println("Basic Mode");
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] findInjectionsBasedOnMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
             long t2 = System.currentTimeMillis();
