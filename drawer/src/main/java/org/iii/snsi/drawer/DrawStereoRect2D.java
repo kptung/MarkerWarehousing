@@ -21,6 +21,8 @@ import java.util.Map;
  */
 public class DrawStereoRect2D extends DrawTrackingRect {
 
+    private static final int COLOR_RECT = Color.argb(255, 255, 255, 0);
+    private static final int COLOR_CIRCLE = Color.argb(255, 255, 0, 255);
     private boolean dbgObjImg = false;
     private boolean calibrateInside = false;
     private HashMap<Integer, int[]> rectSets;//old item
@@ -43,10 +45,9 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     private int offsetLR;
     private int[] roiScopeR;
     private int[] roiScopeMix;
-    private Bitmap bbitmap;
-    private int drawshape=0;//0:circle, 1:rectangle
-    private int colorrect= Color.argb(255,255,255,0);
-    private int colorcircle= Color.argb(255,255,0,255);
+    private Bitmap bBitmap;
+    private int drawShape = 0;//0:circle, 1:rectangle
+    private int[] circleData;
 
     public DrawStereoRect2D(Context context) {
         super(context);
@@ -61,8 +62,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         circleSetsR = new HashMap<Integer, int[]>();
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
-    {
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -72,18 +72,20 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         // resize the bit map
         matrix.postScale(scaleWidth, scaleHeight);
         // recreate the new Bitmap
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+                matrix, false);
         return resizedBitmap;
     }
 
-    public void SetBitmap(byte[] bytes, int width, int height)
-    {
+    public void SetBitmap(byte[] bytes, int width, int height) {
         // catch the image
-        YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height, null);
+        YuvImage im = new YuvImage(bytes, ImageFormat.NV21, width, height,
+                null);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        im.compressToJpeg(new Rect(0,0,width,height), 90, baos);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.toByteArray().length);
-        bbitmap = getResizedBitmap(bitmap, layoutHeight, layoutWidth);
+        im.compressToJpeg(new Rect(0, 0, width, height), 90, baos);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(baos.toByteArray(), 0,
+                baos.toByteArray().length);
+        bBitmap = getResizedBitmap(bitmap, layoutHeight, layoutWidth);
     }
 
     public void setDbgObjImg(int flag) {
@@ -102,7 +104,8 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     }
 
     @Override
-    public void setTrackingCalibration(int offsetWidth, int offsetHeight, int roiWidth, int roiHeight) {
+    public void setTrackingCalibration(int offsetWidth, int offsetHeight,
+            int roiWidth, int roiHeight) {
         this.offsetWidth = offsetWidth;
         this.offsetHeight = offsetHeight;
         this.roiWidth = roiWidth;
@@ -151,7 +154,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     public int[] processTrackingRect(int width, int height, double[] data) {
         rectSets.clear();
         rectSetsLR.clear();
-        drawshape=1;
+        drawShape = 1;
         if (data == null) {
             return null;
         }
@@ -179,21 +182,25 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                     > (layoutWidth * 2)))
             {
             } else {
-                rectSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftR),
-                        (int) Math.round(topR), (int) Math.round(rightR),
-                        (int) Math.round(bottomR)});
-                rectSetsLR.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftL),
-                        (int) Math.round(rightL)});
+                rectSets.put((int) Math.round(data[i]),
+                        new int[] {(int) Math.round(leftR),
+                                (int) Math.round(topR),
+                                (int) Math.round(rightR),
+                                (int) Math.round(bottomR)});
+                rectSetsLR.put((int) Math.round(data[i]),
+                        new int[] {(int) Math.round(leftL),
+                                (int) Math.round(rightL)});
 
             }
         }
-        int[] xx = new int [1];
+        int[] xx = new int[1];
         return xx;
     }
+
     public int[] processTrackingCircle(int width, int height, double[] data) {
         circleSets.clear();
         circleSetsLR.clear();
-        drawshape=0;
+        drawShape = 0;
         if (data == null) {
             return null;
         }
@@ -209,10 +216,12 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                     (double) (data[i + 2] - (offsetHeight * rateY)) / (roiHeight
                             * rateY) * layoutHeight;
             double rightR =
-                    (double) (data[i + 1] + data[i + 3]*2 - (offsetWidth * rateX))
-                            / (roiWidth * rateX) * layoutWidth + layoutWidth;
-            double bottomR = (double) (data[i + 2] + data[i + 4]*2 - (offsetHeight
-                    * rateY)) / (roiHeight * rateY) * layoutHeight;
+                    (double) (data[i + 1] + data[i + 3] * 2 - (offsetWidth
+                            * rateX)) / (roiWidth * rateX) * layoutWidth
+                            + layoutWidth;
+            double bottomR =
+                    (double) (data[i + 2] + data[i + 4] * 2 - (offsetHeight
+                            * rateY)) / (roiHeight * rateY) * layoutHeight;
 
             double leftL = leftR + offsetLR * rateX - layoutWidth;
             double rightL = rightR + offsetLR * rateX - layoutWidth;
@@ -221,19 +230,20 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                     > (layoutWidth * 2)))
             {
             } else {
-                circleSets.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftR),
-                        (int) Math.round(topR), (int) Math.round(rightR),
-                        (int) Math.round(bottomR)});
-                circleSetsLR.put((int) Math.round(data[i]), new int[] {(int) Math.round(leftL),
-                        (int) Math.round(rightL)});
+                circleSets.put((int) Math.round(data[i]),
+                        new int[] {(int) Math.round(leftR),
+                                (int) Math.round(topR),
+                                (int) Math.round(rightR),
+                                (int) Math.round(bottomR)});
+                circleSetsLR.put((int) Math.round(data[i]),
+                        new int[] {(int) Math.round(leftL),
+                                (int) Math.round(rightL)});
 
             }
         }
-        int[] xx = new int [1];
+        int[] xx = new int[1];
         return xx;
     }
-
-
 
     @Override
     public void setLayoutSize(int width, int height) {
@@ -247,12 +257,9 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (calibrateInside) {
-            if(drawshape==0)
-            {
+            if (drawShape == 0) {
                 calibrateInsideDrawCircle(canvas);
-            }
-            else
-            {
+            } else {
                 calibrateInsideDraw(canvas);
             }
             //
@@ -278,7 +285,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             bottomRightPointLeftEye = new Point(rectLR[1], rectData[3]);
             topLeftPointRightEye = new Point(rectData[0], rectData[1]);
             bottomRightPointRightEye = new Point(rectData[2], rectData[3]);
-            paint.setColor(colorrect);
+            paint.setColor(COLOR_RECT);
 
             drawFilledRect(canvas, paint, topLeftPointLeftEye,
                     bottomRightPointLeftEye, topLeftPointRightEye,
@@ -288,11 +295,13 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     }
 
     private void drawFilledRect(Canvas canvas, Paint paint,
-                                Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
-                                Point topLeftPointRightEye, Point bottomRightPointRightEye) {
+            Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
+            Point topLeftPointRightEye, Point bottomRightPointRightEye) {
         paint.setStyle(Paint.Style.FILL);
-        Bitmap b1 = Bitmap.createBitmap(layoutWidth, layoutHeight, Bitmap.Config.ARGB_8888);
-        Bitmap b2 = Bitmap.createBitmap(layoutWidth, layoutHeight, Bitmap.Config.ARGB_8888);
+        Bitmap b1 = Bitmap.createBitmap(layoutWidth, layoutHeight,
+                Bitmap.Config.ARGB_8888);
+        Bitmap b2 = Bitmap.createBitmap(layoutWidth, layoutHeight,
+                Bitmap.Config.ARGB_8888);
         //---------------left eye
         Point realBottomRightPointLeftEye = bottomRightPointLeftEye;
         if (topLeftPointLeftEye.x < layoutWidth) {
@@ -302,11 +311,18 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                         bottomRightPointLeftEye.y);
             }
             Canvas c1 = new Canvas(b1);
-            System.out.println("Left Eye: TopLeft.x , TopLeft.y, Width, Height=  " + topLeftPointLeftEye.x + " , " + topLeftPointLeftEye.y + " , " + realBottomRightPointLeftEye.x + " , " + realBottomRightPointLeftEye.y);
-            c1.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y, realBottomRightPointLeftEye.x, realBottomRightPointLeftEye.y, paint);
-//            canvas.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
-//                    realBottomRightPointLeftEye.x,
-//                    realBottomRightPointLeftEye.y, paint);
+            System.out.println(
+                    "Left Eye: TopLeft.x , TopLeft.y, Width, Height=  "
+                            + topLeftPointLeftEye.x + " , "
+                            + topLeftPointLeftEye.y + " , "
+                            + realBottomRightPointLeftEye.x + " , "
+                            + realBottomRightPointLeftEye.y);
+            c1.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+                    realBottomRightPointLeftEye.x,
+                    realBottomRightPointLeftEye.y, paint);
+            //            canvas.drawRect(topLeftPointLeftEye.x, topLeftPointLeftEye.y,
+            //                    realBottomRightPointLeftEye.x,
+            //                    realBottomRightPointLeftEye.y, paint);
         }
         //---------------end left eye
         //------------------right eye
@@ -319,11 +335,20 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                         topLeftPointRightEye.y);
             }
             Canvas c2 = new Canvas(b2);
-            int rltx=-1, rrbx=-1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
-            rltx = (realTopLeftPointRightEye.x>=layoutWidth)?realTopLeftPointRightEye.x-layoutWidth:realTopLeftPointRightEye.x;
-            rrbx = (bottomRightPointRightEye.x>=layoutWidth)?bottomRightPointRightEye.x-layoutWidth:bottomRightPointRightEye.x;
-            System.out.println("Right Eye: TopLeft.x , TopLeft.y, Width, Height=  " + rltx + " , " + realTopLeftPointRightEye.y + " , " + rrbx + " , " + bottomRightPointRightEye.y);
-            c2.drawRect(rltx, realTopLeftPointRightEye.y, rrbx, bottomRightPointRightEye.y, paint);
+            int rltx = -1, rrbx =
+                    -1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
+            rltx = (realTopLeftPointRightEye.x >= layoutWidth) ?
+                    realTopLeftPointRightEye.x - layoutWidth :
+                    realTopLeftPointRightEye.x;
+            rrbx = (bottomRightPointRightEye.x >= layoutWidth) ?
+                    bottomRightPointRightEye.x - layoutWidth :
+                    bottomRightPointRightEye.x;
+            System.out.println(
+                    "Right Eye: TopLeft.x , TopLeft.y, Width, Height=  " + rltx
+                            + " , " + realTopLeftPointRightEye.y + " , " + rrbx
+                            + " , " + bottomRightPointRightEye.y);
+            c2.drawRect(rltx, realTopLeftPointRightEye.y, rrbx,
+                    bottomRightPointRightEye.y, paint);
             //canvas.drawRect(realTopLeftPointRightEye.x, realTopLeftPointRightEye.y, bottomRightPointRightEye.x, bottomRightPointRightEye.y, paint);
         }
         //----------------end right eye
@@ -350,7 +375,7 @@ public class DrawStereoRect2D extends DrawTrackingRect {
             bottomRightPointLeftEye = new Point(circleLR[1], circleData[3]);
             topLeftPointRightEye = new Point(circleData[0], circleData[1]);
             bottomRightPointRightEye = new Point(circleData[2], circleData[3]);
-            paint.setColor(colorcircle);
+            paint.setColor(COLOR_CIRCLE);
 
             drawFilledCircle(canvas, paint, topLeftPointLeftEye,
                     bottomRightPointLeftEye, topLeftPointRightEye,
@@ -359,11 +384,13 @@ public class DrawStereoRect2D extends DrawTrackingRect {
     }
 
     private void drawFilledCircle(Canvas canvas, Paint paint,
-                                Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
-                                Point topLeftPointRightEye, Point bottomRightPointRightEye) {
+            Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
+            Point topLeftPointRightEye, Point bottomRightPointRightEye) {
         paint.setStyle(Paint.Style.FILL);
-        Bitmap b1 = Bitmap.createBitmap(layoutWidth, layoutHeight, Bitmap.Config.ARGB_8888);
-        Bitmap b2 = Bitmap.createBitmap(layoutWidth, layoutHeight, Bitmap.Config.ARGB_8888);
+        Bitmap b1 = Bitmap.createBitmap(layoutWidth, layoutHeight,
+                Bitmap.Config.ARGB_8888);
+        Bitmap b2 = Bitmap.createBitmap(layoutWidth, layoutHeight,
+                Bitmap.Config.ARGB_8888);
 
         //---------------left eye
         Point realBottomRightPointLeftEye = bottomRightPointLeftEye;
@@ -373,10 +400,15 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                 realBottomRightPointLeftEye = new Point(layoutWidth - 1,
                         bottomRightPointLeftEye.y);
             }
-            int cx = (topLeftPointLeftEye.x+realBottomRightPointLeftEye.x)/2;
-            int cy = (topLeftPointLeftEye.y+realBottomRightPointLeftEye.y)/2;
-            int radius = Math.abs(topLeftPointLeftEye.x-realBottomRightPointLeftEye.x);
-            System.out.println("Left Eye:  Cx, Cy, Radius =  " + cx + " , " + cy + " , " +radius);
+            int cx =
+                    (topLeftPointLeftEye.x + realBottomRightPointLeftEye.x) / 2;
+            int cy =
+                    (topLeftPointLeftEye.y + realBottomRightPointLeftEye.y) / 2;
+            int radius = Math.abs(
+                    topLeftPointLeftEye.x - realBottomRightPointLeftEye.x);
+            System.out.println(
+                    "Left Eye:  Cx, Cy, Radius =  " + cx + " , " + cy + " , "
+                            + radius);
             Canvas c1 = new Canvas(b1);
             c1.drawCircle(cx, cy, radius, paint);
         }
@@ -391,13 +423,21 @@ public class DrawStereoRect2D extends DrawTrackingRect {
                         topLeftPointRightEye.y);
             }
             Canvas c2 = new Canvas(b2);
-            int rltx=-1, rrbx=-1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
-            rltx = (realTopLeftPointRightEye.x>=layoutWidth)?realTopLeftPointRightEye.x-layoutWidth:realTopLeftPointRightEye.x;
-            rrbx = (bottomRightPointRightEye.x>=layoutWidth)?bottomRightPointRightEye.x-layoutWidth:bottomRightPointRightEye.x;
-            int cx = (rltx+rrbx)/2;
-            int cy = (realTopLeftPointRightEye.y + bottomRightPointRightEye.y)/2;
+            int rltx = -1, rrbx =
+                    -1;//rltx, rlty: Right-eye Left Top (x, y);  //rrbx, rrby: Right-eye Right Bottom (x, y);
+            rltx = (realTopLeftPointRightEye.x >= layoutWidth) ?
+                    realTopLeftPointRightEye.x - layoutWidth :
+                    realTopLeftPointRightEye.x;
+            rrbx = (bottomRightPointRightEye.x >= layoutWidth) ?
+                    bottomRightPointRightEye.x - layoutWidth :
+                    bottomRightPointRightEye.x;
+            int cx = (rltx + rrbx) / 2;
+            int cy = (realTopLeftPointRightEye.y + bottomRightPointRightEye.y)
+                    / 2;
             int radius = Math.abs(realTopLeftPointRightEye.y - cy);
-            System.out.println("Right Eye:  Cx, Cy, Radius =  " + cx + " , " + cy + " , " +radius);
+            System.out.println(
+                    "Right Eye:  Cx, Cy, Radius =  " + cx + " , " + cy + " , "
+                            + radius);
             c2.drawCircle(cx, cy, radius, paint);
         }
         //----------------end right eye
@@ -413,8 +453,6 @@ public class DrawStereoRect2D extends DrawTrackingRect {
         paint.setColor(Color.RED);
         paint.setStrokeWidth(5);
     }
-
-
 
     private void drawHollowRect(Canvas canvas, Paint paint,
             Point topLeftPointLeftEye, Point bottomRightPointLeftEye,
