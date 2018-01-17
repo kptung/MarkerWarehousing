@@ -15,7 +15,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>
 
-		<org.iii.snsi.trackingtest.StereoImageView
+		<org.iii.snsi.markertest.StereoImageView
 			android:id="@+id/stereo_image"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>

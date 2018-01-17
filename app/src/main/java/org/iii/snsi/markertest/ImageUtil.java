@@ -1,4 +1,4 @@
-package org.iii.snsi.trackingtest;
+package org.iii.snsi.markertest;
 
 import android.app.Activity;
 import android.content.res.Resources;

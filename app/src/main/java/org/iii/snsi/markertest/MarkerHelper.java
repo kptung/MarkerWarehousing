@@ -1,7 +1,6 @@
-package org.iii.snsi.trackingtest;
+package org.iii.snsi.markertest;
 
 import android.os.Environment;
-import android.util.Log;
 
 import org.iii.snsi.markerposition.IrArucoMarker;
 import org.iii.snsi.markerposition.IrDetect;
