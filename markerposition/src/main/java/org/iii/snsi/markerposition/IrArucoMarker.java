@@ -4,6 +4,7 @@ public class IrArucoMarker {
     public int mid;
     public int mori;
     public double mxzdistance;
+    public double mdistance;
     public Point2D[] mcorners;
     public Point2D[] mrejecteds;
     public Point3D camposition;
@@ -14,6 +15,7 @@ public class IrArucoMarker {
         mid=-1;
         mori=-1;
         mxzdistance=-1;
+        mdistance=-1;
         camposition.x=-1;
         camposition.y=-1;
         camposition.z=-1;
