@@ -10,7 +10,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/01/03                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main56743646534864(int argc, char **argv)
 {
 	std::string infolder("./data/artest");
 	std::string outfolder("./data/arout");
