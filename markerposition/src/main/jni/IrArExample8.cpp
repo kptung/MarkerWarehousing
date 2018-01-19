@@ -11,16 +11,16 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main643467457(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	std::string infolder("./data/artest");
-	std::string outfolder("./data/arout");
+	std::string infolder("D:/workprojs/III.Projs/out/armarker/artest/");
+	std::string outfolder("D:/workprojs/III.Projs/out/armarker/arout/");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
 	/************************************************************************/
-	//float markerLength = 0.03f; // the unit is meter
-	float markerLength = 3; // the unit is meter
+	float markerLength = 0.03f; // the unit is meter
+	//float markerLength = 3; // the unit is centi-meter
 
 	std::string cameraFilename("camera-z2.yml");
 	//std::string cameraFilename("a6k_mr/bt300jj130-camera.yml");

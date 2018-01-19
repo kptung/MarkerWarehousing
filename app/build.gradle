@@ -5,7 +5,7 @@ android {
     buildToolsVersion '25.0.2'
 
     defaultConfig {
-        applicationId "org.iii.snsi.trackingtest"
+        applicationId "org.iii.snsi.markertest"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1

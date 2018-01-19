@@ -13,7 +13,7 @@ using namespace std;
 /*  Author: opencv_contrib                                              */
 /*  Modified: kptung, 2017/11/09                                        */
 /************************************************************************/
-int main(int argc, char *argv[])
+int main6878678678676(int argc, char *argv[])
 {
 	int dictionaryId = 16;
 	std::vector<int> markerIdList{ 25,153,275,279,373,433,477,806,919,1013 };

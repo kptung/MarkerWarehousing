@@ -25,9 +25,9 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vector<IrArucoMarker> &markers)
 {
 	// (0) convert markerLength from centimeter(cm) to meter(m) 
-	float markLen = markerLength;
-	if(markerLength >= 1)
-		markLen = markerLength / 100;
+	float markerLen = markerLength;
+	if (markerLen - (int)markerLen == 0)
+		markerLen = markerLen / 100;
 
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
@@ -55,7 +55,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	cv::Ptr<cv::aruco::Dictionary> dictionary =
 		cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
 	// (d) detect marker
-	return mdet.findArMarkers(origin, gray, markLen, markers, intrinsic, distortion, detectparas);
+	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, detectparas);
 
 }
 

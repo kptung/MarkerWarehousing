@@ -34,11 +34,9 @@ public:
 	/************************************************************************/
 	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
 	{
-
 #ifdef ANDROID
 		LOGD("C lib start");
 #endif
-
 		cv::Mat origin;
 		src.copyTo(origin);
 		// (a) define aruco dictionary
@@ -65,7 +63,7 @@ public:
 #ifdef ANDROID
 		LOGD("detect pass");
 #endif		
-		// (c) estimate the camera pose; the unit is meter
+		// (c) estimate the camera pose; the unit is meter; check the val is integer or float
 		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
 		auto tend = std::chrono::high_resolution_clock::now();
 		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
@@ -93,6 +91,9 @@ public:
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
+				// (d0) check marker ID to avoid the ambiguous detection
+				if (ids.at(i) == 1023)
+					return false;
 				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
@@ -176,6 +177,10 @@ public:
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
+				// (d0) check marker ID to avoid the ambiguous detection
+				if (ids.at(i) == 1023)
+					return false;
+
 				// (d1) marker id, corners, rejecteds and marker_center
 #ifdef ANDROID
 				LOGD("ids.at(i) = %d", ids.at(i));
