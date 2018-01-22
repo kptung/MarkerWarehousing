@@ -64,8 +64,6 @@ std::string ToString(const T& value)
 	return stream.str();
 }
 
-
-
 /* Returns a list of files in a directory (except the ones that begin with a dot) */
 inline void get_files_in_directory(const std::string &directory, std::vector<std::string> &out)
 {
@@ -102,5 +100,6 @@ inline void get_files_in_directory(const std::string &directory, std::vector<std
 
     closedir(dir);
 }
+
 
 #endif

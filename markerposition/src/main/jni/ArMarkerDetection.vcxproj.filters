@@ -33,9 +33,6 @@
     <ClCompile Include="IrArInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="create_marker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IrArExample9.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,9 +48,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="common.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IrArAssistant.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IrArCalibration.hpp">

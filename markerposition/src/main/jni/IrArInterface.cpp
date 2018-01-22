@@ -15,6 +15,13 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 {
 	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
+	if (intrinsic.empty() || distortion.empty())
+	{
+#ifdef ANDROID
+		LOGD("Lib needs parameters. Please check intrinsic and distortion");
+#endif
+		return make_vector<cv::Point2f>() << cv::Point2f();
+	}
 	if (objpts.size() == 0)
 		return make_vector<cv::Point2f>();
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, rvec, tvec, ori, center);
@@ -31,8 +38,13 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
+	{
+#ifdef ANDROID
+		LOGD("Image Fail. Please check it!!");
+#endif
 		return false;
-	// (a) convert bgr -> gray
+	}
+		// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);
 	image.copyTo(origin);
@@ -44,7 +56,6 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
 	if (intrinsic.empty() || distortion.empty())
 	{
-		std::cout << "Lib needs parameters. Please check intrinsic and distortion" << endl;
 #ifdef ANDROID
 		LOGD("Lib needs parameters. Please check intrinsic and distortion");
 #endif
@@ -63,7 +74,12 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 {
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
+	{
+#ifdef ANDROID
+		LOGD("Image Fail. Please check it!!");
+#endif
 		return false;
+	}
 	// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);
@@ -124,13 +140,13 @@ bool importYMLDetectParameters(const std::string &filename)
 //// //// ************ //// ////
 #ifdef ANDROID
 void GetJStringContent(JNIEnv *env, jstring AStr, std::string &ARes) {
-    if (!AStr) {
-        ARes.clear();
-        return;
-    }
-    const char *str = env->GetStringUTFChars(AStr, NULL);
-    ARes = str;
-    env->ReleaseStringUTFChars(AStr, str);
+	if (!AStr) {
+		ARes.clear();
+		return;
+	}
+	const char *str = env->GetStringUTFChars(AStr, NULL);
+	ARes = str;
+	env->ReleaseStringUTFChars(AStr, str);
 }
 #endif
 

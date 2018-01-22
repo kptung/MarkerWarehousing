@@ -13,21 +13,21 @@
 #include <ctime>
 #include <fstream>
 
-#define LOG_NDEBUG 0
-#define LOG_TAG "JNI_NativeTracking"
-#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+//#define LOG_NDEBUG 0
+//#define LOG_TAG "JNI_NativeTracking"
+//#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 
-#define JNI_DBG 0
-#define VIDEO_TRACKING_LIB_VERSION 0.03
-#define MIN_RECT_VALUE 14
+//#define JNI_DBG 0
+//#define VIDEO_TRACKING_LIB_VERSION 0.03
+//#define MIN_RECT_VALUE 14
 
 #ifndef JPG
 #define JPG (std::string(".jpg"))
 #endif
 
-#define IR_LIB_VERSION 1.0.0
+#define IRAR_LIB_VERSION 1.93
 #define JNI_DBG 1
-#define LOG_TAG "IrMarkerLib"
+#define LOG_TAG "IrArMarkerLib"
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 
 using namespace std;

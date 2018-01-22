@@ -11,15 +11,6 @@
 #include "IrArGlobalMethods.hpp"
 #include <string>
 
-#ifdef ANDROID
-#include <jni.h>
-#include <android/log.h>
-#define IR_LIB_VERSION 1.0.0
-#define JNI_DBG 1
-#define LOG_TAG "IrMarkerLib"
-#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
-#endif
-
 #ifndef PI
 #define PI (3.14159265f)
 #endif

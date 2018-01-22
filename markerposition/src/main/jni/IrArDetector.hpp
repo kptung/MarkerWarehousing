@@ -35,14 +35,14 @@ public:
 	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
 	{
 #ifdef ANDROID
-		LOGD("C lib start");
+		LOGD("C Adv/App lib start");
 #endif
 		cv::Mat origin;
 		src.copyTo(origin);
 		// (a) define aruco dictionary
 		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
 #ifdef ANDROID
-		LOGD("dict load pass");
+		LOGD("dictionary load pass");
 #endif
 		if (intrinsic.empty() || distortion.empty())
 		{
@@ -70,20 +70,6 @@ public:
 #ifdef ANDROID
 		LOGD("estimate pass");
 #endif		
-		// time estimation
-// 		bool tflag = false;
-// 		if (tflag)
-// 		{
-// 			std::ofstream out1;
-// 			char *ptimefile_name;
-// 			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
-// #ifdef ANDROID
-// 			ptimefile_name = "/sdcard/marker/mtime.txt";
-// #endif
-// 			out1.open(ptimefile_name, std::ios_base::app);
-// 			out1 << "Func: " << (long)(1000 * diff.count()) << ", ";
-// 			out1.close();
-// 		}
 
 		// (d) marker information
 		if (ids.size() > 0)

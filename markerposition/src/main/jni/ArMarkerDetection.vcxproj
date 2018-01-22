@@ -107,7 +107,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aruco.cpp" />
-    <ClCompile Include="create_marker.cpp" />
     <ClCompile Include="INIReaderTest.cpp" />
     <ClCompile Include="IrArExample10.cpp" />
     <ClCompile Include="IrArExample8.cpp" />
@@ -124,7 +123,6 @@
     <ClInclude Include="aruco\predefined_dictionaries.hpp" />
     <ClInclude Include="common.hpp" />
     <ClInclude Include="INIReader.h" />
-    <ClInclude Include="IrArAssistant.hpp" />
     <ClInclude Include="IrArCalibration.hpp" />
     <ClInclude Include="IrArDetector.hpp" />
     <ClInclude Include="IrArGlobalMethods.hpp" />

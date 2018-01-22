@@ -53,7 +53,7 @@ int main87645864564868(int argc, char **argv)
 		bool tflag = false;
 		if (tflag)
 		{
-			ofstream out1;
+			std::ofstream out1;
 			char *ptimefile_name;
 			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
 			out1.open(ptimefile_name, ios::app);
