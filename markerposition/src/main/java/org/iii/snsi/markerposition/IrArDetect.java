@@ -2,7 +2,7 @@ package org.iii.snsi.markerposition;
 
 import android.util.Log;
 
-public class IrDetect {
+public class IrArDetect {
 
     static {
         try {

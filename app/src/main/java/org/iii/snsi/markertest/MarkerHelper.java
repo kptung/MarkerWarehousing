@@ -3,7 +3,7 @@ package org.iii.snsi.markertest;
 import android.os.Environment;
 
 import org.iii.snsi.markerposition.IrArucoMarker;
-import org.iii.snsi.markerposition.IrDetect;
+import org.iii.snsi.markerposition.IrArDetect;
 
 import java.io.File;
 
@@ -20,8 +20,8 @@ public class MarkerHelper {
         File f2=new File(detfile);
 
         if(f1.exists()&&f2.exists()) {
-            IrDetect.importYMLCameraParameters(camfile);
-            IrDetect.importYMLDetectParameters(detfile);
+            IrArDetect.importYMLCameraParameters(camfile);
+            IrArDetect.importYMLDetectParameters(detfile);
         }
         else
         {
@@ -35,7 +35,7 @@ public class MarkerHelper {
             System.out.println("Error!! Image is NULL. Please check it");
             return null;
         }
-        return IrDetect.findAppMarkers(bytes, width, height, markerSize);
+        return IrArDetect.findAppMarkers(bytes, width, height, markerSize);
     }
 
     public static IrArucoMarker[] nFindBasicMarkers(byte[] bytes, int width,int height, float markerSize){
@@ -43,7 +43,7 @@ public class MarkerHelper {
             System.out.println("Error!! Image is NULL. Please check it");
             return null;
         }
-        return IrDetect.findBasicMarkers(bytes, width, height, markerSize);
+        return IrArDetect.findBasicMarkers(bytes, width, height, markerSize);
     }
 
     public static IrArucoMarker[] nFindAdvMarkers(byte[] bytes, int width,int height, float markerSize){
@@ -51,7 +51,7 @@ public class MarkerHelper {
             System.out.println("Error!! Image is NULL. Please check it");
             return null;
         }
-        return IrDetect.findAdvMarkers(bytes, width, height, markerSize);
+        return IrArDetect.findAdvMarkers(bytes, width, height, markerSize);
     }
 
 }

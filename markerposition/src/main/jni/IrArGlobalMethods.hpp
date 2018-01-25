@@ -24,7 +24,7 @@
 #include <android/log.h>
 #define IR_LIB_VERSION 1.0.0
 #define JNI_DBG 0
-#define LOG_TAG "IrMarkerLib"
+#define LOG_TAG "IrArMarkerLib"
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 #endif
 

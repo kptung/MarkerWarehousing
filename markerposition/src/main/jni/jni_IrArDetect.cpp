@@ -35,14 +35,14 @@ using namespace cv;
 
 static bool debug_mode = false;
 
-#ifndef org_iii_snsi_markerposition_IrDetect
-#define org_iii_snsi_markerposition_IrDetect
+#ifndef org_iii_snsi_markerposition_IrArDetect
+#define org_iii_snsi_markerposition_IrArDetect
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jboolean JNICALL Java_org_iii_snsi_markerposition_IrDetect_importYMLCameraParameters
-        (JNIEnv *env, jclass jIrDetect, jstring jfilename) {
+JNIEXPORT jboolean JNICALL Java_org_iii_snsi_markerposition_IrArDetect_importYMLCameraParameters
+        (JNIEnv *env, jclass jIrArDetect, jstring jfilename) {
     // Reconstruct Java structure to C++ structure
     string filename;
     GetJStringContent(env, jfilename, filename);
@@ -54,7 +54,7 @@ JNIEXPORT jboolean JNICALL Java_org_iii_snsi_markerposition_IrDetect_importYMLCa
 }
 
 JNIEXPORT jboolean JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_importYMLDetectParameters(
+Java_org_iii_snsi_markerposition_IrArDetect_importYMLDetectParameters(
         JNIEnv *env, jclass type, jstring jfilename) {
     // Reconstruct Java structure to C++ structure
     string filename;
@@ -67,7 +67,7 @@ Java_org_iii_snsi_markerposition_IrDetect_importYMLDetectParameters(
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_findAppMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
+Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;
@@ -246,7 +246,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findAppMarkers(JNIEnv *env, jclass typ
     //return 0;
 }
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
+Java_org_iii_snsi_markerposition_IrArDetect_findBasicMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;
@@ -345,7 +345,7 @@ Java_org_iii_snsi_markerposition_IrDetect_findBasicMarkers(JNIEnv *env, jclass t
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrDetect_findAdvMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
+Java_org_iii_snsi_markerposition_IrArDetect_findAdvMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;

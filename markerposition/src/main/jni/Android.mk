@@ -12,7 +12,7 @@ include ${OPENCVROOT}/sdk/native/jni/OpenCV.mk
 LOCAL_SRC_FILES := IrArInterface.cpp \
                    dictionary.cpp \
                    aruco.cpp \
-                   jni_IrDetect.cpp
+                   jni_IrArDetect.cpp
 LOCAL_LDLIBS += -llog -latomic
 LOCAL_MODULE := markerposition
 
