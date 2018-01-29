@@ -57,23 +57,27 @@ public:
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
 		std::vector< cv::Vec3d > rvecs, tvecs;
 		
-		auto tstart = std::chrono::high_resolution_clock::now();
+		//auto tstart = std::chrono::high_resolution_clock::now();
 		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
-		// cv::aruco::drawDetectedMarkers(origin, corners, ids);
+		//cv::aruco::drawDetectedMarkers(origin, rejecteds, ids);
 #ifdef ANDROID
 		LOGD("detect pass");
 #endif		
-		// (c) estimate the camera pose; the unit is meter; check the val is integer or float
-		cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
-		auto tend = std::chrono::high_resolution_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
-#ifdef ANDROID
-		LOGD("estimate pass");
-#endif		
+		
 
 		// (d) marker information
 		if (ids.size() > 0)
 		{
+			// (c) estimate the camera pose; the unit is meter; check the val is integer or float
+			cv::aruco::estimatePoseSingleMarkers(corners, markerLen, intrinsic, distortion, rvecs, tvecs);
+			//auto tend = std::chrono::high_resolution_clock::now();
+			//auto diff = std::chrono::duration_cast<std::chrono::duration<double>>(tend - tstart);
+#ifdef ANDROID
+			LOGD("estimate pass");
+#endif		
+			//if (rejecteds.size() > 0)
+			//	cv::aruco::drawDetectedMarkers(origin, rejecteds, cv::noArray(), cv::Scalar(100, 0, 255));
+
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
@@ -81,11 +85,15 @@ public:
 				if (ids.at(i) == 1023)
 					return false;
 				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
+				int unit = 0;
+				if (markerLen - (int)markerLen == 0)
+					unit = 1;
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 				_markers[i].setTransnslationMatrix(tvecs[i]);
+				_markers[i].setMarkerUnit(unit);
 #ifdef ANDROID
 				LOGD("D1 pass");
 #endif

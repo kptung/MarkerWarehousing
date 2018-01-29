@@ -24,7 +24,7 @@ class IrArucoMarker
 public:
 
 	/// constructor
-	IrArucoMarker() : m_id(-1), m_ori(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32FC1)*-1), RX(cv::Mat::eye(3, 3, CV_32FC1)), RY(cv::Mat::eye(3, 3, CV_32FC1)), RZ(cv::Mat::eye(3, 3, CV_32FC1)), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
+	IrArucoMarker() : m_id(-1), m_ori(-1), m_unit(-1), m_cameraPosition(cv::Point3f(-1.0, -1.0, -1.0)), m_rvec(cv::Mat::eye(3, 3, CV_32FC1)*-1), RX(cv::Mat::eye(3, 3, CV_32FC1)), RY(cv::Mat::eye(3, 3, CV_32FC1)), RZ(cv::Mat::eye(3, 3, CV_32FC1)), m_center(cv::Point2f(-1.0, -1.0)), m_markerLength(-1)
 	{
 	}
 
@@ -90,13 +90,23 @@ public:
 	void setMarkerCenter(const std::vector< cv::Point2f >& corners)
 	{
 		cv::Point2f cent(0, 0);
-		for (int p = 0; p < 4; p++)
+		for (int p = 0; p < corners.size(); p++)
 			cent += corners.at(p);
-		m_center = cent / 4.;
+		m_center = cent / (float)corners.size();
 	}
 	cv::Point2f getMarkerCenter() const
 	{
 		return m_center;
+	}
+
+	// set/get marker length unit
+	void setMarkerUnit(const int& i)
+	{
+		m_unit = i;
+	}
+	float getMarkerUnit(void) const
+	{
+		return m_unit;
 	}
 
 	// set/get marker length in meters
@@ -116,7 +126,8 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 		float dist = sqrt(x*x + y*y + z*z);
-		dist *= 100;
+		if(m_unit == 0)
+			dist *= 100;
 		return dist;
 		//return z;
 	}
@@ -127,7 +138,8 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 		float dist = sqrt(x * x + z * z);
-		dist *= 100;
+		if (m_unit == 0)
+			dist *= 100;
 		return dist;
 	}
 	
@@ -345,6 +357,8 @@ private:
 	//  marker length    
 	float m_markerLength;
 
+	// marker length unit
+	int m_unit;
 };
 
 

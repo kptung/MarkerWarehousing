@@ -5,7 +5,7 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco application sample for full marker information                    */
+/*  Aruco application webcam sample for full marker information                    */
 /*  and draw the injection point without considering the marker orientation */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
@@ -19,8 +19,8 @@ int main(int argc, char **argv)
 	/************************************************************************/
 	/* the given marker length in meters                                    */
 	/************************************************************************/
-	//float markerLength = 0.03f; // the unit is meter
-	float markerLength = 3; // the unit is centi-meter
+	float markerLength = 0.03f; // the unit is meter
+	//float markerLength = 3; // the unit is centi-meter
 
 	std::string cameraFilename("camera-z2.yml");
 	//std::string cameraFilename("a6k_mr/bt300jj130-camera.yml");
@@ -114,13 +114,15 @@ int main(int argc, char **argv)
 				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
 				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
 
-				int x = (mid == 777) ? (mcenter.x - 200) : 50;
+				int x = -1, y = 0;
+				float width = src.cols / markers.size();
+				x = width * j;
 
-				cv::putText(src, str1.str(), cv::Point(x, src.rows*0.1+10), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str1.str(), cv::Point(x, y + 50), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-				cv::putText(src, str2.str(), cv::Point(x, src.rows*0.1 + 50), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str2.str(), cv::Point(x, y + 90), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 				str3 << "Marker Orientation: " << mori << " degrees ";
-				cv::putText(src, str3.str(), cv::Point(x, src.rows*0.1 + 100), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str3.str(), cv::Point(x, y + 130), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 
 				str << fout << std::setw(5) << std::setfill('0') << std::setiosflags(ios::fixed) << count << ".jpg";
 				cv::imwrite(str.str(), src);
@@ -128,10 +130,7 @@ int main(int argc, char **argv)
 			}
 		}
 		else
-		{
-			cout << "No Detected Marker!!!" << endl;
-		}
-		
+			cout << "No Detected Marker!!!" << endl;	
 	}
 
 	/*

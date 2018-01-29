@@ -26,6 +26,7 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 		return make_vector<cv::Point2f>();
 	return mdet.findInjectPoints(objpts, intrinsic, distortion, rvec, tvec, ori, center);
 }
+
 /************************************************************************/
 /*         Aruco marker detection                                 */
 /************************************************************************/

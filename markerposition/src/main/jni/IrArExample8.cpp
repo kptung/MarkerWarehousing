@@ -5,7 +5,7 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco application sample for full marker information                    */
+/*  Aruco application JPG sample for full marker information                    */
 /*  and draw the injection point without considering the marker orientation */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
@@ -94,25 +94,25 @@ int main5375375375432(int argc, char **argv)
 
 				// the angle left/right depends on the camera's position (Z-axis 0 degree)
 				std::ostringstream str1, str2, str3;
-				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Front: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Top: " << abs(myzangle);
+				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << std::abs(mxzangle) << ", Front: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
 				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
 				
-				int r1 = 4, r2 = 7;
-				int r = (mid == 777) ? r1 : r2;
-				int x = (mid == 777) ? (mcenter.x - 200) : (mcenter.x);
+				int x = -1, y = -1;
+				float width = src.cols / markers.size();
+				x = width * (j + 1);
 
-				putText(src, str1.str(), Point(x, 500), FONT_HERSHEY_SIMPLEX, 2, Scalar(255, 0, 0), 5, 8, false);
+				cv::putText(src, str1.str(), cv::Point(x, y + 50), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-				putText(src, str2.str(), Point(x, 600), FONT_HERSHEY_SIMPLEX, 2, Scalar(255, 0, 0), 5, 8, false);
+				cv::putText(src, str2.str(), cv::Point(x, y + 90), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 				str3 << "Marker Orientation: " << mori << " degrees ";
-				putText(src, str3.str(), Point(x, 700), FONT_HERSHEY_SIMPLEX, 2, Scalar(255, 0, 0), 5, 8, false);
+				cv::putText(src, str3.str(), cv::Point(x, y + 130), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 
 				imwrite(outfolder + SEP + files[i], src);
 			}
