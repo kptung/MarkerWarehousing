@@ -19,8 +19,8 @@ int main(int argc, char **argv)
 	/************************************************************************/
 	/* the given marker length in meters                                    */
 	/************************************************************************/
-	float markerLength = 0.03f; // the unit is meter
-	//float markerLength = 3; // the unit is centi-meter
+	//float markerLength = 0.03f; // the unit is meter
+	float markerLength = 3; // the unit is centi-meter
 
 	std::string cameraFilename("camera-z2.yml");
 	//std::string cameraFilename("a6k_mr/bt300jj130-camera.yml");

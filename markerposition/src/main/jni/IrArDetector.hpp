@@ -85,9 +85,7 @@ public:
 				if (ids.at(i) == 1023)
 					return false;
 				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
-				int unit = 0;
-				if (markerLen - (int)markerLen == 0)
-					unit = 1;
+				int unit = (markerLen - (int)markerLen == 0) ? 0 : 1;
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setRejecteds(rejecteds.at(i));

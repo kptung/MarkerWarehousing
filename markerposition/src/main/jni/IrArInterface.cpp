@@ -34,8 +34,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 {
 	// (0) convert markerLength from centimeter(cm) to meter(m) 
 	float markerLen = markerLength;
-	if (markerLen - (int)markerLen == 0)
-		markerLen = markerLen / 100;
+	markerLen = (markerLen - (int)markerLen == 0) ? markerLen = markerLen / 100 :  markerLen;
 
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
