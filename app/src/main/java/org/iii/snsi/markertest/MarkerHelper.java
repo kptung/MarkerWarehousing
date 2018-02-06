@@ -30,20 +30,20 @@ public class MarkerHelper {
         }
     }
 
-    public static IrArucoMarker[] nFindAppMarkers(byte[] bytes, int width,int height, float markerSize){
+    public static IrArucoMarker[] nFindAppMarkers(byte[] bytes, int width,int height, float markerSize, double[] markerArea){
         if (bytes == null) {
             System.out.println("Error!! Image is NULL. Please check it");
             return null;
         }
-        return IrArDetect.findAppMarkers(bytes, width, height, markerSize);
+        return IrArDetect.findAppMarkers(bytes, width, height, markerSize, markerArea);
     }
 
-    public static IrArucoMarker[] nFindBasicMarkers(byte[] bytes, int width,int height, float markerSize){
+    public static IrArucoMarker[] nFindBasicMarkers(byte[] bytes, int width,int height){
         if (bytes == null) {
             System.out.println("Error!! Image is NULL. Please check it");
             return null;
         }
-        return IrArDetect.findBasicMarkers(bytes, width, height, markerSize);
+        return IrArDetect.findBasicMarkers(bytes, width, height);
     }
 
     public static IrArucoMarker[] nFindAdvMarkers(byte[] bytes, int width,int height, float markerSize){

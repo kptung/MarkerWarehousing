@@ -11,7 +11,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main5375375375432(int argc, char **argv)
+int main8568568757(int argc, char **argv)
 {
 	std::string infolder("D:/workprojs/III.Projs/out/armarker/artest/");
 	std::string outfolder("D:/workprojs/III.Projs/out/armarker/arout/");

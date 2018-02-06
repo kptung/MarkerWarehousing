@@ -13,17 +13,18 @@ using namespace std;
 /*  Author: opencv_contrib                                              */
 /*  Modified: kptung, 2017/11/09                                        */
 /************************************************************************/
-int main6878678678676(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	int dictionaryId = 16;
-	std::vector<int> markerIdList{ 25,153,275,279,373,433,477,806,919,1013 };
-	int markerId = 25;
+	std::vector<int> markerIdList{ 666 };
+	//std::vector<int> markerIdList{ 25,153,275,279,373,433,477,806,919,1013 };
+	int markerId = 666;
 	int borderBits = 1;
 	int markerSize = 240; // Marker size in pixels, 1 cm = 30 pixels
 	std::vector<int> markerSizeList{ 30,60,90,120,150,180,210,240,270,300 }; //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 	bool showImage = 0;
 	bool rotflag = false;
-	bool colorflag = true;
+	bool colorflag = false;
 
 	//cout << str1.str() << endl;
 

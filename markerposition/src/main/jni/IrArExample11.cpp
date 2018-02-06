@@ -11,7 +11,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main36783678367846767(int argc, char **argv)
 {
 	std::string fout("D:/workprojs/III.Projs/out/trackout/");
 	std::string fin("D:/workprojs/III.Projs/out/trackin/");
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		video >> src;
 		cv::imshow("frame", src);
 		
-		vector<IrArucoMarker> markers;
+		std::vector<IrArucoMarker> markers;
 		auto tstart = std::chrono::high_resolution_clock::now();
 		bool flag = findArucoMarkers(src, markerLength, markers);
 		auto tend = std::chrono::high_resolution_clock::now();
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 		bool tflag = false;
 		if (tflag)
 		{
-			ofstream out1;
+			std::ofstream out1;
 			char *ptimefile_name;
 			ptimefile_name = "D:/workprojs/III.Projs/out/mtime.txt";
 			out1.open(ptimefile_name, ios::app);
@@ -81,6 +81,7 @@ int main(int argc, char **argv)
 			{
 				int mid = markers.at(j).getMarkerId();
 				float mxzdist = markers.at(j).getXZCameraDistance();
+				float mdist = markers.at(j).getCameraDistance();
 				int mori = markers.at(j).getMarkerOri();
 				cv::Point2f mcenter = markers.at(j).getMarkerCenter();
 				int mxzangle = 0, myzangle = 0;
@@ -90,6 +91,7 @@ int main(int argc, char **argv)
 				cout << "X-Z viewing angle: " << mxzangle << endl;
 				cout << "Y-Z viewing angle: " << myzangle << endl;
 				cout << "X-Z viewing distance: " << mxzdist << endl;
+				cout << "viewing distance: " << mdist << endl;
 
 				cv::Mat rvec = markers.at(j).getRotationMatrix();
 				cv::Mat tvec = markers.at(j).getTransnslationMatrix();
@@ -119,7 +121,7 @@ int main(int argc, char **argv)
 				x = width * j;
 
 				cv::putText(src, str1.str(), cv::Point(x, y + 50), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
-				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
+				str2 << "Marker ID: " << mid << ", X-Z Distance(cm): " << mxzdist << ", Distance(cm): " << mdist;
 				cv::putText(src, str2.str(), cv::Point(x, y + 90), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
 				str3 << "Marker Orientation: " << mori << " degrees ";
 				cv::putText(src, str3.str(), cv::Point(x, y + 130), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);

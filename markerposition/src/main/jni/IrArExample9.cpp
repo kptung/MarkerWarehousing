@@ -10,15 +10,16 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/01/03                                            */
 /****************************************************************************/
-int main56743646534864(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	std::string infolder("./data/artest");
-	std::string outfolder("./data/arout");
+	std::string infolder("D:/workprojs/III.Projs/out/armarker/artest/");
+	std::string outfolder("D:/workprojs/III.Projs/out/armarker/arout/");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
 	/************************************************************************/
-	float markerLength = 0.03f; // the unit is meter
+	float markerLength = 3; // the unit is meter
+	int scale = (markerLength - (int)markerLength == 0) ? 100 : 1;
 
 	//std::string cameraFilename("a6k_mr/bt300kassia-camera.yml");
 	std::string cameraFilename("camera-z2.yml");
@@ -42,6 +43,18 @@ int main56743646534864(int argc, char **argv)
 
 	std::vector<std::string> files;
 	get_files_in_directory(infolder, files);
+
+	std::vector<double> input{ 666,0.0,-6,0,666,0,-9,0,777,8,0,0,777,0,8,0 };
+	std::vector<cv::Point3f> ppos;
+	std::vector<int> idd;
+	for (int i = 0; i < input.size(); i += 4)
+	{
+		idd.push_back(input.at(i));
+		double x = input.at(i + 1) / scale;
+		double y = input.at(i + 2) / scale;
+		double z = input.at(i + 3) / scale;
+		ppos.push_back(cv::Point3f(x, y, z));
+	}
 
 	bool wflag = false;
 	for (unsigned int i = 0; i < files.size(); i++)
@@ -79,20 +92,25 @@ int main56743646534864(int argc, char **argv)
 				tvec = markers[j].getTransnslationMatrix();
 
 				std::vector<cv::Point3f> Injectionpts;
-				if (mid == 666)
-				{
-					// find injection pts
-					cv::Point3f Injection(0, -0.075f, 0);
-					Injectionpts = make_vector<cv::Point3f>() << Injection;
-					Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
-				}
-				else if (mid == 777)
-				{
-					// find injection pts
-					cv::Point3f Injection(0.08f, 0, 0);
-					Injectionpts = make_vector<cv::Point3f>() << Injection;
-					Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
-				}
+				for (int i = 0; i < idd.size(); i++)
+					if (idd.at(i) == mid)
+						Injectionpts.push_back(ppos.at(i));
+
+// 				std::vector<cv::Point3f> Injectionpts;
+// 				if (mid == 666)
+// 				{	
+// 					// find injection pts
+// 					cv::Point3f Injection(0, -0.075f, 0);
+// 					Injectionpts = make_vector<cv::Point3f>() << Injection;
+// 					Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
+// 				}
+// 				else if (mid == 777)
+// 				{
+// 					// find injection pts
+// 					cv::Point3f Injection(0.08f, 0, 0);
+// 					Injectionpts = make_vector<cv::Point3f>() << Injection;
+// 					Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
+// 				}
 				std::vector<cv::Point2f> injpts = findInjection(Injectionpts, rvec, tvec, mori, mcenter);
 				cv::Mat overlay;
 				src.copyTo(overlay);

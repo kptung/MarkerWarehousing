@@ -26,7 +26,7 @@
 #endif
 
 #define IRAR_LIB_VERSION 1.93
-#define JNI_DBG 1
+//#define JNI_DBG 1
 #define LOG_TAG "IrArMarkerLib"
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
 
@@ -67,7 +67,7 @@ Java_org_iii_snsi_markerposition_IrArDetect_importYMLDetectParameters(
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
+Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize, jdoubleArray infos)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;
@@ -96,7 +96,30 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
 
     if(JNI_DBG)
         LOGD("JNI_findMarkers_App_Start...");
-    vector<IrArucoMarker> markers = vector<IrArucoMarker>();
+
+
+    jint length = env->GetArrayLength(infos);
+    jdouble *infoData = env->GetDoubleArrayElements(infos, NULL);
+    std::vector<double>input;
+    for(int i=0;i<length;i++)
+    {
+        const double& var = infoData[i];
+        input.push_back(var);
+    }
+
+    double scale = (markerSize - (int)markerSize == 0) ? 100.0 : 1.0;
+    std::vector<cv::Point3f> ppos;
+    std::vector<int> idd;
+    for (int i = 0; i < length; i += 4)
+    {
+    	idd.push_back(input.at(i));
+    	double x = input.at(i + 1) / scale;
+        double y = input.at(i + 2) / scale;
+        double z = input.at(i + 3) / scale;
+        ppos.push_back(cv::Point3f(x, y, z));
+    }
+
+    std::vector<IrArucoMarker> markers = std::vector<IrArucoMarker>();
     auto tstart = std::chrono::high_resolution_clock::now();
     bool flag = findArucoMarkers(image, markerSize, markers);
     //bool flag = findArucoMarkers(image, markers);
@@ -158,22 +181,24 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
             cv::Mat tvec = markers[i].getTransnslationMatrix();
 
             std::vector<cv::Point3f> Injectionpts;
-            if (mId == 666)
-            {
-                // find injection pts
+            for (int i = 0; i < idd.size(); i++)
+            	if (idd.at(i) == mId)
+                	Injectionpts.push_back(ppos.at(i));
+            //if (mId == 666)
+            //{
+               // find injection pts
                 // the 1st is up, the 2nd is center, the 3rd is left
-                cv::Point3f Injection(0, -0.075f, 0);
-                Injectionpts = make_vector<cv::Point3f>() << Injection;
-                Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
-
-            }
-            else if (mId == 777)
-            {
+            //    cv::Point3f Injection(0, -0.075f, 0);
+            //    Injectionpts = make_vector<cv::Point3f>() << Injection;
+            //    Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
+            //}
+            //else if (mId == 777)
+            //{
           	    // find injection pts
-          	    cv::Point3f Injection(0.08f, 0, 0);
-          	    Injectionpts = make_vector<cv::Point3f>() << Injection;
-          	    Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
-            }
+          	//    cv::Point3f Injection(0.08f, 0, 0);
+          	//    Injectionpts = make_vector<cv::Point3f>() << Injection;
+          	//    Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
+            //}
             std::vector<cv::Point2f> mInjectPoints = findInjection(Injectionpts, rvec, tvec, mOri, markers[i].getMarkerCenter());
             int injectPoints_len = (int) mInjectPoints.size();
 
@@ -246,7 +271,7 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
     //return 0;
 }
 JNIEXPORT jobjectArray JNICALL
-Java_org_iii_snsi_markerposition_IrArDetect_findBasicMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize)
+Java_org_iii_snsi_markerposition_IrArDetect_findBasicMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height)
 {
     jbyte* frame = env->GetByteArrayElements(bytes_, 0);
 	Mat image;

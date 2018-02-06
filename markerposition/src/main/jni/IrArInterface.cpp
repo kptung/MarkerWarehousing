@@ -34,7 +34,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 {
 	// (0) convert markerLength from centimeter(cm) to meter(m) 
 	float markerLen = markerLength;
-	markerLen = (markerLen - (int)markerLen == 0) ? markerLen = markerLen / 100 :  markerLen;
+	markerLen = (markerLen - (int)markerLen == 0) ? markerLen / 100 :  markerLen;
 
 	// (1) processing
 	if (image.rows == 0 || image.cols == 0)
@@ -48,7 +48,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	cv::Mat gray, origin;
 	image.copyTo(gray);
 	image.copyTo(origin);
-	cvtColor(gray, gray, COLOR_BGR2GRAY);
+	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
 	cv::bitwise_not(gray, gray);
 	
 	// (b) camera intrinsic matrices
@@ -84,7 +84,7 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 	cv::Mat gray, origin;
 	image.copyTo(gray);
 	image.copyTo(origin);
-	cvtColor(gray, gray, COLOR_BGR2GRAY);
+	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
 	cv::bitwise_not(gray, gray);
 
 	// (b) camera intrinsic matrices

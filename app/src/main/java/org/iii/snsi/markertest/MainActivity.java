@@ -175,8 +175,15 @@ public class MainActivity extends Activity {
     private void drawInjectionArea(byte[] bytes, int width, int height) {
         if (markermode == 2) {
             System.out.println("Application Mode");
+
+            double[] markerArea=new double[16];
+            markerArea[0]=666;markerArea[1]=0;markerArea[2]=-7.5;markerArea[3]=0;
+            markerArea[4]=666;markerArea[5]=0;markerArea[6]=-10.5;markerArea[7]=0;
+            markerArea[8]=777;markerArea[9]=8;markerArea[10]=0;markerArea[11]=0;
+            markerArea[12]=777;markerArea[13]=0;markerArea[14]=8;markerArea[15]=0;
+
             long t1 = System.currentTimeMillis();
-            IrArucoMarker[] findInjections = MarkerHelper.nFindAppMarkers(bytes, width, height, 3);
+            IrArucoMarker[] appMarkers = MarkerHelper.nFindAppMarkers(bytes, width, height, 3, markerArea);
             long t2 = System.currentTimeMillis();
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
@@ -186,44 +193,44 @@ public class MainActivity extends Activity {
             drawRect[0] = 0; drawRect[1] = -1; drawRect[2] = -1; drawRect[3] = -1; drawRect[4] = -1;
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
-            for (int i = 0; i < findInjections.length; i++) {
-                if (findInjections[i].mid == 666) {
+            for (int i = 0; i < appMarkers.length; i++) {
+                if (appMarkers[i].mid == 666) {
                     if (!modeFlag) {
-                        drawCircle[3] = Math.abs(findInjections[i].injectpoints[0].y - findInjections[i].injectpoints[1].y);
-                        drawCircle[4] = Math.abs(findInjections[i].injectpoints[1].y - findInjections[i].injectpoints[0].y);
-                        drawCircle[1] = Math.abs(findInjections[i].injectpoints[1].x - drawCircle[3]) + 40;
-                        drawCircle[2] = findInjections[i].injectpoints[0].y;
+                        drawCircle[3] = Math.abs(appMarkers[i].injectpoints[0].y - appMarkers[i].injectpoints[1].y);
+                        drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
+                        drawCircle[1] = Math.abs(appMarkers[i].injectpoints[1].x - drawCircle[3]) + 40;
+                        drawCircle[2] = appMarkers[i].injectpoints[0].y;
                         drawerStereo.processTrackingCircle(width, height, drawCircle);
 
                     } else {
-                        drawCircle[1] = findInjections[i].injectpoints[1].x;
-                        drawCircle[2] = findInjections[i].injectpoints[1].y;
-                        drawCircle[3] = Math.abs(findInjections[i].injectpoints[1].y - findInjections[i].injectpoints[0].y);
-                        drawCircle[4] = Math.abs(findInjections[i].injectpoints[1].y - findInjections[i].injectpoints[0].y);
+                        drawCircle[1] = appMarkers[i].injectpoints[1].x;
+                        drawCircle[2] = appMarkers[i].injectpoints[1].y;
+                        drawCircle[3] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
+                        drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
                         drawerCam.processTrackingCircle(width, height, drawCircle);
                         //drawerCam.postInvalidate();
                     }
                 }
-                if (findInjections[i].mid == 777) {
+                if (appMarkers[i].mid == 777) {
                     if (!modeFlag) {
-                        drawRect[1] = findInjections[i].mcenter.x + 40;
+                        drawRect[1] = appMarkers[i].mcenter.x + 40;
                         drawRect[1] = (drawRect[1] > width) ? width : drawRect[1];
-                        drawRect[2] = findInjections[i].injectpoints[1].y;
+                        drawRect[2] = appMarkers[i].injectpoints[1].y;
                         drawRect[3] = 150;
-                        drawRect[4] = Math.abs(findInjections[i].injectpoints[1].y-findInjections[i].mcenter.y);
+                        drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
                         drawerStereo.processTrackingRect(width, height, drawRect);
 
                     } else {
-                        drawRect[1] = findInjections[i].mcenter.x;
-                        drawRect[2] = findInjections[i].injectpoints[1].y;
-                        drawRect[3] = Math.abs(findInjections[i].injectpoints[1].y-findInjections[i].mcenter.y);;
-                        drawRect[4] = Math.abs(findInjections[i].injectpoints[1].y-findInjections[i].mcenter.y);
+                        drawRect[1] = appMarkers[i].mcenter.x;
+                        drawRect[2] = appMarkers[i].injectpoints[1].y;
+                        drawRect[3] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);;
+                        drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
                         drawerCam.processTrackingRect(width, height, drawRect);
                         //drawerCam.postInvalidate();
                     }
                 }
             }
-            if(findInjections.length==0)
+            if(appMarkers.length==0)
             {
                 drawerStereo.processTrackingRect(width, height, drawRect);
                 drawerStereo.processTrackingCircle(width, height, drawCircle);
@@ -248,16 +255,16 @@ public class MainActivity extends Activity {
         else if (markermode == 0) {
             System.out.println("Basic Mode");
             long t1 = System.currentTimeMillis();
-            IrArucoMarker[] BasicMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height, 3);
+            IrArucoMarker[] basicMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height);
             long t2 = System.currentTimeMillis();
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
-            if (BasicMarkers.length > 0)
+            if (basicMarkers.length > 0)
             {
-                System.out.println("MID, Marker length " + BasicMarkers.length);
-                for (int i = 0; i < BasicMarkers.length; i++)
+                System.out.println("MID, Marker length " + basicMarkers.length);
+                for (int i = 0; i < basicMarkers.length; i++)
                 {
-                    System.out.println("Marker " + i + ", MID =  " + BasicMarkers[i].mid);
+                    System.out.println("Marker " + i + ", MID =  " + basicMarkers[i].mid);
                 }
             }
             drawerStereo.postInvalidate();
@@ -267,16 +274,16 @@ public class MainActivity extends Activity {
         {
             System.out.println("Advanced Mode");
             long t1 = System.currentTimeMillis();
-            IrArucoMarker[] AdvMarkers = MarkerHelper.nFindAdvMarkers(bytes, width, height, 3);
+            IrArucoMarker[] advMarkers = MarkerHelper.nFindAdvMarkers(bytes, width, height, 3);
             long t2 = System.currentTimeMillis();
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
-            if (AdvMarkers.length > 0) {
-                System.out.println("MID, Marker length " + AdvMarkers.length);
-                for (int i = 0; i < AdvMarkers.length; i++) {
-                    System.out.println("Marker " + i + ", MID =  " + AdvMarkers[i].mid);
-                    System.out.println("Marker " + i + ", Distance =  " + AdvMarkers[i].mdistance);
-                    System.out.println("Marker " + i + ", X-Z Distance =  " + AdvMarkers[i].mxzdistance);
+            if (advMarkers.length > 0) {
+                System.out.println("MID, Marker length " + advMarkers.length);
+                for (int i = 0; i < advMarkers.length; i++) {
+                    System.out.println("Marker " + i + ", MID =  " + advMarkers[i].mid);
+                    System.out.println("Marker " + i + ", Distance =  " + advMarkers[i].mdistance);
+                    System.out.println("Marker " + i + ", X-Z Distance =  " + advMarkers[i].mxzdistance);
                 }
             }
             drawerStereo.postInvalidate();
