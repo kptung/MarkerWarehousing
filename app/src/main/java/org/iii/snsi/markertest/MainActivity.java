@@ -197,6 +197,7 @@ public class MainActivity extends Activity {
 
             String sid="";
             String sdis="";
+            String smori="";
             String str1="";
             for (int i = 0; i < appMarkers.length; i++) {
                 if (appMarkers[i].mid == 666) {
@@ -207,19 +208,20 @@ public class MainActivity extends Activity {
                         drawCircle[2] = appMarkers[i].injectpoints[0].y;
 
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
-                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
                         str1="";
-                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+str1;
+                        final String sss=sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -238,19 +240,20 @@ public class MainActivity extends Activity {
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
 
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
-                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
                         str1="";
-                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+str1;
+                        final String sss=sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -273,19 +276,20 @@ public class MainActivity extends Activity {
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
-                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
                         str1="";
-                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+str1;
+                        final String sss=sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -304,19 +308,20 @@ public class MainActivity extends Activity {
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
-                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
                         str1="";
-                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
-                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+str1;
+                        final String sss=sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -342,7 +347,8 @@ public class MainActivity extends Activity {
                 sid="";
                 str1="";
                 sdis="";
-                final String sss=sid+sdis+str1;
+                smori="";
+                final String sss=sid+sdis+smori+str1;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
