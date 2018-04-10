@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -173,6 +174,7 @@ public class MainActivity extends Activity {
     }
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
+
         if (markermode == 2) {
             System.out.println("Application Mode");
 
@@ -193,6 +195,9 @@ public class MainActivity extends Activity {
             drawRect[0] = 0; drawRect[1] = -1; drawRect[2] = -1; drawRect[3] = -1; drawRect[4] = -1;
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
+            String sid="";
+            String sdis="";
+            String str1="";
             for (int i = 0; i < appMarkers.length; i++) {
                 if (appMarkers[i].mid == 666) {
                     if (!modeFlag) {
@@ -200,6 +205,30 @@ public class MainActivity extends Activity {
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
                         drawCircle[1] = Math.abs(appMarkers[i].injectpoints[1].x - drawCircle[3]) + 40;
                         drawCircle[2] = appMarkers[i].injectpoints[0].y;
+
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=sid+sdis+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
                         drawerStereo.processTrackingCircle(width, height, drawCircle);
 
                     } else {
@@ -207,6 +236,30 @@ public class MainActivity extends Activity {
                         drawCircle[2] = appMarkers[i].injectpoints[1].y;
                         drawCircle[3] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
+
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=sid+sdis+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
                         drawerCam.processTrackingCircle(width, height, drawCircle);
                         //drawerCam.postInvalidate();
                     }
@@ -218,13 +271,61 @@ public class MainActivity extends Activity {
                         drawRect[2] = appMarkers[i].injectpoints[1].y;
                         drawRect[3] = 150;
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
+
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1=" Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= " Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1=" Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=sid+sdis+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
                         drawerStereo.processTrackingRect(width, height, drawRect);
 
                     } else {
                         drawRect[1] = appMarkers[i].mcenter.x;
                         drawRect[2] = appMarkers[i].injectpoints[1].y;
-                        drawRect[3] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);;
+                        drawRect[3] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
+
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance: "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle: Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle: Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=sid+sdis+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
                         drawerCam.processTrackingRect(width, height, drawRect);
                         //drawerCam.postInvalidate();
                     }
@@ -238,6 +339,18 @@ public class MainActivity extends Activity {
                 drawerCam.processTrackingRect(width, height, drawRect);
                 drawerCam.processTrackingCircle(width, height, drawCircle);
                 drawerCam.postInvalidate();
+                sid="";
+                str1="";
+                sdis="";
+                final String sss=sid+sdis+str1;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMarkerInfoText.setText(sss);
+                        mMarkerInfoText.setTextColor(Color.WHITE);
+                        mMarkerInfoText.setTextSize(15.f);
+                    }
+                });
             }
             else
             {

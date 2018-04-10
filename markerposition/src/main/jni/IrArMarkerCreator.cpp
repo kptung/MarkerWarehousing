@@ -13,20 +13,20 @@ using namespace std;
 /*  Author: opencv_contrib                                              */
 /*  Modified: kptung, 2017/11/09                                        */
 /************************************************************************/
-int main(int argc, char *argv[])
+int main546343243884343648634(int argc, char *argv[])
 {
 	int dictionaryId = 16;
-	std::vector<int> markerIdList{ 666 };
+	//std::vector<int> markerIdList{ 111, 222, 333 };
+	std::vector<int> markerIdList{ 168, 178, 518, 888 };
+	//std::vector<int> markerIdList{ 666 };
 	//std::vector<int> markerIdList{ 25,153,275,279,373,433,477,806,919,1013 };
 	int markerId = 666;
 	int borderBits = 1;
 	int markerSize = 240; // Marker size in pixels, 1 cm = 30 pixels
-	std::vector<int> markerSizeList{ 30,60,90,120,150,180,210,240,270,300 }; //1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+	std::vector<int> markerSizeList{ 30,60,90,120,150,180,210,240,270,300 }; //1cm, 2cm, 3cm, 4cm, 5cm, 6cm, 7cm, 8cm, 9cm, 10cm
 	bool showImage = 0;
 	bool rotflag = false;
-	bool colorflag = false;
-
-	//cout << str1.str() << endl;
+	bool colorflag = true;
 
 	cv::Ptr<cv::aruco::Dictionary> dictionary =
 		cv::aruco::getPredefinedDictionary(aruco::PREDEFINED_DICTIONARY_NAME(dictionaryId));
@@ -36,10 +36,11 @@ int main(int argc, char *argv[])
 	std::ostringstream str1;
 	//aruco::drawMarker(dictionary, markerId, markerSize, markerImg, borderBits);
 
-	//for (int i = 0; i < 1; i++)
+	//for (int i = 0; i < 1024; i++)
 	for (int i = 0; i < markerIdList.size(); i++)
 	{
 		id = markerIdList.at(i);
+		//id = i;
 		aruco::drawMarker(dictionary, id, markerSize, markerImg, borderBits);
 		// convert bit-color: black->white, white->black
 		cv::bitwise_not(markerImg, markerImg);
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
 			waitKey(0);
 		}
 
-		str1 << "D:/workprojs/III.Projs/out/armarker/" << id << ".jpg";
+		str1 << "D:/workprojs/projs/out/armarker/" << id << ".jpg";
 		imwrite(str1.str(), markerImg);
 		str1.str("");
 		str1.clear();

@@ -11,10 +11,10 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2017/11/07                                            */
 /****************************************************************************/
-int main8568568757(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	std::string infolder("D:/workprojs/III.Projs/out/armarker/artest/");
-	std::string outfolder("D:/workprojs/III.Projs/out/armarker/arout/");
+	std::string infolder("D:/workprojs/projs/out/armarker/artest2/");
+	std::string outfolder("D:/workprojs/projs/out/armarker/arout/");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
@@ -22,7 +22,7 @@ int main8568568757(int argc, char **argv)
 	float markerLength = 0.03f; // the unit is meter
 	//float markerLength = 3; // the unit is centi-meter
 
-	std::string cameraFilename("camera-z2.yml");
+	std::string cameraFilename("pmiN.yml");
 	//std::string cameraFilename("a6k_mr/bt300jj130-camera.yml");
 	bool camflag = importYMLCameraParameters(cameraFilename);
 	if (!camflag)
@@ -94,25 +94,26 @@ int main8568568757(int argc, char **argv)
 
 				// the angle left/right depends on the camera's position (Z-axis 0 degree)
 				std::ostringstream str1, str2, str3;
-				if (mxzangle > 0 & myzangle > 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle > 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle < 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle < 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
-				else if (mxzangle < 0 && myzangle == 0) str1 << " Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle > 0 && myzangle == 0) str1 << " Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle == 0) str1 << " Camera Angle: Front: " << std::abs(mxzangle) << ", Front: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle > 0) str1 << " Camera Angle: Front: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
-				else if (mxzangle == 0 && myzangle < 0) str1 << " Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				if (mxzangle > 0 & myzangle > 0) str1 << "Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle > 0) str1 << "Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle < 0) str1 << "Camera Angle: Right: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle < 0) str1 << "Camera Angle: Left: " << std::abs(mxzangle) << ", Bottom: " << abs(myzangle);
+				else if (mxzangle < 0 && myzangle == 0) str1 << "Camera Angle: Left: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle > 0 && myzangle == 0) str1 << "Camera Angle: Right: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle == 0) str1 << "Camera Angle: Front: " << std::abs(mxzangle) << ", Front: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle > 0) str1 << "Camera Angle: Front: " << std::abs(mxzangle) << ", Top: " << abs(myzangle);
+				else if (mxzangle == 0 && myzangle < 0) str1 << "Camera Angle: Front: " << abs(mxzangle) << ", Bottom: " << abs(myzangle);
 				
-				int x = -1, y = -1;
+				int x = -1, y = 0;
+				
 				float width = src.cols / markers.size();
-				x = width * (j + 1);
+				x = width * j;
 
-				cv::putText(src, str1.str(), cv::Point(x, y + 50), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str1.str(), cv::Point(x, y + 50), FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(255, 0, 0), 2, 8, false);
 				str2 << "Marker ID: " << mid << ", Distance(cm): " << mxzdist;
-				cv::putText(src, str2.str(), cv::Point(x, y + 90), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str2.str(), cv::Point(x, y + 110), FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(255, 0, 0), 2, 8, false);
 				str3 << "Marker Orientation: " << mori << " degrees ";
-				cv::putText(src, str3.str(), cv::Point(x, y + 130), FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 2, 8, false);
+				cv::putText(src, str3.str(), cv::Point(x, y + 170), FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(255, 0, 0), 2, 8, false);
 
 				imwrite(outfolder + SEP + files[i], src);
 			}

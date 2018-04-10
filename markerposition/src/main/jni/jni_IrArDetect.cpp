@@ -140,8 +140,17 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
         jfieldID fidmOri = env->GetFieldID( classIrArucoMarker, "mori", "I" );
         assert(fidmOri != NULL);
 
+        jfieldID fidmXZangle = env->GetFieldID( classIrArucoMarker, "mxzangle", "I" );
+        assert(fidmXZangle != NULL);
+
+        jfieldID fidmYZangle = env->GetFieldID( classIrArucoMarker, "myzangle", "I" );
+        assert(fidmYZangle != NULL);
+
         jfieldID fidmxzDistance = env->GetFieldID( classIrArucoMarker, "mxzdistance", "D");
         assert(fidmxzDistance != NULL);
+
+        jfieldID fidmDistance = env->GetFieldID( classIrArucoMarker, "mdistance", "D");
+        assert(fidmDistance != NULL);
 
         jfieldID fidmCorners = env->GetFieldID( classIrArucoMarker, "mcorners", "[Lorg/iii/snsi/markerposition/Point2D;" );
         assert(fidmCorners != NULL);
@@ -170,7 +179,9 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
         {
             int mId = markers[i].getMarkerId();
             double mXZdist = markers[i].getXZCameraDistance(); // the distance unit is cm
+            double mDist = markers[i].getCameraDistance(); // the distance unit is cm
             int mOri = markers[i].getMarkerOri();
+
             cv::Point2f mCenter = markers[i].getMarkerCenter();
             const std::vector<cv::Point2f> &mCorners = markers[i].getCorners();
             int corner_len = (int) mCorners.size();
@@ -179,26 +190,14 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
             const cv::Point3f &m_cameraPosition = markers[i].getCameraPosition();
             cv::Mat rvec = markers[i].getRotationMatrix();
             cv::Mat tvec = markers[i].getTransnslationMatrix();
+            int mXZangle = 0, mYZangle = 0;
+            markers[i].getCameraAngle(mXZangle, mYZangle);
 
             std::vector<cv::Point3f> Injectionpts;
             for (int i = 0; i < idd.size(); i++)
             	if (idd.at(i) == mId)
                 	Injectionpts.push_back(ppos.at(i));
-            //if (mId == 666)
-            //{
-               // find injection pts
-                // the 1st is up, the 2nd is center, the 3rd is left
-            //    cv::Point3f Injection(0, -0.075f, 0);
-            //    Injectionpts = make_vector<cv::Point3f>() << Injection;
-            //    Injectionpts.push_back(cv::Point3f(0, -0.105f, 0));
-            //}
-            //else if (mId == 777)
-            //{
-          	    // find injection pts
-          	//    cv::Point3f Injection(0.08f, 0, 0);
-          	//    Injectionpts = make_vector<cv::Point3f>() << Injection;
-          	//    Injectionpts.push_back(cv::Point3f(0, 0.08f, 0));
-            //}
+
             std::vector<cv::Point2f> mInjectPoints = findInjection(Injectionpts, rvec, tvec, mOri, markers[i].getMarkerCenter());
             int injectPoints_len = (int) mInjectPoints.size();
 
@@ -208,7 +207,10 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
             // Change the variable
             env->SetIntField( objIrArucoMarker, fidmId, mId );
             env->SetIntField( objIrArucoMarker, fidmOri, mOri );
+            env->SetIntField( objIrArucoMarker, fidmXZangle, mXZangle );
+            env->SetIntField( objIrArucoMarker, fidmYZangle, mYZangle );
             env->SetDoubleField( objIrArucoMarker, fidmxzDistance, mXZdist );
+            env->SetDoubleField( objIrArucoMarker, fidmDistance, mDist );
 
             jobjectArray pointCornersArray = env->NewObjectArray( corner_len, classCvPoint, NULL );
             for (int j = 0; j < corner_len; j++)

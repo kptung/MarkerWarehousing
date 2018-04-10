@@ -3,6 +3,8 @@ public class IrArucoMarker {
     private static final String TAG = "IrArMarker";
     public int mid;
     public int mori;
+    public int mxzangle;
+    public int myzangle;
     public double mxzdistance;
     public double mdistance;
     public Point2D[] mcorners;
@@ -14,6 +16,8 @@ public class IrArucoMarker {
     public IrArucoMarker() {
         mid=-1;
         mori=-1;
+        mxzangle=-1;
+        myzangle=-1;
         mxzdistance=-1;
         mdistance=-1;
         camposition.x=-1;

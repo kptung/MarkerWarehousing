@@ -126,8 +126,8 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 		float dist = sqrt(x*x + y*y + z*z);
-		if(m_unit == 0)
-			dist *= 100;
+		//if(m_unit == 0)
+		dist *= 100;
 		return dist;
 		//return z;
 	}
@@ -138,8 +138,8 @@ public:
 		float y = (float)m_cameraPosition.y;
 		float z = (float)m_cameraPosition.z;
 		float dist = sqrt(x * x + z * z);
-		if (m_unit == 0)
-			dist *= 100;
+		//if (m_unit == 0)
+		dist *= 100;
 		return dist;
 	}
 	

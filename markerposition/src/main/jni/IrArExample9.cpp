@@ -10,10 +10,10 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/01/03                                            */
 /****************************************************************************/
-int main(int argc, char **argv)
+int main25436783678374834(int argc, char **argv)
 {
-	std::string infolder("D:/workprojs/III.Projs/out/armarker/artest/");
-	std::string outfolder("D:/workprojs/III.Projs/out/armarker/arout/");
+	std::string infolder("D:/workprojs/projs/out/armarker/artest/");
+	std::string outfolder("D:/workprojs/projs/out/armarker/arout/");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
