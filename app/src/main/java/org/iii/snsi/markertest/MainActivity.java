@@ -175,6 +175,11 @@ public class MainActivity extends Activity {
 
     private void drawInjectionArea(byte[] bytes, int width, int height) {
 
+        String smode="";
+        String sid="";
+        String sdis="";
+        String smori="";
+        String str1="";
         if (markermode == 2) {
             System.out.println("Application Mode");
 
@@ -195,10 +200,6 @@ public class MainActivity extends Activity {
             drawRect[0] = 0; drawRect[1] = -1; drawRect[2] = -1; drawRect[3] = -1; drawRect[4] = -1;
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
-            String sid="";
-            String sdis="";
-            String smori="";
-            String str1="";
             for (int i = 0; i < appMarkers.length; i++) {
                 if (appMarkers[i].mid == 666) {
                     if (!modeFlag) {
@@ -207,6 +208,7 @@ public class MainActivity extends Activity {
                         drawCircle[1] = Math.abs(appMarkers[i].injectpoints[1].x - drawCircle[3]) + 40;
                         drawCircle[2] = appMarkers[i].injectpoints[0].y;
 
+                        smode="App mode\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -221,7 +223,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+smori+str1;
+                        final String sss=smode+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -239,6 +241,7 @@ public class MainActivity extends Activity {
                         drawCircle[3] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
 
+                        smode="App mode\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -253,7 +256,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+smori+str1;
+                        final String sss=smode+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -275,6 +278,7 @@ public class MainActivity extends Activity {
                         drawRect[3] = 150;
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
+                        smode="App mode\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -289,7 +293,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+smori+str1;
+                        final String sss=smode+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -307,6 +311,7 @@ public class MainActivity extends Activity {
                         drawRect[3] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
+                        smode="App mode\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -321,7 +326,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=sid+sdis+smori+str1;
+                        final String sss=smode+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -348,7 +353,7 @@ public class MainActivity extends Activity {
                 str1="";
                 sdis="";
                 smori="";
-                final String sss=sid+sdis+smori+str1;
+                final String sss=smode+sid+sdis+smori+str1;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -384,10 +389,55 @@ public class MainActivity extends Activity {
                 for (int i = 0; i < basicMarkers.length; i++)
                 {
                     System.out.println("Marker " + i + ", MID =  " + basicMarkers[i].mid);
+
+                    smode="Basic mode\n";
+                    sid="ID: "+String.valueOf(basicMarkers[i].mid)+"\n";
+                    smori="Marker orientation(degrees): "+String.valueOf(basicMarkers[i].mori)+"\n";
+
+                    final String sss=smode+sid+sdis+smori+str1;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMarkerInfoText.setText(sss);
+                            mMarkerInfoText.setTextColor(Color.WHITE);
+                            mMarkerInfoText.setTextSize(15.f);
+                        }
+                    });
+
+
                 }
             }
-            drawerStereo.postInvalidate();
-            drawerCam.postInvalidate();
+
+            if(basicMarkers.length==0)
+            {
+                sid="";
+                str1="";
+                sdis="";
+                smori="";
+                final String sss=smode+sid+sdis+smori+str1;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMarkerInfoText.setText(sss);
+                        mMarkerInfoText.setTextColor(Color.WHITE);
+                        mMarkerInfoText.setTextSize(15.f);
+                    }
+                });
+            }
+            else
+            {
+                if (!modeFlag)
+                {
+                    drawerStereo.postInvalidate();
+                }
+                else
+                {
+                    drawerCam.postInvalidate();
+                }
+            }
+
+        //    drawerStereo.postInvalidate();
+        //    drawerCam.postInvalidate();
         }
         else if(markermode==1)
         {
@@ -403,10 +453,64 @@ public class MainActivity extends Activity {
                     System.out.println("Marker " + i + ", MID =  " + advMarkers[i].mid);
                     System.out.println("Marker " + i + ", Distance =  " + advMarkers[i].mdistance);
                     System.out.println("Marker " + i + ", X-Z Distance =  " + advMarkers[i].mxzdistance);
+
+                    smode="Adv mode\n";
+                    sid="ID: "+String.valueOf(advMarkers[i].mid)+"\n";
+                    sdis="Distance(cm): "+String.valueOf(advMarkers[i].mxzdistance)+"\n";
+                    smori="Marker orientation(degrees): "+String.valueOf(advMarkers[i].mori)+"\n";
+                    str1="";
+                    if (advMarkers[i].mxzangle > 0 & advMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(advMarkers[i].mxzangle) + ", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle < 0 && advMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(advMarkers[i].mxzangle)+", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle > 0 && advMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(advMarkers[i].mxzangle)+", Bottom: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle < 0 && advMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(advMarkers[i].mxzangle)+", Bottom: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle < 0 && advMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(advMarkers[i].mxzangle)+", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle > 0 && advMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(advMarkers[i].mxzangle)+", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle == 0 && advMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(advMarkers[i].mxzangle)+", Front: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle == 0 && advMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(advMarkers[i].mxzangle)+", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
+                    else if (advMarkers[i].mxzangle == 0 && advMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(advMarkers[i].mxzangle)+", Bottom: " +Math.abs(advMarkers[i].myzangle)+"\n";
+
+                    final String sss=smode+sid+sdis+smori+str1;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMarkerInfoText.setText(sss);
+                            mMarkerInfoText.setTextColor(Color.WHITE);
+                            mMarkerInfoText.setTextSize(15.f);
+                        }
+                    });
+
                 }
             }
-            drawerStereo.postInvalidate();
-            drawerCam.postInvalidate();
+            if(advMarkers.length==0)
+            {
+                sid="";
+                str1="";
+                sdis="";
+                smori="";
+                final String sss=smode+sid+sdis+smori+str1;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMarkerInfoText.setText(sss);
+                        mMarkerInfoText.setTextColor(Color.WHITE);
+                        mMarkerInfoText.setTextSize(15.f);
+                    }
+                });
+            }
+            else
+            {
+                if (!modeFlag)
+                {
+                    drawerStereo.postInvalidate();
+                }
+                else
+                {
+                    drawerCam.postInvalidate();
+                }
+            }
+
+           // drawerStereo.postInvalidate();
+           // drawerCam.postInvalidate();
         }
         else {
             System.out.println(" MID = NULL !! No Detected Marker !!");

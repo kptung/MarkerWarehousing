@@ -422,6 +422,12 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAdvMarkers(JNIEnv *env, jclass t
         jfieldID fidmOri = env->GetFieldID( classIrArucoMarker, "mori", "I" );
         assert(fidmOri != NULL);
 
+        jfieldID fidmXZangle = env->GetFieldID( classIrArucoMarker, "mxzangle", "I" );
+        assert(fidmXZangle != NULL);
+
+        jfieldID fidmYZangle = env->GetFieldID( classIrArucoMarker, "myzangle", "I" );
+        assert(fidmYZangle != NULL);
+
         jfieldID fidmxzDistance = env->GetFieldID( classIrArucoMarker, "mxzdistance", "D");
         assert(fidmxzDistance != NULL);
 
@@ -465,6 +471,9 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAdvMarkers(JNIEnv *env, jclass t
             const cv::Point3f &m_cameraPosition = markers[i].getCameraPosition();
             cv::Mat rvec = markers[i].getRotationMatrix();
             cv::Mat tvec = markers[i].getTransnslationMatrix();
+            int mXZangle = 0, mYZangle = 0;
+            markers[i].getCameraAngle(mXZangle, mYZangle);
+
 
             // Create an object instance
             jobject objIrArucoMarker = env->AllocObject( classIrArucoMarker );
@@ -472,6 +481,8 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAdvMarkers(JNIEnv *env, jclass t
             // Change the variable
             env->SetIntField( objIrArucoMarker, fidmId, mId );
             env->SetIntField( objIrArucoMarker, fidmOri, mOri );
+            env->SetIntField( objIrArucoMarker, fidmXZangle, mXZangle );
+            env->SetIntField( objIrArucoMarker, fidmYZangle, mYZangle );
             env->SetDoubleField( objIrArucoMarker, fidmxzDistance, mXZdist );
             env->SetDoubleField( objIrArucoMarker, fidmDistance, mXZdist );
 

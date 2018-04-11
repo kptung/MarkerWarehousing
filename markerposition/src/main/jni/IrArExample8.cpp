@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	float markerLength = 0.03f; // the unit is meter
 	//float markerLength = 3; // the unit is centi-meter
 
-	std::string cameraFilename("pmiN.yml");
+	std::string cameraFilename("camera-z2.yml");
 	//std::string cameraFilename("a6k_mr/bt300jj130-camera.yml");
 	bool camflag = importYMLCameraParameters(cameraFilename);
 	if (!camflag)

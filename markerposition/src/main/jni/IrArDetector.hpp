@@ -84,14 +84,13 @@ public:
 				// (d0) check marker ID to avoid the ambiguous detection
 				if (ids.at(i) == 1023)
 					return false;
-				// (d1) marker id, corners, marker_center, rotation_matrix and translation_matrix
-				int unit = (markerLen - (int)markerLen == 0) ? 0 : 1;
+				// (d1) marker id, corners, marker_center, rotation_matrix, translation_matrix
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 				_markers[i].setTransnslationMatrix(tvecs[i]);
-				_markers[i].setMarkerUnit(unit);
+
 #ifdef ANDROID
 				LOGD("D1 pass");
 #endif
