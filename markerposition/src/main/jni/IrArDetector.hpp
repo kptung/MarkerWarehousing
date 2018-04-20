@@ -23,7 +23,10 @@
 
 
 ///**** **** **** *** **** **** **** ****/
-//*** This class represents a marker ***/
+//*** This class represents marker detection ***/
+//*** The unit of the detected marker size is in meter compulsory ***//
+//*** Thus the unit of the camera position and the other 3D positions is in meter ***//
+//*** Since the returned position needs to be represented as centimeter, the value shoul be multiplied 100  ***//
 ///**** **** **** *** **** **** **** ****/
 class IrArDetector
 {

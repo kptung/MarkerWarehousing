@@ -115,6 +115,7 @@
     <ClCompile Include="IrArMarkerCreator.cpp" />
     <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="IrArExample9.cpp" />
+    <ClCompile Include="IrArMarkerCreator0.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aruco\aruco.hpp" />

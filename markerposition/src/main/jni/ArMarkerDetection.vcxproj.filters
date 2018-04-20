@@ -45,6 +45,9 @@
     <ClCompile Include="IrArExample11.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IrArMarkerCreator0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IrArInterface.h">
