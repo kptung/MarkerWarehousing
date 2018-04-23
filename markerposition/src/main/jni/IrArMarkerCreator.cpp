@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 			argv++;
 			for (int i = 0; i < num; i++)
 			{
-				mDBase.at(atoi(argv[1])) = 2;
+				mDBase.at(atoi(argv[1])) = 2; // exclude marker
 				argc--;
 				argv++;
 			}
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 			argv++;
 			for(int i = 0; i < num; i++)
 			{
-				mDBase.at(atoi(argv[1])) = 1;
+				mDBase.at(atoi(argv[1])) = 1; // print marker
 				argc--;
 				argv++;
 			}
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 			while (mDBase.at(id) != -1)
 				id = round(rand() % mlen);
 			if (mDBase.at(id) == -1)
-				mDBase.at(id) = 1;
+				mDBase.at(id) = 1; // print marker
 		}
 	}
 	
