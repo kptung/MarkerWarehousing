@@ -169,9 +169,9 @@ int main(int argc, char *argv[])
 			int borderType = BORDER_CONSTANT;
 			copyMakeBorder(markerImg, markerImg, top, bottom, left, right, borderType, Scalar(0, 0, 0));
 			// make a color marker
-			cv::Mat colorMarker(markerImg.size(), CV_8UC3);
 			if (colorflag)
 			{
+				cv::Mat colorMarker(markerImg.size(), CV_8UC3);
 				for (int y = 0; y < markerImg.rows; y++)
 					for (int x = 0; x < markerImg.cols; x++)
 					{
