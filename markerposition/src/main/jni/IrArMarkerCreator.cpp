@@ -29,12 +29,9 @@ void useage()
 int main(int argc, char *argv[])
 {
 	bool colorflag = false;
-	bool showImage = false;
-	bool rotflag = false;
 	bool inflag = false;
-	bool exflag = false;
 
-	cv::Vec3b color;
+	cv::Vec3b color(0, 0, 0);
 	int mnum = -1;	// marke_num
 	int msize = -1; // marker_size in cm
 	float DPI = 74.2; // Dot Per Inch (defalt:74)
@@ -66,8 +63,6 @@ int main(int argc, char *argv[])
 		ok = false;
 		if (strcmp(argv[1], "-r") == 0) {
 			colorflag = true;
-			color[0] = 0;
-			color[1] = 0;
 			color[2] = 255;
 			argc--;
 			argv++;
@@ -75,9 +70,7 @@ int main(int argc, char *argv[])
 		}
 		else if (strcmp(argv[1], "-g") == 0) {
 			colorflag = true;
-			color[0] = 0;
 			color[1] = 255;
-			color[2] = 0;
 			argc--;
 			argv++;
 			ok = true;
@@ -85,8 +78,6 @@ int main(int argc, char *argv[])
 		else if (strcmp(argv[1], "-b") == 0) {
 			colorflag = true;
 			color[0] = 255;
-			color[1] = 0;
-			color[2] = 0;
 			argc--;
 			argv++;
 			ok = true;
@@ -95,7 +86,7 @@ int main(int argc, char *argv[])
 			colorflag = true;
 			argc--;
 			argv++;
-			color[0] = (atoi(argv[1])<0)? (atoi(argv[1])+256):atoi(argv[1]);
+			color[0] = (atoi(argv[1]) < 0) ? (atoi(argv[1]) + 256) : atoi(argv[1]);
 			argc--;
 			argv++;
 			color[1] = (atoi(argv[1]) < 0) ? (atoi(argv[1]) + 256) : atoi(argv[1]);
@@ -115,7 +106,6 @@ int main(int argc, char *argv[])
 			ok = true;
 		}
 		else if (strcmp(argv[1], "-exclude") == 0) {
-			exflag = true;
 			argc--;
 			argv++;
 			int num = atoi(argv[1]);
@@ -123,7 +113,7 @@ int main(int argc, char *argv[])
 			argv++;
 			for (int i = 0; i < num; i++)
 			{
-				mDBase.at(atoi(argv[1])) = 2; // exclude marker
+				mDBase.at(atoi(argv[1])) = (mDBase.at(atoi(argv[1])) < 0) ? 2 : mDBase.at(atoi(argv[1])); // exclude marker
 				argc--;
 				argv++;
 			}
@@ -138,7 +128,7 @@ int main(int argc, char *argv[])
 			argv++;
 			for(int i = 0; i < num; i++)
 			{
-				mDBase.at(atoi(argv[1])) = 1; // print marker
+				mDBase.at(atoi(argv[1])) = (mDBase.at(atoi(argv[1])) < 0) ? 1 : mDBase.at(atoi(argv[1])); // print marker
 				argc--;
 				argv++;
 			}
@@ -159,8 +149,7 @@ int main(int argc, char *argv[])
 			int id = round(rand() % mlen);
 			while (mDBase.at(id) != -1)
 				id = round(rand() % mlen);
-			if (mDBase.at(id) == -1)
-				mDBase.at(id) = 1; // print marker
+			mDBase.at(id) = 1; // print marker
 		}
 	}
 	
@@ -186,31 +175,13 @@ int main(int argc, char *argv[])
 				for (int y = 0; y < markerImg.rows; y++)
 					for (int x = 0; x < markerImg.cols; x++)
 					{
-					cv:Scalar intensity = markerImg.at<uchar>(y, x);
+						cv:Scalar intensity = markerImg.at<uchar>(y, x);
 						if (intensity.val[0] == 255)
 							colorMarker.at<Vec3b>(y, x) = cv::Vec3b(255, 255, 255);
 						if (intensity.val[0] == 0)
 							colorMarker.at<Vec3b>(y, x) = color;
 					}
 				colorMarker.copyTo(markerImg);
-			}
-
-			// RotateFlags 
-			// ROTATE_90_CLOCKWISE = 0, //Rotate 90 degrees clockwise
-			// ROTATE_180 = 1, //Rotate 180 degrees clockwise
-			// ROTATE_90_COUNTERCLOCKWISE = 2, //Rotate 270 degrees clockwise
-			if (rotflag)
-			{
-				cv::Mat tmp;
-				markerImg.copyTo(tmp);
-				cv::rotate(markerImg, tmp, ROTATE_90_CLOCKWISE);
-				cv::rotate(markerImg, tmp, ROTATE_180);
-				cv::rotate(markerImg, tmp, ROTATE_90_COUNTERCLOCKWISE);
-			}
-
-			if (showImage) {
-				cv::imshow("marker", markerImg);
-				waitKey(0);
 			}
 
 			output << outFolder.str() << i << ".jpg";
