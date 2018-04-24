@@ -164,23 +164,25 @@ int main(int argc, char *argv[])
 			// convert bit-color: black->white, white->black
 			cv::bitwise_not(markerImg, markerImg);
 			// add border
-			int top = (int)(0.15*markerImg.rows), bottom = (int)(0.15*markerImg.rows);
-			int left = (int)(0.15*markerImg.cols), right = (int)(0.15*markerImg.cols);
+			int top = (int)(0.15 * markerImg.rows), bottom = (int)(0.15 * markerImg.rows);
+			int left = (int)(0.15 * markerImg.cols), right = (int)(0.15 * markerImg.cols);
 			int borderType = BORDER_CONSTANT;
-			copyMakeBorder(markerImg, markerImg, top, bottom, left, right, borderType, Scalar(0, 0, 0));
+			cv::copyMakeBorder(markerImg, markerImg, top, bottom, left, right, borderType, Scalar(0, 0, 0));
 			// make a color marker
 			if (colorflag)
 			{
 				cv::Mat colorMarker(markerImg.size(), CV_8UC3);
 				for (int y = 0; y < markerImg.rows; y++)
+				{
 					for (int x = 0; x < markerImg.cols; x++)
 					{
-						cv:Scalar intensity = markerImg.at<uchar>(y, x);
-						if (intensity.val[0] == 255)
+					cv:Scalar intensity = markerImg.at<uchar>(y, x);
+						if (intensity.val[0] == 255) // change value from 1-channel to 3-channels (white 2 white)
 							colorMarker.at<Vec3b>(y, x) = cv::Vec3b(255, 255, 255);
-						if (intensity.val[0] == 0)
+						else if (intensity.val[0] == 0) // change value from 1-channel to 3-channels (black 2 color)
 							colorMarker.at<Vec3b>(y, x) = color;
 					}
+				}
 				colorMarker.copyTo(markerImg);
 			}
 
