@@ -31,6 +31,10 @@ public:
 	{
 		return m_detectParams;
 	}
+	cv::Ptr<cv::aruco::Dictionary> getDictionary(void)
+	{
+		return m_dict;
+	}
 	
 	// get RT from double eyes 
 	void getRTfromDualEyes(cv::Mat& lrvec, cv::Mat& rrvec, cv::Mat& ltvec, cv::Mat& rtvec)
@@ -47,6 +51,8 @@ public:
 	bool readDetectParameters(const std::string& filename);
 	// get RT parameters
 	bool loadRTParametersFromYML(const std::string &filename);
+	// get defined dictionary
+	bool readDictionary(const std::string& filename);
 
 private:
 	
@@ -58,7 +64,32 @@ private:
 	cv::Vec3d m_Lrvec, m_Rrvec, m_Ltvec, m_Rtvec;
 	//  aruco detections params definition        	
 	cv::Ptr<cv::aruco::DetectorParameters> m_detectParams;
+	// aruco dictionary
+	cv::Ptr<cv::aruco::Dictionary> m_dict;
 };
+
+/************************************************************************/
+/*    aruco detection parameters                                        */
+/************************************************************************/
+inline bool IrArCalibration3d::readDictionary(const std::string& filename) {
+	
+	int mSize, mCBits;
+	cv::Mat bits;
+	cv::FileStorage fsr(filename, cv::FileStorage::READ);
+	if (!fsr.isOpened())
+	{
+		// if no dictionary file, load the pre-defined aruco dictionary
+		m_dict = cv::aruco::getPredefinedDictionary(16);
+		return true;
+	}
+	fsr["MarkerSize"] >> mSize;
+	fsr["MaxCorrectionBits"] >> mCBits;
+	fsr["ByteList"] >> bits;
+	fsr.release();
+	m_dict = cv::makePtr<cv::aruco::Dictionary>(cv::aruco::Dictionary(bits, mSize, mCBits));
+	return true;
+}
+
 
 /************************************************************************/
 /*    aruco detection parameters                                        */
@@ -89,7 +120,7 @@ inline bool IrArCalibration3d::readDetectParameters(const std::string& filename)
 	fs["minOtsuStdDev"] >> m_detectParams->minOtsuStdDev;
 	fs["errorCorrectionRate"] >> m_detectParams->errorCorrectionRate;
 	fs.release();
-	m_detectParams->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX; // do corner refinement in markers
+	m_detectParams->cornerRefinementMethod = 1; // do corner refinement in markers
 	return true;
 }
 

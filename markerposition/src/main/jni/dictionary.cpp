@@ -42,6 +42,7 @@ the use of this software, even if advised of the possibility of such damage.
 #include <opencv2/imgproc.hpp>
 #include "aruco/predefined_dictionaries.hpp"
 #include "opencv2/core/hal/hal.hpp"
+#include <time.h>
 
 namespace cv {
 namespace aruco {
@@ -350,8 +351,9 @@ static Mat _generateRandomMarker(int markerSize) {
     Mat marker(markerSize, markerSize, CV_8UC1, Scalar::all(0));
     for(int i = 0; i < markerSize; i++) {
         for(int j = 0; j < markerSize; j++) {
-            unsigned char bit = (unsigned char) (rand() % 2);
-            marker.at< unsigned char >(i, j) = bit;
+			//srand((unsigned)time(NULL));
+			unsigned char bit = (unsigned char)(rand() % 2);
+			marker.at< unsigned char >(i, j) = bit;
         }
     }
     return marker;
@@ -414,6 +416,8 @@ Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
     const int maxUnproductiveIterations = 5000;
     int unproductiveIterations = 0;
 
+	std::vector<int> numMarkList;
+	std::vector<int> tauList;
     while(out->bytesList.rows < nMarkers) {
         Mat currentMarker = _generateRandomMarker(markerSize);
 
@@ -438,6 +442,8 @@ Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
             bestTau = 0;
             Mat bytes = Dictionary::getByteListFromBits(currentMarker);
             out->bytesList.push_back(bytes);
+			numMarkList.push_back(out->bytesList.rows);
+			tauList.push_back(tau);
         } else {
             unproductiveIterations++;
 
@@ -450,10 +456,13 @@ Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
             // if number of unproductive iterarions has been reached, accept the current best option
             if(unproductiveIterations == maxUnproductiveIterations) {
                 unproductiveIterations = 0;
-                tau = bestTau;
-                bestTau = 0;
-                Mat bytes = Dictionary::getByteListFromBits(bestMarker);
-                out->bytesList.push_back(bytes);
+ 				numMarkList.push_back(out->bytesList.rows);
+ 				tauList.push_back(tau);
+				tau -= 1;
+				//tau = bestTau;
+                //bestTau = 0;
+                //Mat bytes = Dictionary::getByteListFromBits(bestMarker);
+                //out->bytesList.push_back(bytes);
             }
         }
     }
@@ -464,12 +473,116 @@ Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
     return out;
 }
 
+/**
+*/
+Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
+	const Ptr<Dictionary> &baseDictionary, std::vector<int> &numMarkList,
+std::vector<int> &tauList) {
+
+	Ptr<Dictionary> out = makePtr<Dictionary>();
+	out->markerSize = markerSize;
+
+	// theoretical maximum intermarker distance
+	// See S. Garrido-Jurado, R. Muñoz-Salinas, F. J. Madrid-Cuevas, and M. J. Marín-Jiménez. 2014.
+	// "Automatic generation and detection of highly reliable fiducial markers under occlusion".
+	// Pattern Recogn. 47, 6 (June 2014), 2280-2292. DOI=10.1016/j.patcog.2014.01.005
+	int C = (int)std::floor(float(markerSize * markerSize) / 4.f);
+	int tau = 2 * (int)std::floor(float(C) * 4.f / 3.f);
+
+	// if baseDictionary is provided, calculate its intermarker distance
+	if (baseDictionary->bytesList.rows > 0) {
+		CV_Assert(baseDictionary->markerSize == markerSize);
+		out->bytesList = baseDictionary->bytesList.clone();
+
+		int minDistance = markerSize * markerSize + 1;
+		for (int i = 0; i < out->bytesList.rows; i++) {
+			Mat markerBytes = out->bytesList.rowRange(i, i + 1);
+			Mat markerBits = Dictionary::getBitsFromByteList(markerBytes, markerSize);
+			minDistance = min(minDistance, _getSelfDistance(markerBits));
+			for (int j = i + 1; j < out->bytesList.rows; j++) {
+				minDistance = min(minDistance, out->getDistanceToId(markerBits, j));
+			}
+		}
+		tau = minDistance;
+	}
+
+	// current best option
+	int bestTau = 0;
+	Mat bestMarker;
+
+	// after these number of unproductive iterations, the best option is accepted
+	const int maxUnproductiveIterations = 5000;
+	int unproductiveIterations = 0;
+
+	while (out->bytesList.rows < nMarkers) {
+		Mat currentMarker = _generateRandomMarker(markerSize);
+
+		int selfDistance = _getSelfDistance(currentMarker);
+		int minDistance = selfDistance;
+
+		// if self distance is better or equal than current best option, calculate distance
+		// to previous accepted markers
+		if (selfDistance >= bestTau) {
+			for (int i = 0; i < out->bytesList.rows; i++) {
+				int currentDistance = out->getDistanceToId(currentMarker, i);
+				minDistance = min(currentDistance, minDistance);
+				if (minDistance <= bestTau) {
+					break;
+				}
+			}
+		}
+
+		// if distance is high enough, accept the marker
+		if (minDistance >= tau) {
+			unproductiveIterations = 0;
+			bestTau = 0;
+			Mat bytes = Dictionary::getByteListFromBits(currentMarker);
+			out->bytesList.push_back(bytes);
+			numMarkList.push_back(out->bytesList.rows);
+			tauList.push_back(tau);
+		}
+		else {
+			unproductiveIterations++;
+
+			// if distance is not enough, but is better than the current best option
+			if (minDistance > bestTau) {
+				bestTau = minDistance;
+				bestMarker = currentMarker;
+			}
+
+			// if number of unproductive iterarions has been reached, accept the current best option
+			if (unproductiveIterations == maxUnproductiveIterations) {
+				unproductiveIterations = 0;
+				numMarkList.push_back(out->bytesList.rows); // num of marks 
+				tauList.push_back(tau); // value of tau
+				tau -= 1;
+				//tau = bestTau;
+				//bestTau = 0;
+				//Mat bytes = Dictionary::getByteListFromBits(bestMarker);
+				//out->bytesList.push_back(bytes);
+			}
+		}
+	}
+
+	// update the maximum number of correction bits for the generated dictionary
+	out->maxCorrectionBits = (tau - 1) / 2;
+
+	return out;
+}
 
 /**
  */
 Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize) {
     Ptr<Dictionary> baseDictionary = makePtr<Dictionary>();
     return generateCustomDictionary(nMarkers, markerSize, baseDictionary);
+}
+
+/**
+*/
+Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize, std::vector<int> &numMarkList,
+	std::vector<int> &tauList) {
+	Ptr<Dictionary> baseDictionary = makePtr<Dictionary>();
+	return generateCustomDictionary(nMarkers, markerSize, baseDictionary, numMarkList, tauList);
 }
 
 

@@ -33,42 +33,35 @@ class IrArDetector
 public:
 
 	/************************************************************************/
-	/*         Aruco marker detection                                 */
+	/*         Aruco marker detection    Adv + App mode                     */
 	/************************************************************************/
-	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
+	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, const float& markerLen, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::Dictionary> &dictionary)
 	{
 #ifdef ANDROID
 		LOGD("C Adv/App lib start");
 #endif
 		cv::Mat origin;
 		src.copyTo(origin);
-		// (a) define aruco dictionary
-		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-#ifdef ANDROID
-		LOGD("dictionary load pass");
-#endif
-		if (intrinsic.empty() || distortion.empty())
+		if (intrinsic.empty() || distortion.empty() || dictionary->bytesList.empty())
 		{
-			//std::cout << "Lib needs parameters. Please check intrinsic and distortion" << endl;
+			//std::cout << "Lib needs parameters. Please check intrinsic, distortion and dictionary" << endl;
 #ifdef ANDROID
-			LOGD("Lib needs parameters. Please check intrinsic and distortion");
+			LOGD("Lib needs parameters. Please check intrinsic, distortion and dictionary");
 #endif
 			return false;
 		}
-		// (b) detect the markers and estimate pose
+		// (a) detect the markers and estimate pose
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
 		std::vector< cv::Vec3d > rvecs, tvecs;
-		
+		cv::Ptr<cv::aruco::DetectorParameters> paras = cv::aruco::DetectorParameters::create();
 		//auto tstart = std::chrono::high_resolution_clock::now();
-		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
+		cv::aruco::detectMarkers(gray, dictionary, corners, ids, paras, rejecteds);
 		//cv::aruco::drawDetectedMarkers(origin, rejecteds, ids);
 #ifdef ANDROID
 		LOGD("detect pass");
 #endif		
-		
-
-		// (d) marker information
+		// (b) marker information
 		if (ids.size() > 0)
 		{
 			// (c) estimate the camera pose; the unit is meter; check the val is integer or float
@@ -84,18 +77,14 @@ public:
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
-				// (d0) check marker ID to avoid the ambiguous detection
-				if (ids.at(i) == 1023)
-					return false;
 				// (d1) marker id, corners, marker_center, rotation_matrix, translation_matrix
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setCorners(corners.at(i));
 				_markers[i].setRejecteds(rejecteds.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 				_markers[i].setTransnslationMatrix(tvecs[i]);
-
 #ifdef ANDROID
-				LOGD("D1 pass");
+				LOGD("D1 - ID + Corners pass");
 #endif
 				// (d2) get marker orientation
 				cv::Point2f cent= _markers[i].getMarkerCenter();
@@ -108,12 +97,12 @@ public:
 				else
 					_markers[i].setMarkerOri(0);
 #ifdef ANDROID
-				LOGD("D2 pass");
+				LOGD("D2 - orientation pass");
 #endif
 				// (d3) set rotation matrix based on marker orientation
 				_markers[i].setRotationMatrix(rvecs[i]);
 #ifdef ANDROID
-				LOGD("D3 pass");
+				LOGD("D3 - rotation matrix pass");
 #endif				
 				// (d4) Calculate the camera pose based on marker orientation
 				cv::Mat R(3, 3, CV_32FC1);
@@ -125,11 +114,10 @@ public:
 				cv::Mat cameraPose = -R.t()*tvec;
 				_markers[i].setCameraPos(cameraPose);
 #ifdef ANDROID
-				LOGD("D4 pass");
+				LOGD("D4 - camera position pass");
 #endif
 				// (d5) draw marker orientation
 				//cv::aruco::drawAxis(origin, intrinsic, distortion, rvecs.at(i), tvecs.at(i), markerLen * 0.5f);
-
 				markers.push_back(_markers[i]);
 			}
 #ifdef ANDROID
@@ -146,22 +134,18 @@ public:
 		}
 	}
 	// basic marker
-	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, std::vector<IrArucoMarker> &markers, const cv::Mat &intrinsic, const cv::Mat &distortion, const cv::Ptr<cv::aruco::DetectorParameters> &detectparas)
+	bool findArMarkers(const cv::Mat &src, const cv::Mat &gray, std::vector<IrArucoMarker> &markers, const cv::Ptr<cv::aruco::Dictionary> &dictionary)
 	{
 #ifdef ANDROID
 		LOGD("C Basic mode lib start");
 #endif
 		cv::Mat origin;
 		src.copyTo(origin);
-		// (a) define aruco dictionary
-		cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-#ifdef ANDROID
-		LOGD("dict load pass");
-#endif		
-		// (b) detect the markers and estimate pose
+		// (b) detect the markers
 		std::vector< int > ids;
 		std::vector< std::vector< cv::Point2f > > corners, rejecteds;
-		cv::aruco::detectMarkers(gray, dictionary, corners, ids, detectparas, rejecteds, intrinsic, distortion);
+		cv::Ptr<cv::aruco::DetectorParameters> paras = cv::aruco::DetectorParameters::create();
+		cv::aruco::detectMarkers(gray, dictionary, corners, ids, paras, rejecteds);
 #ifdef ANDROID
 		LOGD("detect pass");
 #endif		
@@ -171,18 +155,11 @@ public:
 			std::vector<IrArucoMarker> _markers(ids.size());
 			for (int i = 0; i < ids.size(); i++)
 			{
-				// (d0) check marker ID to avoid the ambiguous detection
-				if (ids.at(i) == 1023)
-					return false;
-
-				// (d1) marker id, corners, rejecteds and marker_center
-#ifdef ANDROID
-				LOGD("ids.at(i) = %d", ids.at(i));
-#endif	
+				// (d1) marker id and marker_center
 				_markers[i].setMarkerId(ids.at(i));
 				_markers[i].setMarkerCenter(corners.at(i));
 #ifdef ANDROID
-				LOGD("D1 pass");
+				LOGD("D1 - ID + Corners pass");
 #endif
 				// (d2) marker orientation
 				cv::Point2f cent = _markers[i].getMarkerCenter();
@@ -195,7 +172,7 @@ public:
 				else
 					_markers[i].setMarkerOri(0);
 #ifdef ANDROID
-				LOGD("D2 pass");
+				LOGD("D2 - orientation pass");
 #endif
 				markers.push_back(_markers[i]);
 			}

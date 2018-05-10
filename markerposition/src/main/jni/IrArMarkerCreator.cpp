@@ -26,7 +26,7 @@ void useage()
 	exit(1);
 }
 
-int main(int argc, char *argv[])
+int main537368738468874(int argc, char *argv[])
 {
 	bool colorflag = false;
 	bool inflag = false;

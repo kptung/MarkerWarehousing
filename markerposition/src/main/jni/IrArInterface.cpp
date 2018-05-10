@@ -44,16 +44,22 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 #endif
 		return false;
 	}
-		// (a) convert bgr -> gray
+	// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
+	/************************************************************************/
+	/* Important!! convert black content 2 white content since detect algo. */
+	/* can only detect the white content in the marker                      */
+	/************************************************************************/
 	cv::bitwise_not(gray, gray);
-	
+	/************************************************************************/
+
 	// (b) camera intrinsic matrices
 	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
+	cv::Ptr<cv::aruco::Dictionary> dictionary = calib3d.getDictionary();
 	if (intrinsic.empty() || distortion.empty())
 	{
 #ifdef ANDROID
@@ -61,15 +67,12 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 #endif
 		return false;
 	}
-	const cv::Ptr<cv::aruco::DetectorParameters> &detectparas = calib3d.getDetectparas();
-	// (c) define aruco dictionary
-	cv::Ptr<cv::aruco::Dictionary> dictionary =
-		cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-	// (d) detect marker
-	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, detectparas);
+	// (c) detect marker
+	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, dictionary);
 
 }
 
+// basic marker
 bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 {
 	// (1) processing
@@ -85,17 +88,18 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
-	cv::bitwise_not(gray, gray);
+	/************************************************************************/
+	/* Important!! convert black content 2 white content since detect algo. */
+	/* can only detect the white content in the marker                      */
+	/************************************************************************/
+	cv::bitwise_not(gray, gray); 
+	/************************************************************************/
 
-	// (b) camera intrinsic matrices
-	const Mat &intrinsic = calib3d.getIntrinsicMatrix();
-	const Mat &distortion = calib3d.getDistortionMatrix();
-	const cv::Ptr<cv::aruco::DetectorParameters> &detectparas = calib3d.getDetectparas();
-	// (c) define aruco dictionary
-	cv::Ptr<cv::aruco::Dictionary> dictionary =
-		cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME(cv::aruco::DICT_ARUCO_ORIGINAL));
-	// (d) detect marker
-	return mdet.findArMarkers(origin, gray, markers, intrinsic, distortion, detectparas);
+	// (b) load dictionary
+	cv::Ptr<cv::aruco::Dictionary> dictionary = calib3d.getDictionary();
+
+	// (c) detect marker
+	return mdet.findArMarkers(origin, gray, markers, dictionary);
 
 }
 
@@ -131,6 +135,14 @@ bool importYMLRTParameters(const std::string &filename)
 bool importYMLDetectParameters(const std::string &filename)
 {
 	return calib3d.readDetectParameters(filename);
+}
+
+/************************************************************************/
+/* aruco read dictionary                                           */
+/************************************************************************/
+bool importYMLDict(const std::string &filename)
+{
+	return calib3d.readDictionary(filename);
 }
 //////////////////////////////////////////////////////////////////////////
 

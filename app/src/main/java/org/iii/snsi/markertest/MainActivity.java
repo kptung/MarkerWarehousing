@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
     private int originSurfaceWidth;
     private int originSurfaceHeight;
     // marker mode
-    private int markermode = 2;//0: basic mode, 1:adv mode, 2:app mode
+    private int markermode = 0;//0: basic mode, 1:adv mode, 2:app mode
     // ini info
     private int roih = 53, offsetw = 91, roiw = 92, offseth = 90, offsetwlr = 26;
 

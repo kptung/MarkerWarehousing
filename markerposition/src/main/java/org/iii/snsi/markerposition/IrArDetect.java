@@ -16,10 +16,12 @@ public class IrArDetect {
 
     public native static boolean importYMLDetectParameters(String filename);
 
-    public native static IrArucoMarker[] findAppMarkers(byte[] bytes, int width,int height, float markerSize, double[] markerArea);
+    public native static boolean importYMLDict(String filename);
 
-    public native static IrArucoMarker[] findAdvMarkers(byte[] bytes, int width,int height, float markerSize);
+    public native static IrArucoMarker[] findAppMarkers(byte[] bytes, int width, int height, float markerSize, double[] markerArea);
 
-    public native static IrArucoMarker[] findBasicMarkers(byte[] bytes, int width,int height);
+    public native static IrArucoMarker[] findAdvMarkers(byte[] bytes, int width, int height, float markerSize);
+
+    public native static IrArucoMarker[] findBasicMarkers(byte[] bytes, int width, int height);
 
 }

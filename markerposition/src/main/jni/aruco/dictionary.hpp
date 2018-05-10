@@ -177,7 +177,10 @@ CV_EXPORTS_W Ptr<Dictionary> getPredefinedDictionary(int dict);
 CV_EXPORTS_AS(custom_dictionary) Ptr<Dictionary> generateCustomDictionary(
         int nMarkers,
         int markerSize);
-
+CV_EXPORTS_AS(custom_dictionary) Ptr<Dictionary> generateCustomDictionary(
+	int nMarkers,
+	int markerSize, std::vector<int> &numMarkList,
+	std::vector<int> &tauList);
 
 /**
   * @brief Generates a new customizable marker dictionary
@@ -197,6 +200,9 @@ CV_EXPORTS_AS(custom_dictionary_from) Ptr<Dictionary> generateCustomDictionary(
         const Ptr<Dictionary> &baseDictionary);
 
 
+CV_EXPORTS_AS(custom_dictionary_from) Ptr<Dictionary> generateCustomDictionary(int nMarkers, int markerSize,
+	const Ptr<Dictionary> &baseDictionary, std::vector<int> &numMarkList,
+	std::vector<int> &tauList);
 
 //! @}
 }

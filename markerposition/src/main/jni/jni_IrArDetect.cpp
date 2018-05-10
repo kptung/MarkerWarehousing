@@ -66,6 +66,19 @@ Java_org_iii_snsi_markerposition_IrArDetect_importYMLDetectParameters(
     return (jboolean)importYMLDetectParameters(filename);
 }
 
+JNIEXPORT jboolean JNICALL
+Java_org_iii_snsi_markerposition_IrArDetect_importYMLDict(
+        JNIEnv *env, jclass type, jstring jfilename) {
+    // Reconstruct Java structure to C++ structure
+    string filename;
+    GetJStringContent(env, jfilename, filename);
+
+    // Call IrCalibration method
+    if(JNI_DBG)
+        LOGD("importYMLDict is %s", filename.c_str());
+    return (jboolean)importYMLDict(filename);
+}
+
 JNIEXPORT jobjectArray JNICALL
 Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass type, jbyteArray bytes_, jint width, jint height, jfloat markerSize, jdoubleArray infos)
 {

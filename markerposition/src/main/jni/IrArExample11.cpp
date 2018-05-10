@@ -11,7 +11,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/01/07                                            */
 /****************************************************************************/
-int main7464348657464(int argc, char **argv)
+int main4637437483748674(int argc, char **argv)
 {
 	std::string fout("D:/workprojs/projs/out/trackout/");
 	std::string fin("D:/workprojs/projs/out/trackin/");
