@@ -54,7 +54,9 @@ public class MainActivity extends Activity {
     private int originSurfaceWidth;
     private int originSurfaceHeight;
     // marker mode
-    private int markermode = 0;//0: basic mode, 1:adv mode, 2:app mode
+    private int markermode = 2;//0: basic mode, 1:adv mode, 2:app mode
+    int markerSize = 8; // marker size in cm
+    int mid1 = 888, mid2 = 168;
     // ini info
     private int roih = 53, offsetw = 91, roiw = 92, offseth = 90, offsetwlr = 26;
 
@@ -184,13 +186,13 @@ public class MainActivity extends Activity {
             System.out.println("Application Mode");
 
             double[] markerArea=new double[16];
-            markerArea[0]=666;markerArea[1]=0;markerArea[2]=-7.5;markerArea[3]=0;
-            markerArea[4]=666;markerArea[5]=0;markerArea[6]=-10.5;markerArea[7]=0;
-            markerArea[8]=777;markerArea[9]=8;markerArea[10]=0;markerArea[11]=0;
-            markerArea[12]=777;markerArea[13]=0;markerArea[14]=8;markerArea[15]=0;
+            markerArea[0]=mid1;markerArea[1]=0;markerArea[2]=-7.5;markerArea[3]=0;
+            markerArea[4]=mid1;markerArea[5]=0;markerArea[6]=-10.5;markerArea[7]=0;
+            markerArea[8]=mid2;markerArea[9]=8;markerArea[10]=0;markerArea[11]=0;
+            markerArea[12]=mid2;markerArea[13]=0;markerArea[14]=8;markerArea[15]=0;
 
             long t1 = System.currentTimeMillis();
-            IrArucoMarker[] appMarkers = MarkerHelper.nFindAppMarkers(bytes, width, height, 3, markerArea);
+            IrArucoMarker[] appMarkers = MarkerHelper.nFindAppMarkers(bytes, width, height, markerSize, markerArea);
             long t2 = System.currentTimeMillis();
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
@@ -201,7 +203,7 @@ public class MainActivity extends Activity {
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
             for (int i = 0; i < appMarkers.length; i++) {
-                if (appMarkers[i].mid == 666) {
+                if (appMarkers[i].mid == 888) {
                     if (!modeFlag) {
                         drawCircle[3] = Math.abs(appMarkers[i].injectpoints[0].y - appMarkers[i].injectpoints[1].y);
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
@@ -443,7 +445,7 @@ public class MainActivity extends Activity {
         {
             System.out.println("Advanced Mode");
             long t1 = System.currentTimeMillis();
-            IrArucoMarker[] advMarkers = MarkerHelper.nFindAdvMarkers(bytes, width, height, 3);
+            IrArucoMarker[] advMarkers = MarkerHelper.nFindAdvMarkers(bytes, width, height, markerSize);
             long t2 = System.currentTimeMillis();
             long diff = t2 - t1;
             System.out.println("time =  " + diff);
