@@ -80,6 +80,9 @@ inline bool IrArCalibration3d::readDictionary(const std::string& filename) {
 	{
 		// if no dictionary file, load the pre-defined aruco dictionary
 		m_dict = cv::aruco::getPredefinedDictionary(16);
+#ifdef ANDROID
+		LOGD("No user-defined dictionary, Load the pre-defined aruco dictionary.");
+#endif
 		return true;
 	}
 	fsr["MarkerSize"] >> mSize;
