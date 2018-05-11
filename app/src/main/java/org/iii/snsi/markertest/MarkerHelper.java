@@ -15,19 +15,18 @@ public class MarkerHelper {
     private static final String Dict_YML = "/markpos/dict.yml";
 
 
-    public static void initialization() {
-        String camfile = Environment.getExternalStorageDirectory().getPath() + Cam_YML;
+    public static void initialization(int mode) {
+        if(mode>0) {
+            String camfile = Environment.getExternalStorageDirectory().getPath() + Cam_YML;
+            File f1 = new File(camfile);
+            if (f1.exists()) {
+                IrArDetect.importYMLCameraParameters(camfile);
+            } else {
+                System.out.println("Error!! No parameters. Please check /sdcard/markpos/bt300-camera.yml");
+                return;
+            }
+        }
         String dictfile = Environment.getExternalStorageDirectory().getPath() + Dict_YML;
-        File f1=new File(camfile);
-
-        if(f1.exists()) {
-            IrArDetect.importYMLCameraParameters(camfile);
-        }
-        else
-        {
-            System.out.println("Error!! No parameters. Please check /sdcard/markpos/bt300-camera.yml");
-            return;
-        }
         IrArDetect.importYMLDict(dictfile);
     }
 
