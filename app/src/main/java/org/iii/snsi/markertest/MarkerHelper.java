@@ -13,7 +13,7 @@ public class MarkerHelper {
     private static final String Cam_YML = "/markpos/bt300-camera.yml";
     //private static final String Det_YML = "/markpos/detector_params.yml";
     private static final String Dict_YML = "/markpos/dict.yml";
-
+    //private static final String Dict_YML = "/markpos/prededict.yml";
 
     public static void initialization(int mode) {
         if(mode>0) {

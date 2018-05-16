@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
     private int originSurfaceWidth;
     private int originSurfaceHeight;
     // marker mode
-    private int markermode = 2;//0: basic mode, 1:adv mode, 2:app mode
+    private int markerMode = 2;//0: basic mode, 1:adv mode, 2:app mode
     int markerSize = 8; // marker size in cm
     int mid1 = 888, mid2 = 168;
     // ini info
@@ -98,7 +98,7 @@ public class MainActivity extends Activity {
 
         requestPermission();
 
-        MarkerHelper.initialization(markermode);
+        MarkerHelper.initialization(markerMode);
 
         final SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -182,7 +182,7 @@ public class MainActivity extends Activity {
         String sdis="";
         String smori="";
         String str1="";
-        if (markermode == 2) {
+        if (markerMode == 2) {
             System.out.println("Application Mode");
 
             double[] markerArea=new double[16];
@@ -203,7 +203,7 @@ public class MainActivity extends Activity {
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
             for (int i = 0; i < appMarkers.length; i++) {
-                if (appMarkers[i].mid == 888) {
+                if (appMarkers[i].mid == mid1) {
                     if (!modeFlag) {
                         drawCircle[3] = Math.abs(appMarkers[i].injectpoints[0].y - appMarkers[i].injectpoints[1].y);
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
@@ -272,7 +272,7 @@ public class MainActivity extends Activity {
                         //drawerCam.postInvalidate();
                     }
                 }
-                if (appMarkers[i].mid == 777) {
+                if (appMarkers[i].mid == mid2) {
                     if (!modeFlag) {
                         drawRect[1] = appMarkers[i].mcenter.x + 40;
                         drawRect[1] = (drawRect[1] > width) ? width : drawRect[1];
@@ -378,7 +378,7 @@ public class MainActivity extends Activity {
             }
 
         }
-        else if (markermode == 0) {
+        else if (markerMode == 0) {
             System.out.println("Basic Mode");
             long t1 = System.currentTimeMillis();
             IrArucoMarker[] basicMarkers = MarkerHelper.nFindBasicMarkers(bytes, width, height);
@@ -441,7 +441,7 @@ public class MainActivity extends Activity {
         //    drawerStereo.postInvalidate();
         //    drawerCam.postInvalidate();
         }
-        else if(markermode==1)
+        else if(markerMode==1)
         {
             System.out.println("Advanced Mode");
             long t1 = System.currentTimeMillis();
