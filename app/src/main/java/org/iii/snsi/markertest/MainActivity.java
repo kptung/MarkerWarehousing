@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
     private int markerMode = 2;//0: basic mode, 1:adv mode, 2:app mode
     int markerSize = 8; // marker size in cm
     int mid1 = 888, mid2 = 168;
+    int dictMode = 1; //0: pre-defined dictionary, 1: user-defined dictionary
     // ini info
     private int roih = 53, offsetw = 91, roiw = 92, offseth = 90, offsetwlr = 26;
 
@@ -98,7 +99,8 @@ public class MainActivity extends Activity {
 
         requestPermission();
 
-        MarkerHelper.initialization(markerMode);
+        //MarkerHelper.initialization(markerMode);
+        MarkerHelper.initialization(markerMode,dictMode);
 
         final SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -182,6 +184,7 @@ public class MainActivity extends Activity {
         String sdis="";
         String smori="";
         String str1="";
+        String sdict="";
         if (markerMode == 2) {
             System.out.println("Application Mode");
 
@@ -211,6 +214,7 @@ public class MainActivity extends Activity {
                         drawCircle[2] = appMarkers[i].injectpoints[0].y;
 
                         smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -225,7 +229,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=smode+sid+sdis+smori+str1;
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -244,6 +248,7 @@ public class MainActivity extends Activity {
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
 
                         smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -258,7 +263,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=smode+sid+sdis+smori+str1;
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -281,6 +286,7 @@ public class MainActivity extends Activity {
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
                         smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -295,7 +301,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=smode+sid+sdis+smori+str1;
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -314,6 +320,7 @@ public class MainActivity extends Activity {
                         drawRect[4] = Math.abs(appMarkers[i].injectpoints[1].y-appMarkers[i].mcenter.y);
 
                         smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                         sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
                         sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
                         smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
@@ -328,7 +335,7 @@ public class MainActivity extends Activity {
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
                         else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
 
-                        final String sss=smode+sid+sdis+smori+str1;
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -355,7 +362,8 @@ public class MainActivity extends Activity {
                 str1="";
                 sdis="";
                 smori="";
-                final String sss=smode+sid+sdis+smori+str1;
+                sdict="";
+                final String sss=smode+sdict+sid+sdis+smori+str1;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -393,10 +401,11 @@ public class MainActivity extends Activity {
                     System.out.println("Marker " + i + ", MID =  " + basicMarkers[i].mid);
 
                     smode="Basic mode\n";
+                    sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                     sid="ID: "+String.valueOf(basicMarkers[i].mid)+"\n";
                     smori="Marker orientation(degrees): "+String.valueOf(basicMarkers[i].mori)+"\n";
 
-                    final String sss=smode+sid+sdis+smori+str1;
+                    final String sss=smode+sdict+sid+sdis+smori+str1;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -413,10 +422,11 @@ public class MainActivity extends Activity {
             if(basicMarkers.length==0)
             {
                 sid="";
+                sdict="";
                 str1="";
                 sdis="";
                 smori="";
-                final String sss=smode+sid+sdis+smori+str1;
+                final String sss=smode+sdict+sid+sdis+smori+str1;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -458,6 +468,7 @@ public class MainActivity extends Activity {
 
                     smode="Adv mode\n";
                     sid="ID: "+String.valueOf(advMarkers[i].mid)+"\n";
+                    sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
                     sdis="Distance(cm): "+String.valueOf(advMarkers[i].mxzdistance)+"\n";
                     smori="Marker orientation(degrees): "+String.valueOf(advMarkers[i].mori)+"\n";
                     str1="";
@@ -471,7 +482,7 @@ public class MainActivity extends Activity {
                     else if (advMarkers[i].mxzangle == 0 && advMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(advMarkers[i].mxzangle)+", Top: " +Math.abs(advMarkers[i].myzangle)+"\n";
                     else if (advMarkers[i].mxzangle == 0 && advMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(advMarkers[i].mxzangle)+", Bottom: " +Math.abs(advMarkers[i].myzangle)+"\n";
 
-                    final String sss=smode+sid+sdis+smori+str1;
+                    final String sss=smode+sdict+sid+sdis+smori+str1;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -489,6 +500,7 @@ public class MainActivity extends Activity {
                 str1="";
                 sdis="";
                 smori="";
+                sdict="";
                 final String sss=smode+sid+sdis+smori+str1;
                 runOnUiThread(new Runnable() {
                     @Override

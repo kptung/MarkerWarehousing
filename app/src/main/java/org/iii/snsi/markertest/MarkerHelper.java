@@ -30,6 +30,31 @@ public class MarkerHelper {
         IrArDetect.importYMLDict(dictfile);
     }
 
+    // dict = 0; pre-defined dictionary
+    // dict = 1; user-defined dictionary
+    public static void initialization(int mode, int dictMode) {
+        if(mode>0) {
+            String camfile = Environment.getExternalStorageDirectory().getPath() + Cam_YML;
+            File f1 = new File(camfile);
+            if (f1.exists()) {
+                IrArDetect.importYMLCameraParameters(camfile);
+            } else {
+                System.out.println("Error!! No parameters. Please check /sdcard/markpos/bt300-camera.yml");
+                return;
+            }
+        }
+        String dictfile;
+        if(dictMode==1)
+        {
+            dictfile = Environment.getExternalStorageDirectory().getPath() + Dict_YML;
+            IrArDetect.importYMLDict(dictfile);
+        }
+        else{
+            dictfile = "NULL";
+            IrArDetect.importYMLDict(dictfile);
+        }
+    }
+
     public static IrArucoMarker[] nFindAppMarkers(byte[] bytes, int width,int height, float markerSize, double[] markerArea){
         if (bytes == null) {
             System.out.println("Error!! Image is NULL. Please check it");
