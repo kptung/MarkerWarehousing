@@ -55,9 +55,10 @@ public class MainActivity extends Activity {
     private int originSurfaceHeight;
     // marker mode
     private int markerMode = 2;//0: basic mode, 1:adv mode, 2:app mode
-    int markerSize = 8; // marker size in cm
-    int mid1 = 888, mid2 = 168;
-    int dictMode = 1; //0: pre-defined dictionary, 1: user-defined dictionary
+    private int markerSize = 8; // marker size in cm
+    private int mid1 = 888, mid2 = 168;
+    //private int mid1 = 666, mid2 = 777;
+    private int dictMode = 1; //0: pre-defined dictionary, 1: user-defined dictionary
     // ini info
     private int roih = 53, offsetw = 91, roiw = 92, offseth = 90, offsetwlr = 26;
 
@@ -205,8 +206,10 @@ public class MainActivity extends Activity {
             drawRect[0] = 0; drawRect[1] = -1; drawRect[2] = -1; drawRect[3] = -1; drawRect[4] = -1;
             drawCircle[0] = 1; drawCircle[1] = -1; drawCircle[2] = -1; drawCircle[3] = -1; drawCircle[4] = -1;
 
-            for (int i = 0; i < appMarkers.length; i++) {
-                if (appMarkers[i].mid == mid1) {
+            for (int i = 0; i < appMarkers.length; i++)
+            {
+                if (appMarkers[i].mid == mid1)
+                {
                     if (!modeFlag) {
                         drawCircle[3] = Math.abs(appMarkers[i].injectpoints[0].y - appMarkers[i].injectpoints[1].y);
                         drawCircle[4] = Math.abs(appMarkers[i].injectpoints[1].y - appMarkers[i].injectpoints[0].y);
@@ -277,7 +280,7 @@ public class MainActivity extends Activity {
                         //drawerCam.postInvalidate();
                     }
                 }
-                if (appMarkers[i].mid == mid2) {
+                else if (appMarkers[i].mid == mid2) {
                     if (!modeFlag) {
                         drawRect[1] = appMarkers[i].mcenter.x + 40;
                         drawRect[1] = (drawRect[1] > width) ? width : drawRect[1];
@@ -349,7 +352,70 @@ public class MainActivity extends Activity {
                         //drawerCam.postInvalidate();
                     }
                 }
+                else
+                {
+                    if (!modeFlag) {
+                        smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
+                        drawerStereo.processTrackingCircle(width, height, drawCircle);
+
+                    } else {
+                        smode="App mode\n";
+                        sdict=(dictMode==0)?"pre-defined dictionary\n":"user-defined dictionary\n";
+                        sid="ID: "+String.valueOf(appMarkers[i].mid)+"\n";
+                        sdis="Distance(cm): "+String.valueOf(appMarkers[i].mxzdistance)+"\n";
+                        smori="Marker orientation(degrees): "+String.valueOf(appMarkers[i].mori)+"\n";
+                        str1="";
+                        if (appMarkers[i].mxzangle > 0 & appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Right: "+Math.abs(appMarkers[i].mxzangle) + ", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle > 0) str1= "Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle < 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Left: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle > 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Right: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle == 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Front: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle > 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Top: " +Math.abs(appMarkers[i].myzangle)+"\n";
+                        else if (appMarkers[i].mxzangle == 0 && appMarkers[i].myzangle < 0) str1="Camera Angle(degrees): Front: " +Math.abs(appMarkers[i].mxzangle)+", Bottom: " +Math.abs(appMarkers[i].myzangle)+"\n";
+
+                        final String sss=smode+sdict+sid+sdis+smori+str1;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMarkerInfoText.setText(sss);
+                                mMarkerInfoText.setTextColor(Color.WHITE);
+                                mMarkerInfoText.setTextSize(15.f);
+                            }
+                        });
+
+                        drawerCam.processTrackingCircle(width, height, drawCircle);
+                        //drawerCam.postInvalidate();
+                    }
+                }
             }
+
             if(appMarkers.length==0)
             {
                 drawerStereo.processTrackingRect(width, height, drawRect);
