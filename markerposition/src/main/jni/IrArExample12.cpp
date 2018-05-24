@@ -5,16 +5,16 @@ using namespace std;
 using namespace cv;
 
 /****************************************************************************/
-/*  Aruco application webcam sample for full marker information by pre-defined dictionary                   */
+/*  Aruco application webcam sample for full marker information by user-defined dictionary                    */
 /*  and draw the injection point without considering the marker orientation */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
-/*  Modified: kptung, 2018/01/07                                            */
+/*  Modified: kptung, 2018/05/24                                            */
 /****************************************************************************/
-int main4637437483748674(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	std::string fout("D:/workprojs/projs/out/trackout/");
-	std::string fin("D:/workprojs/projs/out/trackin/");
+	std::string fout("D:/workprojs/out/trackout/");
+	std::string fin("D:/workprojs/out/trackin/");
 	
 	/************************************************************************/
 	/* the given marker length in meters                                    */
@@ -28,12 +28,8 @@ int main4637437483748674(int argc, char **argv)
 	if (!camflag)
 		return 0;
 
-	std::string detFilename("detector_params.yml");
-	bool detflag = importYMLDetectParameters(detFilename);
-	if (!detflag) {
-		cerr << "Invalid detector parameters file" << endl;
-		return 0;
-	}
+	std::string dictFilename("dict.yml");
+	bool dictflag = importYMLDict(dictFilename);
 
 	// Set real inject-position
 	cv::Point3f Injection(0, -0.05f, 0);
