@@ -50,11 +50,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
-	// (a.2) denoise
-	cv::Mat bin;
-	cv::adaptiveThreshold(gray, bin, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 79, 0);
-	morphologyEx(bin, bin, MORPH_CLOSE, Mat());
-	bin.copyTo(gray);
+
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
 	/* can only detect the white content in the marker                      */
@@ -97,10 +93,6 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
-	// (a.2) denoise
-	cv::Mat binary;
-	cv::threshold(gray, binary, 0, 255, CV_THRESH_OTSU);
-	binary.copyTo(gray);
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
 	/* can only detect the white content in the marker                      */
