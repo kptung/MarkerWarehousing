@@ -24,9 +24,6 @@
     <ClCompile Include="dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IrArMarkerCreator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IrArExample8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -43,9 +40,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IrArExample11.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IrArMarkerCreator0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IrArExample12.cpp">

@@ -28,7 +28,8 @@ std::vector<cv::Point2f> findInjection(const std::vector<cv::Point3f>& objpts, c
 }
 
 /************************************************************************/
-/*         Aruco marker detection                                 */
+/*         Aruco marker detection                                       */
+/*         Advanced and Application Mode                                */
 /************************************************************************/
 bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vector<IrArucoMarker> &markers)
 {
@@ -49,6 +50,10 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
+	// (a.2) denoise
+	cv::Mat binary; 
+	cv::threshold(gray, binary, 0, 255, CV_THRESH_OTSU);
+	binary.copyTo(gray);
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
 	/* can only detect the white content in the marker                      */
@@ -72,7 +77,10 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 
 }
 
-// basic marker
+/************************************************************************/
+/*         Aruco marker detection                                       */
+/*         Basic Mode                                                   */
+/************************************************************************/
 bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 {
 	// (1) processing
@@ -88,6 +96,10 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 	image.copyTo(gray);
 	image.copyTo(origin);
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
+	// (a.2) denoise
+	cv::Mat binary;
+	cv::threshold(gray, binary, 0, 255, CV_THRESH_OTSU);
+	binary.copyTo(gray);
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
 	/* can only detect the white content in the marker                      */

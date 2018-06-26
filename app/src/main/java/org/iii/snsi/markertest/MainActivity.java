@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
         requestPermission();
 
         //MarkerHelper.initialization(markerMode);
-        MarkerHelper.initialization(markerMode,dictMode);
+        MarkerHelper.initialization(markerMode, dictMode);
 
         final SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
