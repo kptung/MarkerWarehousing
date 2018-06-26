@@ -7,16 +7,16 @@ using namespace cv;
 /****************************************************************************/
 /*  Aruco application webcam sample for full marker information by user-defined dictionary                    */
 /*  and draw the injection point without considering the marker orientation */
-/*  Test by web-cam                                                          */
+/*  Test by files                                                          */
 /*  Test marker @ 1x1, 2x2, 3x3, 4x4, 5x5 are ok                            */
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/05/24                                            */
 /****************************************************************************/
-int main534536745354343543(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	std::string fout("data/arout/");
-	std::string fin("data/artest/");
-	
+	std::string fin("data/arin/");
+
 	/************************************************************************/
 	/* the given marker length in meters                                    */
 	/************************************************************************/
@@ -36,25 +36,19 @@ int main534536745354343543(int argc, char **argv)
 	cv::Point3f Injection(0, -0.05f, 0);
 	std::vector<cv::Point3f> Injectionpts = make_vector<cv::Point3f>() << Injection;
 
-	cv::Mat src;
-	cv::VideoCapture video(0);
-	if (!video.isOpened()) {
-		return 0;
-	}
+	std::vector<std::string> files;
+	get_files_in_directory(fin, files);
+
 	int count = 0;
-	while (true) 
+	for (unsigned int i = 0; i < files.size(); i++)
 	{
-		char key = (char)waitKey(33);
-		if (key == 27)
-			break;
-		switch (key)
-		{
-		default:
-			;
-		}
-		video >> src;
-		cv::imshow("frame", src);
-		
+		cout << "i: " << i + 1 << "/" << files.size() << endl;
+		cout << "file: " << files[i] << endl;
+
+		//CV_LOAD_IMAGE_UNCHANGED, CV_LOAD_IMAGE_GRAYSCALE, CV_LOAD_IMAGE_COLOR
+		cv::Mat src = imread(fin + SEP + files[i], CV_LOAD_IMAGE_COLOR);
+		//cv::imshow("frame", src);
+
 		std::vector<IrArucoMarker> markers;
 		auto tstart = std::chrono::high_resolution_clock::now();
 		bool flag = findArucoMarkers(src, markerLength, markers);
@@ -129,7 +123,7 @@ int main534536745354343543(int argc, char **argv)
 			}
 		}
 		else
-			cout << "No Detected Marker!!!" << endl;	
+			cout << "No Detected Marker!!!" << endl;
 	}
 	return 1;
 }

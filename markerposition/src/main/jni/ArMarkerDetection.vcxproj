@@ -111,6 +111,7 @@
     <ClCompile Include="IrArExample10.cpp" />
     <ClCompile Include="IrArExample11.cpp" />
     <ClCompile Include="IrArExample12.cpp" />
+    <ClCompile Include="IrArExample13.cpp" />
     <ClCompile Include="IrArExample8.cpp" />
     <ClCompile Include="IrArInterface.cpp" />
     <ClCompile Include="dictionary.cpp" />

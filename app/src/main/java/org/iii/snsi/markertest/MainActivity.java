@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     private static final int REQUEST_READ_STORAGE = 113;
     private static final int REQUEST_COARSE_LOCATION = 114;
     private static final boolean ENABLE_PREVIEW = false;
-    CameraController cameraController;
+    private CameraController cameraController;
     // marker
     private TextView mMarkerInfoText;
     private SurfaceView surfaceView;
