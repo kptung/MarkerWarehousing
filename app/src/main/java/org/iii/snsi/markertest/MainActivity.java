@@ -100,8 +100,8 @@ public class MainActivity extends Activity {
 
         requestPermission();
 
-        //MarkerHelper.initialization(markerMode);
-        MarkerHelper.initialization(markerMode, dictMode);
+        MarkerHelper.initialization(markerMode);
+        //MarkerHelper.initialization(markerMode, dictMode);
         //MarkerHelper.initialization(markerMode, 0);
 
         final SurfaceHolder surfaceHolder = surfaceView.getHolder();

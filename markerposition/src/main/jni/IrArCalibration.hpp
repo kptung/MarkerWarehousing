@@ -75,7 +75,7 @@ inline bool IrArCalibration3d::readDictionary(const std::string& filename) {
 	
 	int mSize, mCBits;
 	cv::Mat bits;
-	if (filename.empty())
+	if (filename.empty() || filename=="")
 	{
 		m_dict = cv::aruco::getPredefinedDictionary(16);
 #ifdef ANDROID

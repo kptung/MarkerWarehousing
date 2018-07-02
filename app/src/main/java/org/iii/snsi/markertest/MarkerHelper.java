@@ -40,7 +40,7 @@ public class MarkerHelper {
         }
         else
         {
-            String dictfile = null;
+            String dictfile = "";
             IrArDetect.importYMLDict(dictfile);
         }
 
