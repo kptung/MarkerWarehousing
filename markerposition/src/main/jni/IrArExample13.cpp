@@ -29,7 +29,8 @@ int main(int argc, char **argv)
 	if (!camflag)
 		return 0;
 
-	std::string dictFilename("dict.yml");
+	//std::string dictFilename("dict.yml");
+	std::string dictFilename("");
 	bool dictflag = importYMLDict(dictFilename);
 
 	// Set real inject-position

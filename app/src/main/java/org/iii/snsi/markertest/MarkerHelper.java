@@ -16,18 +16,8 @@ public class MarkerHelper {
     //private static final String Dict_YML = "/markpos/prededict.yml";
 
     public static void initialization(int mode) {
-        if(mode>0) {
-            String camfile = Environment.getExternalStorageDirectory().getPath() + Cam_YML;
-            File f1 = new File(camfile);
-            if (f1.exists()) {
-                IrArDetect.importYMLCameraParameters(camfile);
-            } else {
-                System.out.println("Error!! No parameters. Please check /sdcard/markpos/bt300-camera.yml");
-                return;
-            }
-        }
-        String dictfile = Environment.getExternalStorageDirectory().getPath() + Dict_YML;
-        IrArDetect.importYMLDict(dictfile);
+        initialization(mode, 0);
+
     }
 
     // dict = 0; pre-defined dictionary
@@ -43,16 +33,18 @@ public class MarkerHelper {
                 return;
             }
         }
-        String dictfile;
         if(dictMode==1)
         {
-            dictfile = Environment.getExternalStorageDirectory().getPath() + Dict_YML;
+            String dictfile = Environment.getExternalStorageDirectory().getPath() + Dict_YML;
             IrArDetect.importYMLDict(dictfile);
         }
-        else{
-            dictfile = "NULL";
+        else
+        {
+            String dictfile = null;
             IrArDetect.importYMLDict(dictfile);
         }
+
+
     }
 
     public static IrArucoMarker[] nFindAppMarkers(byte[] bytes, int width,int height, float markerSize, double[] markerArea){

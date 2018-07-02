@@ -12,7 +12,7 @@ using namespace cv;
 /*  Author: kptung                                                          */
 /*  Modified: kptung, 2018/05/24                                            */
 /****************************************************************************/
-int main534536745354343543(int argc, char **argv)
+int main678678697678678(int argc, char **argv)
 {
 	std::string fout("data/arout/");
 	std::string fin("data/artest/");

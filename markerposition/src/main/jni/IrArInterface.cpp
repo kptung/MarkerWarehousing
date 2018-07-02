@@ -48,7 +48,9 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);
+#ifndef ANDROID
 	image.copyTo(origin);
+#endif
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
 
 	/************************************************************************/
@@ -62,6 +64,8 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 	const cv::Mat &intrinsic = calib3d.getIntrinsicMatrix();
 	const cv::Mat &distortion = calib3d.getDistortionMatrix();
 	cv::Ptr<cv::aruco::Dictionary> dictionary = calib3d.getDictionary();
+	if (dictionary->bytesList.rows == 0)
+		dictionary = cv::aruco::getPredefinedDictionary(16);
 	if (intrinsic.empty() || distortion.empty())
 	{
 #ifdef ANDROID
@@ -70,6 +74,9 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 		return false;
 	}
 	// (c) detect marker
+#ifdef ANDROID
+	return mdet.findArMarkers(gray, markerLen, markers, intrinsic, distortion, dictionary);
+#endif
 	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, dictionary);
 
 }
@@ -91,7 +98,9 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 	// (a) convert bgr -> gray
 	cv::Mat gray, origin;
 	image.copyTo(gray);
+#ifndef ANDROID
 	image.copyTo(origin);
+#endif
 	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
@@ -102,8 +111,13 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 
 	// (b) load dictionary
 	cv::Ptr<cv::aruco::Dictionary> dictionary = calib3d.getDictionary();
-
+	if(dictionary->bytesList.rows==0)
+		dictionary = cv::aruco::getPredefinedDictionary(16);
+	
 	// (c) detect marker
+#ifdef ANDROID
+	return mdet.findArMarkers(gray, markers, dictionary);
+#endif
 	return mdet.findArMarkers(origin, gray, markers, dictionary);
 
 }

@@ -75,22 +75,41 @@ inline bool IrArCalibration3d::readDictionary(const std::string& filename) {
 	
 	int mSize, mCBits;
 	cv::Mat bits;
-	cv::FileStorage fsr(filename, cv::FileStorage::READ);
-	if (!fsr.isOpened())
+	if (filename.empty())
 	{
-		// if no dictionary file, load the pre-defined aruco dictionary
 		m_dict = cv::aruco::getPredefinedDictionary(16);
 #ifdef ANDROID
 		LOGD("No user-defined dictionary, Load the pre-defined aruco dictionary.");
 #endif
 		return true;
 	}
-	fsr["MarkerSize"] >> mSize;
-	fsr["MaxCorrectionBits"] >> mCBits;
-	fsr["ByteList"] >> bits;
-	fsr.release();
-	m_dict = cv::makePtr<cv::aruco::Dictionary>(cv::aruco::Dictionary(bits, mSize, mCBits));
-	return true;
+	else
+	{
+		cv::FileStorage fsr(filename, cv::FileStorage::READ);
+		if (!fsr.isOpened())
+		{
+			// if no dictionary file, load the pre-defined aruco dictionary
+			m_dict = cv::aruco::getPredefinedDictionary(16);
+#ifdef ANDROID
+			LOGD("No user-defined dictionary, Load the pre-defined aruco dictionary.");
+#endif
+			return true;
+		}
+		else
+		{
+#ifdef ANDROID
+			LOGD("Load the user-defined aruco dictionary.");
+#endif
+			fsr["MarkerSize"] >> mSize;
+			fsr["MaxCorrectionBits"] >> mCBits;
+			fsr["ByteList"] >> bits;
+			fsr.release();
+			m_dict = cv::makePtr<cv::aruco::Dictionary>(cv::aruco::Dictionary(bits, mSize, mCBits));
+			return true;
+		}
+	}
+	
+	
 }
 
 
