@@ -87,7 +87,7 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAppMarkers(JNIEnv *env, jclass t
 	Mat myuv(height + height/2, width, CV_8UC1, (uchar *)frame);
 	//cv::cvtColor(myuv, image, CV_YUV420sp2BGR);
     cv::cvtColor(myuv, image, CV_YUV2BGR_NV21);
-    cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
+    //cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
 
     if (image.data == NULL)
     {
@@ -293,7 +293,7 @@ Java_org_iii_snsi_markerposition_IrArDetect_findBasicMarkers(JNIEnv *env, jclass
 	Mat myuv(height + height/2, width, CV_8UC1, (uchar *)frame);
 	//cv::cvtColor(myuv, image, CV_YUV420sp2BGR);
     cv::cvtColor(myuv, image, CV_YUV2BGR_NV21);
-    cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
+    //cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
 
     if (image.data == NULL)
     {
@@ -392,7 +392,7 @@ Java_org_iii_snsi_markerposition_IrArDetect_findAdvMarkers(JNIEnv *env, jclass t
 	Mat myuv(height + height/2, width, CV_8UC1, (uchar *)frame);
 	//cv::cvtColor(myuv, image, CV_YUV420sp2BGR);
     cv::cvtColor(myuv, image, CV_YUV2BGR_NV21);
-    cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
+    //cv::imwrite("/sdcard/dbg/jni_input.jpg",image);
 
     if (image.data == NULL)
     {

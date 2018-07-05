@@ -46,12 +46,8 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 		return false;
 	}
 	// (a) convert bgr -> gray
-	cv::Mat gray, origin;
-	image.copyTo(gray);
-#ifndef ANDROID
-	image.copyTo(origin);
-#endif
-	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
+	cv::Mat gray;
+	cv::cvtColor(image, gray, COLOR_BGR2GRAY);
 
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
@@ -77,7 +73,7 @@ bool findArucoMarkers(const cv::Mat &image, const float& markerLength, std::vect
 #ifdef ANDROID
 	return mdet.findArMarkers(gray, markerLen, markers, intrinsic, distortion, dictionary);
 #endif
-	return mdet.findArMarkers(origin, gray, markerLen, markers, intrinsic, distortion, dictionary);
+	return mdet.findArMarkers(image, gray, markerLen, markers, intrinsic, distortion, dictionary);
 
 }
 
@@ -96,12 +92,9 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 		return false;
 	}
 	// (a) convert bgr -> gray
-	cv::Mat gray, origin;
-	image.copyTo(gray);
-#ifndef ANDROID
-	image.copyTo(origin);
-#endif
-	cv::cvtColor(gray, gray, COLOR_BGR2GRAY);
+	cv::Mat gray;
+
+	cv::cvtColor(image, gray, COLOR_BGR2GRAY);
 	/************************************************************************/
 	/* Important!! convert black content 2 white content since detect algo. */
 	/* can only detect the white content in the marker                      */
@@ -118,7 +111,7 @@ bool findArucoMarkers(const cv::Mat &image, std::vector<IrArucoMarker> &markers)
 #ifdef ANDROID
 	return mdet.findArMarkers(gray, markers, dictionary);
 #endif
-	return mdet.findArMarkers(origin, gray, markers, dictionary);
+	return mdet.findArMarkers(image, gray, markers, dictionary);
 
 }
 
