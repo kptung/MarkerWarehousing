@@ -28,7 +28,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation project(':markerposition')
+    implementation (name: 'markerposition-release', ext: 'aar')
     implementation (name: 'streamlibrary-release', ext: 'aar')
     implementation project(':drawer')
     implementation files('libs/BT300Ctrl.jar')
